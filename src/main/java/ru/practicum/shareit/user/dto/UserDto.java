@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 @Builder
-public class User {
+public class UserDto {
     private Long id;
     private String name;
     private String email;
