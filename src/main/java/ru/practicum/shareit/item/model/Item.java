@@ -7,13 +7,9 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @AllArgsConstructor
-@Component
+//@Component
 @Builder
 public class Item {
     private Long id;

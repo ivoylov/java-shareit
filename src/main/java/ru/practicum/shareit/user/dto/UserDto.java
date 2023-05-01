@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor
-@Component
+//@Component
 @Builder
 public class UserDto {
     private Long id;
