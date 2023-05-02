@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
+import ru.practicum.shareit.exception.UserNotExistException;
 import ru.practicum.shareit.storage.UserStorage;
 import ru.practicum.shareit.user.model.User;
 import java.util.HashMap;
@@ -27,6 +28,24 @@ public class InMemoryUserStorage implements UserStorage {
         users.put(user.getId(), user);
         log.info(user + " создан");
         return user;
+    }
+
+    @Override
+    public User update(User user) {
+        if (!users.containsKey(user.getId())) throw new UserNotExistException("Пользователь не существует");
+        return users.put(user.getId(),user);
+    }
+
+    @Override
+    public User get(Long id) {
+        if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
+        return users.get(id);
+    }
+
+    @Override
+    public User delete(Long id) {
+        if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
+        return users.remove(id);
     }
 
 }
