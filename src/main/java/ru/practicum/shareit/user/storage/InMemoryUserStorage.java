@@ -2,15 +2,14 @@ package ru.practicum.shareit.user.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.UserAlreadyExistException;
-import ru.practicum.shareit.exception.UserNotExistException;
-import ru.practicum.shareit.storage.UserStorage;
+import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
+import ru.practicum.shareit.exception.userException.UserNotExistException;
 import ru.practicum.shareit.user.model.User;
 import java.util.HashMap;
 
 @Slf4j
 @Component
-public class InMemoryUserStorage implements UserStorage {
+public class InMemoryUserStorage extends UserStorage {
 
     private final HashMap<Long, User> users = new HashMap<>();
     private Long counter = 0L;

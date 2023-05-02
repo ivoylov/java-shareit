@@ -1,6 +1,6 @@
-package ru.practicum.shareit.storage;
+package ru.practicum.shareit;
 
-public interface Storage<T> {
+public interface CrudOperations<T> {
     T create(T t);
     T update(T t);
     T get(Long id);

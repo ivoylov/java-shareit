@@ -2,13 +2,13 @@ package ru.practicum.shareit.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.service.CommonService;
-import ru.practicum.shareit.storage.UserStorage;
+import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.user.model.User;
 
 @Service
 @AllArgsConstructor
-public class UserService implements CommonService<User> {
+public class UserService implements CrudOperations<User> {
 
     private UserStorage storage;
 
@@ -29,7 +29,7 @@ public class UserService implements CommonService<User> {
 
     @Override
     public User get(Long id) {
-        return storage.delete(id);
+        return storage.get(id);
     }
 
 }

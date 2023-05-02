@@ -6,9 +6,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.UserAlreadyExistException;
-
-import javax.validation.ValidationException;
+import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
+import ru.practicum.shareit.exception.userException.UserValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
