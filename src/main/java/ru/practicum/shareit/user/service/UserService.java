@@ -5,12 +5,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.user.model.User;
+import java.util.Collection;
 
 @Service
 @AllArgsConstructor
 public class UserService implements CrudOperations<User> {
 
-    private UserStorage storage;
+    private final UserStorage storage;
 
     @Override
     public User create(User user) {
@@ -23,13 +24,18 @@ public class UserService implements CrudOperations<User> {
     }
 
     @Override
-    public User delete(Long id) {
-        return storage.delete(id);
+    public User get(Long id) {
+        return storage.get(id);
     }
 
     @Override
-    public User get(Long id) {
-        return storage.get(id);
+    public Collection<User> getAll() {
+        return storage.getAll();
+    }
+
+    @Override
+    public User delete(Long id) {
+        return storage.delete(id);
     }
 
 }

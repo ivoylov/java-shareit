@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import javax.validation.Valid;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/users")
@@ -22,20 +23,25 @@ public class UserController {
         return userService.create(user);
     }
 
-    @PutMapping("/{userId}")
-    public User update(@Valid @RequestBody User user, @PathVariable Long userId) {
-        user.setId(userId);
+    @PutMapping("/{id}")
+    public User update(@Valid @RequestBody User user, @PathVariable Long id) {
+        user.setId(id);
         return userService.update(user);
     }
 
-    @DeleteMapping("/{userId}")
-    public User delete(@PathVariable Long userId) {
-        return userService.delete(userId);
+    @DeleteMapping("/{id}")
+    public User delete(@PathVariable Long id) {
+        return userService.delete(id);
     }
 
-    @GetMapping("/{userId}")
-    public User getUser(@PathVariable Long userId) {
-        return userService.get(userId);
+    @GetMapping("/{id}")
+    public User get(@PathVariable Long id) {
+        return userService.get(id);
+    }
+
+    @GetMapping
+    public Collection<User> getAll() {
+        return userService.getAll();
     }
 
 }

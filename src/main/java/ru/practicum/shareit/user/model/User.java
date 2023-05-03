@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import javax.persistence.Entity;
+import org.springframework.stereotype.Component;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Entity
+@Component
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;

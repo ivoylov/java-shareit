@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
 import ru.practicum.shareit.exception.userException.UserNotExistException;
 import ru.practicum.shareit.user.model.User;
-import java.util.HashMap;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -39,6 +39,11 @@ public class InMemoryUserStorage extends UserStorage {
     public User get(Long id) {
         if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
         return users.get(id);
+    }
+
+    @Override
+    public Collection<User> getAll() {
+        return new ArrayList<>(users.values());
     }
 
     @Override
