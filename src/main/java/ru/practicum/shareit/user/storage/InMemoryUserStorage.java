@@ -29,17 +29,20 @@ public class InMemoryUserStorage extends UserStorage {
             if (isExist(user)) throw new UserAlreadyExistException();
         }
         User updatedUser = updateUser(user, users.get(user.getId()));
+        log.info(updatedUser + " обновлён");
         return users.put(updatedUser.getId(),updatedUser);
     }
 
     @Override
     public User get(Long id) {
         if (!users.containsKey(id)) throw new UserNotFoundException();
+        log.info("отдан пользователь с id " + id);
         return users.get(id);
     }
 
     @Override
     public Collection<User> getAll() {
+        log.info("Отдан список всех пользователей");
         return new ArrayList<>(users.values());
     }
 

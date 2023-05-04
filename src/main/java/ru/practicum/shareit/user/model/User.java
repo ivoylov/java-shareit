@@ -35,4 +35,10 @@ public class User {
         this.email = email;
     }
 
+    public User(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+    }
+
 }
