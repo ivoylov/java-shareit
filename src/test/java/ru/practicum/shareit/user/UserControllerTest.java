@@ -1,13 +1,14 @@
 package ru.practicum.shareit.user;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.exception.userException.UserValidationException;
 import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.user.storage.InMemoryUserStorage;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTest {
 
@@ -16,26 +17,68 @@ public class UserControllerTest {
     private final UserController userController = new UserController(userService);
 
     @Test
-    void shouldCreateUser() {
-        User user = new User( "userName", "user@mail.ru");
+    void shouldCreateUserWithCorrectName() {
+        User user = new User( "user1", "user1@mail.ru");
         User createdUser = userController.create(user);
-        assertEquals("userName", createdUser.getName());
-        assertEquals("user@mail.ru", createdUser.getEmail());
-        assertEquals(1, user.getId());
+        assertEquals(user.getName(), createdUser.getName());
+    }
+
+    @Test
+    void shouldCreateUserWithCorrectEmail() {
+        User user = new User( "user2", "user2@mail.ru");
+        User createdUser = userController.create(user);
+        assertEquals(user.getEmail(), createdUser.getEmail());
+    }
+
+    @Test
+    void shouldCreateUserWithCorrectId() {
+        User user = new User( "user3", "user3@mail.ru");
+        User createdUser = userController.create(user);
+        assertEquals(user.getId(), createdUser.getId());
     }
 
     @Test
     void shouldNotCreateSameUser() {
-        User user = new User( "userName", "user@mail.ru");
-        userController.create(user);
-        User createdUser = userController.create(user);
-        assertEquals(1, createdUser.getId());
+        User user1 = new User( "user1", "user1@mail.ru");
+        userController.create(user1);
+        User user2 = userController.create(user1);
+        assertEquals(user1.getId(), user2.getId());
     }
 
     @Test
     void shouldNotCreateUserWithIncorrectEmail() {
-        User user = new User( "", "usermail.ru");
-        assertNull(userController.create(user));
+        User user = new User( "correctName", "usermail.ru");
+        assertThrows(UserValidationException.class, () -> userController.create(user));
+    }
+
+    @Test
+    void shouldNotCreateUserWithEmailWithoutDot() {
+        User user = new User( "correctName", "user@mailru");
+        assertThrows(UserValidationException.class, () -> userController.create(user));
+    }
+
+    @Test
+    void shouldNotCreateUserWithNullEmail() {
+        User user = new User( "correctName", null);
+        assertThrows(UserValidationException.class, () -> userController.create(user));
+    }
+
+    @Test
+    void shouldNotCreateUserWithEmptyName() {
+        User user = new User( "", "user@mail.ru");
+        assertThrows(UserValidationException.class, () -> userController.create(user));
+    }
+
+    @Test
+    void shouldNotCreateUserWithBlankName() {
+        User user = new User( " ", "user@mail.ru");
+        assertThrows(UserValidationException.class, () -> userController.create(user));
+    }
+
+    @Test
+    void shouldNotCreateUserWithNullName() {
+        User user = new User( null, "user@mail.ru");
+        assertThrows(UserValidationException.class, () -> userController.create(user));
     }
 
 }

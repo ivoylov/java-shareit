@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.model.User;
 
 @Data
 @AllArgsConstructor
-@Component
+//@Component
 @Builder
 public class Item {
     private Long id;

@@ -19,7 +19,7 @@ public class InMemoryUserStorage extends UserStorage {
             for (User checkedUser : users.values()) {
                 if (checkedUser.getEmail().equals(user.getEmail())) {
                     log.info(user + " уже существует");
-                    throw new UserAlreadyExistException("Пользователь уже существует");
+                    return user;
                 }
             }
         }
@@ -49,6 +49,7 @@ public class InMemoryUserStorage extends UserStorage {
     @Override
     public User delete(Long id) {
         if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
+        log.info("Пользователь с id %d удалён", id);
         return users.remove(id);
     }
 

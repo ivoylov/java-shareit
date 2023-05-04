@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.userException.UserValidationException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
+        if (!isValid(user)) throw new UserValidationException(user + " не прошёл валидацию");
         return userService.create(user);
     }
 
@@ -42,6 +44,18 @@ public class UserController {
     @GetMapping
     public Collection<User> getAll() {
         return userService.getAll();
+    }
+
+    private boolean isValid(User user) {
+        return isEmail(user.getEmail()) && isCorrectName(user.getName());
+    }
+
+    private boolean isEmail(String email) {
+        return email != null && email.contains("@") && email.contains(".");
+    }
+
+    private boolean isCorrectName(String name) {
+        return name != null && !name.isBlank() && !name.isEmpty() && !name.contains(" ");
     }
 
 }
