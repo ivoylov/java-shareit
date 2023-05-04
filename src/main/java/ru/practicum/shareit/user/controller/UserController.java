@@ -8,6 +8,7 @@ import ru.practicum.shareit.exception.userException.UserValidationException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.Collection;
 
 @RestController
@@ -21,23 +22,24 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        if (!isValid(user)) throw new UserValidationException(user + " не прошёл валидацию");
+        if (!isValid(user)) throw new UserValidationException();
         return userService.create(user);
     }
 
     @PutMapping("/{id}")
-    public User update(@Valid @RequestBody User user, @PathVariable Long id) {
+    public User update(@Valid @RequestBody User user, @PathVariable @Min(1) Long id) {
+        if (!isValid(user)) throw new UserValidationException();
         user.setId(id);
         return userService.update(user);
     }
 
     @DeleteMapping("/{id}")
-    public User delete(@PathVariable Long id) {
+    public User delete(@PathVariable @Min(1) Long id) {
         return userService.delete(id);
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable Long id) {
+    public User get(@PathVariable @Min(1) Long id) {
         return userService.get(id);
     }
 
@@ -51,11 +53,13 @@ public class UserController {
     }
 
     private boolean isEmail(String email) {
-        return email != null && email.contains("@") && email.contains(".");
+        if (email == null) return false;
+        return email.contains("@") && email.contains(".");
     }
 
     private boolean isCorrectName(String name) {
-        return name != null && !name.isBlank() && !name.isEmpty() && !name.contains(" ");
+        if (name == null) return false;
+        return !name.isBlank() && !name.isEmpty() && !name.contains(" ");
     }
 
 }

@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
-import ru.practicum.shareit.exception.userException.UserNotExistException;
+import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import java.util.*;
 
@@ -18,8 +18,7 @@ public class InMemoryUserStorage extends UserStorage {
         if (users.size() != 0) {
             for (User checkedUser : users.values()) {
                 if (checkedUser.getEmail().equals(user.getEmail())) {
-                    log.info(user + " уже существует");
-                    return user;
+                    throw new UserAlreadyExistException();
                 }
             }
         }
@@ -31,13 +30,13 @@ public class InMemoryUserStorage extends UserStorage {
 
     @Override
     public User update(User user) {
-        if (!users.containsKey(user.getId())) throw new UserNotExistException("Пользователь не существует");
+        if (!users.containsKey(user.getId())) throw new UserNotFoundException();
         return users.put(user.getId(),user);
     }
 
     @Override
     public User get(Long id) {
-        if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
+        if (!users.containsKey(id)) throw new UserNotFoundException();
         return users.get(id);
     }
 
@@ -48,8 +47,8 @@ public class InMemoryUserStorage extends UserStorage {
 
     @Override
     public User delete(Long id) {
-        if (!users.containsKey(id)) throw new UserNotExistException("Пользователь не существует");
-        log.info("Пользователь с id %d удалён", id);
+        if (!users.containsKey(id)) throw new UserNotFoundException();
+        log.info("Пользователь с id " + id + " удалён");
         return users.remove(id);
     }
 
