@@ -15,13 +15,7 @@ public class InMemoryUserStorage extends UserStorage {
     private Long counter = 0L;
 
     public User create(User user) {
-        if (users.size() != 0) {
-            for (User checkedUser : users.values()) {
-                if (checkedUser.getEmail().equals(user.getEmail())) {
-                    throw new UserAlreadyExistException();
-                }
-            }
-        }
+        if (isExist(user)) throw new UserAlreadyExistException();
         user.setId(++counter);
         users.put(user.getId(), user);
         log.info(user + " создан");
@@ -31,6 +25,9 @@ public class InMemoryUserStorage extends UserStorage {
     @Override
     public User update(User user) {
         if (!users.containsKey(user.getId())) throw new UserNotFoundException();
+        if (user.getEmail() != null) {
+            if (isExist(user)) throw new UserAlreadyExistException();
+        }
         User updatedUser = updateUser(user, users.get(user.getId()));
         return users.put(updatedUser.getId(),updatedUser);
     }
@@ -61,6 +58,19 @@ public class InMemoryUserStorage extends UserStorage {
             userToUpdate.setName(updatedUser.getName());
         }
         return userToUpdate;
+    }
+
+    private boolean isExist(User user) {
+        for (User checkedUser : users.values()) {
+            if (isSameUsers(checkedUser, user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSameUsers(User user1, User user2) {
+        return user1.getEmail().equals(user2.getEmail()) && !Objects.equals(user1.getId(), user2.getId());
     }
 
 }

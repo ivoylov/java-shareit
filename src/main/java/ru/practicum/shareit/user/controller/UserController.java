@@ -28,7 +28,6 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public User update(@Valid @RequestBody User user, @PathVariable @Min(1) Long id) {
-        if (!isValid(user)) throw new UserValidationException();
         user.setId(id);
         return userService.update(user);
     }
