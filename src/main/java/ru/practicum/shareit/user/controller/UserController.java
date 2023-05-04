@@ -26,7 +26,7 @@ public class UserController {
         return userService.create(user);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public User update(@Valid @RequestBody User user, @PathVariable @Min(1) Long id) {
         if (!isValid(user)) throw new UserValidationException();
         user.setId(id);

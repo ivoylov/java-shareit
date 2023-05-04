@@ -31,7 +31,8 @@ public class InMemoryUserStorage extends UserStorage {
     @Override
     public User update(User user) {
         if (!users.containsKey(user.getId())) throw new UserNotFoundException();
-        return users.put(user.getId(),user);
+        User updatedUser = updateUser(user, users.get(user.getId()));
+        return users.put(updatedUser.getId(),updatedUser);
     }
 
     @Override
@@ -50,6 +51,16 @@ public class InMemoryUserStorage extends UserStorage {
         if (!users.containsKey(id)) throw new UserNotFoundException();
         log.info("Пользователь с id " + id + " удалён");
         return users.remove(id);
+    }
+
+    private User updateUser(User updatedUser, User userToUpdate) {
+        if (updatedUser.getEmail() != null) {
+            userToUpdate.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getName() != null) {
+            userToUpdate.setName(updatedUser.getName());
+        }
+        return userToUpdate;
     }
 
 }

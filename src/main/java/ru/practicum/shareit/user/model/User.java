@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
 
@@ -13,12 +13,13 @@ import javax.validation.constraints.*;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Component
+@Entity
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;
     public static final int MIN_NAME_LENGTH = 3;
 
+    @Id
     private Long id;
     @NotNull
     @NotEmpty(message = "имя не должно быть пустым")
@@ -32,15 +33,6 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
     }
 
 }
