@@ -9,8 +9,8 @@ public class ItemDtoMapper {
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
-                .owner(item.getOwner())
-                .request(item.getRequest())
+                .ownerId(item.getOwnerId())
+                .requestId(item.getRequestId())
                 .available(item.getAvailable())
                 .build();
     }
@@ -20,8 +20,8 @@ public class ItemDtoMapper {
                 .id(itemDto.getId())
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
-                .owner(itemDto.getOwner())
-                .request(itemDto.getRequest())
+                .ownerId(itemDto.getOwnerId())
+                .requestId(itemDto.getRequestId())
                 .available(itemDto.getAvailable())
                 .build();
     }
