@@ -6,6 +6,7 @@ import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -54,11 +55,30 @@ public class InMemoryItemStorage extends ItemStorage {
     public Collection<Item> search(String text) {
         Collection<Item> findItems = new ArrayList<>();
         for (Item item : items.values()) {
-            if (item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) {
+            if ((item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) &&
+                    item.getAvailable()) {
                 findItems.add(item);
             }
         }
         return findItems;
+    }
+
+    @Override
+    public Collection<Item> search(String text, Long ownerId) {
+        Collection<Item> findItems = new ArrayList<>();
+        for (Item item : items.values()) {
+            if ((item.getName().toLowerCase().contains(text) ||
+                    item.getDescription().toLowerCase().contains(text)) &&
+                    item.getOwnerId().equals(ownerId)) {
+                findItems.add(item);
+            }
+        }
+        return findItems;
+    }
+
+    @Override
+    public Collection<Item> getOwnerItems(Long ownerId) {
+        return items.values().stream().filter(item->item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
     }
 
     private Item updateItem(Item updatedItem, Item itemToUpdate) {

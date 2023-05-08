@@ -10,9 +10,9 @@ import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.service.UserService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -27,14 +27,18 @@ public class ItemController {
 
     @PostMapping
     public Item create(@Valid @RequestBody Item item, HttpServletRequest request) {
-        item.setOwnerId(getOwnerId(request));
+        Long ownerId = getOwnerId(request);
+        if (ownerId == null) throw new RequestValidationException();
+        item.setOwnerId(ownerId);
         checkItem(item);
         return itemService.create(item);
     }
 
     @PatchMapping("/{id}")
     public Item update(@RequestBody Item item, @PathVariable Long id, HttpServletRequest request) {
-        item.setOwnerId(getOwnerId(request));
+        Long ownerId = getOwnerId(request);
+        if (ownerId == null) throw new RequestValidationException();
+        item.setOwnerId(ownerId);
         item.setId(id);
         return itemService.update(item);
     }
@@ -44,26 +48,31 @@ public class ItemController {
         return itemService.delete(id);
     }
 
+    @GetMapping
+    public Collection<Item> getOwnerItems(HttpServletRequest request) {
+        return itemService.getOwnerItems(getOwnerId(request));
+    }
+
     @GetMapping("/{id}")
     public Item get(@PathVariable Long id) {
         return itemService.get(id);
     }
 
     @GetMapping("/search")
-    public Collection<Item> get(@RequestParam String text) {
-        return itemService.search(text.toLowerCase());
-    }
-
-    @GetMapping
-    public Collection<Item> getAll() {
-        return itemService.getAll();
+    public Collection<Item> search(@RequestParam String text, HttpServletRequest request) {
+        if (text.isBlank() || text.isEmpty()) return new ArrayList<>();
+        Long ownerId = getOwnerId(request);
+        //if (ownerId == null) {
+            return itemService.search(text.toLowerCase());
+        //}
+        //return itemService.search(text.toLowerCase(), ownerId);
     }
 
     private Long getOwnerId(HttpServletRequest request) {
         try {
             return Long.parseLong(request.getHeader("X-Sharer-User-Id"));
         } catch (Exception e) {
-            throw new RequestValidationException();
+            return null;
         }
     }
 
