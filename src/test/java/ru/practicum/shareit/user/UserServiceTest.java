@@ -1,10 +1,11 @@
 package ru.practicum.shareit.user;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.user.storage.InMemoryUserStorage;
+import ru.practicum.shareit.user.storage.UserStorage;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserServiceTest {

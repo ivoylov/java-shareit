@@ -3,7 +3,7 @@ package ru.practicum.shareit.request.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
 @Data

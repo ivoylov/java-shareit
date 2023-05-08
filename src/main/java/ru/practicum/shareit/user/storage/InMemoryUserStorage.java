@@ -5,7 +5,11 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
 
 @Slf4j
 @Component

@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -78,7 +80,7 @@ public class InMemoryItemStorage extends ItemStorage {
 
     @Override
     public Collection<Item> getOwnerItems(Long ownerId) {
-        return items.values().stream().filter(item->item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
+        return items.values().stream().filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
     }
 
     private Item updateItem(Item updatedItem, Item itemToUpdate) {

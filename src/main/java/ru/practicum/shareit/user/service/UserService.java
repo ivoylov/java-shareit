@@ -3,8 +3,9 @@ package ru.practicum.shareit.user.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
-import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.storage.UserStorage;
+
 import java.util.Collection;
 
 @Service
