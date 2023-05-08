@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
+
+import java.util.*;
 
 @Component
 @Slf4j
@@ -50,6 +48,17 @@ public class InMemoryItemStorage extends ItemStorage {
     @Override
     public Item delete(Long id) {
         return items.remove(id);
+    }
+
+    @Override
+    public Collection<Item> search(String text) {
+        Collection<Item> findItems = new ArrayList<>();
+        for (Item item : items.values()) {
+            if (item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) {
+                findItems.add(item);
+            }
+        }
+        return findItems;
     }
 
     private Item updateItem(Item updatedItem, Item itemToUpdate) {

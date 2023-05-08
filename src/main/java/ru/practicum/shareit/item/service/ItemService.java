@@ -43,4 +43,7 @@ public class ItemService implements CrudOperations<Item> {
         return itemStorage.delete(id);
     }
 
+    public Collection<Item> search(String text) {
+        return itemStorage.search(text);
+    }
 }

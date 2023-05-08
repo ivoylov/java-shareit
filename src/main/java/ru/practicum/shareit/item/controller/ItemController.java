@@ -33,10 +33,9 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public Item update(@Valid @RequestBody Item item, @PathVariable Long id, HttpServletRequest request) {
+    public Item update(@RequestBody Item item, @PathVariable Long id, HttpServletRequest request) {
         item.setOwnerId(getOwnerId(request));
         item.setId(id);
-        checkItem(item);
         return itemService.update(item);
     }
 
@@ -48,6 +47,11 @@ public class ItemController {
     @GetMapping("/{id}")
     public Item get(@PathVariable Long id) {
         return itemService.get(id);
+    }
+
+    @GetMapping("/search")
+    public Collection<Item> get(@RequestParam String text) {
+        return itemService.search(text.toLowerCase());
     }
 
     @GetMapping
@@ -68,6 +72,7 @@ public class ItemController {
         if (item.getAvailable() == null) throw new ItemValidationException();
         if (item.getDescription() == null) throw new ItemValidationException();
         if (item.getName() == null) throw new ItemValidationException();
+        if (item.getName().isEmpty() || item.getName().isBlank()) throw new ItemValidationException();
     }
 
 }
