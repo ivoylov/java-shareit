@@ -29,6 +29,11 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     @Override
+    public Boolean isExist(Long id) {
+        return itemStorage.isExist(id);
+    }
+
+    @Override
     public Collection<Item> getAll() {
         return itemStorage.getAll();
     }

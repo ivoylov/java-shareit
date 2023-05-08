@@ -18,12 +18,19 @@ public class InMemoryItemStorage extends ItemStorage {
     @Override
     public Item create(Item item) {
         item.setId(++counter);
-        return items.put(item.getId(), item);
+        items.put(item.getId(), item);
+        log.info(item + " создан");
+        return item;
     }
 
     @Override
     public Item update(Item item) {
         return items.put(item.getId(), item);
+    }
+
+    @Override
+    public Boolean isExist(Long id) {
+        return items.containsKey(id);
     }
 
     @Override

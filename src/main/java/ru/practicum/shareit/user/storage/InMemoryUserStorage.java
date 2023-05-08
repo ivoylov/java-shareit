@@ -34,6 +34,11 @@ public class InMemoryUserStorage extends UserStorage {
     }
 
     @Override
+    public Boolean isExist(Long id) {
+        return users.containsKey(id);
+    }
+
+    @Override
     public User get(Long id) {
         if (!users.containsKey(id)) throw new UserNotFoundException();
         log.info("отдан пользователь с id " + id);
