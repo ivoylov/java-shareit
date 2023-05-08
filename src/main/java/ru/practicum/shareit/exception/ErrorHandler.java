@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
 import ru.practicum.shareit.exception.itemException.ItemValidationException;
+import ru.practicum.shareit.exception.requestException.RequestValidationException;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.exception.userException.UserValidationException;
@@ -37,6 +39,20 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerItemValidationException(final ItemValidationException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    // 404
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerItemNotFoundException(final ItemNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    // 400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerRequestValidationException(final RequestValidationException e) {
         return new ErrorResponse(e.getMessage());
     }
 

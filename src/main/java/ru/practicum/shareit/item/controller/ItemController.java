@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.itemException.ItemValidationException;
+import ru.practicum.shareit.exception.requestException.RequestValidationException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
@@ -26,22 +27,16 @@ public class ItemController {
 
     @PostMapping
     public Item create(@Valid @RequestBody Item item, HttpServletRequest request) {
-        try {
-            Long ownerId = Long.parseLong(request.getHeader("X-Sharer-User-Id"));
-            if (!userService.isExist(ownerId)) throw new UserNotFoundException();
-            if (item.getAvailable() == null) throw new ItemValidationException();
-            if (item.getDescription() == null) throw new ItemValidationException();
-            if (item.getName() == null) throw new ItemValidationException();
-            item.setOwnerId(ownerId);
-            return itemService.create(item);
-        } catch (Exception e) {
-            throw new ItemValidationException();
-        }
+        item.setOwnerId(getOwnerId(request));
+        checkItem(item);
+        return itemService.create(item);
     }
 
-    @PutMapping("/{id}")
-    public Item update(@Valid @RequestBody Item item, @PathVariable Long id) {
+    @PatchMapping("/{id}")
+    public Item update(@Valid @RequestBody Item item, @PathVariable Long id, HttpServletRequest request) {
+        item.setOwnerId(getOwnerId(request));
         item.setId(id);
+        checkItem(item);
         return itemService.update(item);
     }
 
@@ -58,6 +53,21 @@ public class ItemController {
     @GetMapping
     public Collection<Item> getAll() {
         return itemService.getAll();
+    }
+
+    private Long getOwnerId(HttpServletRequest request) {
+        try {
+            return Long.parseLong(request.getHeader("X-Sharer-User-Id"));
+        } catch (Exception e) {
+            throw new RequestValidationException();
+        }
+    }
+
+    private void checkItem(Item item) {
+        if (!userService.isExist(item.getOwnerId())) throw new UserNotFoundException();
+        if (item.getAvailable() == null) throw new ItemValidationException();
+        if (item.getDescription() == null) throw new ItemValidationException();
+        if (item.getName() == null) throw new ItemValidationException();
     }
 
 }
