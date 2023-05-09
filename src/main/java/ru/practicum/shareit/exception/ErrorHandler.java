@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.requestException.RequestValidationException;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
-import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.exception.userException.UserValidationException;
 
 @RestControllerAdvice
@@ -20,14 +19,6 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerUserAlreadyExistException(final UserAlreadyExistException e) {
         log.info("Пользователь уже существует", e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    // 404
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerUserNotFoundException(final UserNotFoundException e) {
-        log.info("Пользователь не найден", e);
         return new ErrorResponse(e.getMessage());
     }
 
