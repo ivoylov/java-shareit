@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.exception.ItemValidationException;
-import ru.practicum.shareit.exception.requestException.RequestValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.service.UserService;
@@ -29,7 +29,7 @@ public class ItemController {
     @PostMapping
     public Item create(@Valid @RequestBody Item item, HttpServletRequest request) {
         Long ownerId = getOwnerId(request);
-        if (ownerId == null) throw new RequestValidationException();
+        if (ownerId == null) throw new EntityValidationException(request);
         item.setOwnerId(ownerId);
         checkItem(item);
         return itemService.create(item);
@@ -38,7 +38,7 @@ public class ItemController {
     @PatchMapping("/{id}")
     public Item update(@RequestBody Item item, @PathVariable Long id, HttpServletRequest request) {
         Long ownerId = getOwnerId(request);
-        if (ownerId == null) throw new RequestValidationException();
+        if (ownerId == null) throw new EntityValidationException(request);
         item.setOwnerId(ownerId);
         item.setId(id);
         return itemService.update(item);

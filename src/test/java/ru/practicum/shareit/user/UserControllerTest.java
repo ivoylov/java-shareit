@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.exception.userException.UserValidationException;
+import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
@@ -49,37 +49,37 @@ public class UserControllerTest {
     @Test
     void shouldNotCreateUserWithIncorrectEmail() {
         User user = new User("correctName", "usermail.ru");
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotCreateUserWithEmailWithoutDot() {
         User user = new User("correctName", "user@mailru");
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotCreateUserWithNullEmail() {
         User user = new User("correctName", null);
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotCreateUserWithEmptyName() {
         User user = new User("", "user@mail.ru");
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotCreateUserWithBlankName() {
         User user = new User(" ", "user@mail.ru");
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotCreateUserWithNullName() {
         User user = new User(null, "user@mail.ru");
-        assertThrows(UserValidationException.class, () -> userController.create(user));
+        assertThrows(EntityValidationException.class, () -> userController.create(user));
     }
 
 }

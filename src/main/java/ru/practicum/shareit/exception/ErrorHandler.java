@@ -6,9 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.requestException.RequestValidationException;
-import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
-import ru.practicum.shareit.exception.userException.UserValidationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -22,22 +19,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    // 400
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerUserValidationException(final UserValidationException e) {
-        log.info("Ошибка валидации пользователя", e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    // 400
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerItemValidationException(final ItemValidationException e) {
-        log.info("Ошибка валидации вещи", e);
-        return new ErrorResponse(e.getMessage());
-    }
-
     //404
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -46,11 +27,11 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    // 400
+    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerRequestValidationException(final RequestValidationException e) {
-        log.info("Ошибка валидации запроса", e);
+    public ErrorResponse handlerEntityValidationException(final EntityValidationException e) {
+        log.info("Объект {} не прошёл валидацию", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }
 
