@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -17,13 +14,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Entity
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;
     public static final int MIN_NAME_LENGTH = 3;
 
-    @Id
     private Long id;
     @NotNull
     @NotEmpty(message = "имя не должно быть пустым")
