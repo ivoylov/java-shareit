@@ -6,7 +6,6 @@ import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
