@@ -1,14 +1,15 @@
 package ru.practicum.shareit.exception;
 
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends EntityException {
 
     Object o;
+
     public EntityNotFoundException(Object o) {
-        this.o = o;
+        super(o);
     }
 
     public Object getEntity() {
-        return o;
+        return super.getEntity();
     }
 
 }

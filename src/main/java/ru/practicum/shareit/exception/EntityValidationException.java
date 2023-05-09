@@ -1,13 +1,15 @@
 package ru.practicum.shareit.exception;
 
-public class EntityValidationException extends RuntimeException {
+public class EntityValidationException extends EntityException {
+
     Object o;
+
     public EntityValidationException(Object o) {
-        this.o = o;
+        super(o);
     }
 
     public Object getEntity() {
-        return o;
+        return super.getEntity();
     }
 
 }
