@@ -85,10 +85,10 @@ public class InMemoryItemStorage extends ItemStorage {
     }
 
     private Item updateItem(Item updatedItem, Item itemToUpdate) {
-        if (updatedItem.getName() != null) {
+        if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
             itemToUpdate.setName(updatedItem.getName());
         }
-        if (updatedItem.getDescription() != null) {
+        if (updatedItem.getDescription() != null && !updatedItem.getDescription().isBlank()) {
             itemToUpdate.setDescription(updatedItem.getDescription());
         }
         if (updatedItem.getAvailable() != null) {
