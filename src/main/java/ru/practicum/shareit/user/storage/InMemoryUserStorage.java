@@ -49,7 +49,7 @@ public class InMemoryUserStorage extends UserStorage {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         log.info("Отдан список всех пользователей");
         return new ArrayList<>(users.values());
     }

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
-
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +35,7 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     @Override
-    public Collection<Item> getAll() {
+    public List<Item> getAll() {
         return itemStorage.getAll();
     }
 

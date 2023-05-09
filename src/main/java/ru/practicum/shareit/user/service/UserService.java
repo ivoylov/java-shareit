@@ -7,6 +7,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class UserService implements CrudOperations<User> {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         return userStorage.getAll();
     }
 

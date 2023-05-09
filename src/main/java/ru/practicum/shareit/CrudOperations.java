@@ -1,6 +1,6 @@
 package ru.practicum.shareit;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface CrudOperations<T> {
     T create(T t);
@@ -11,7 +11,7 @@ public interface CrudOperations<T> {
 
     T get(Long id);
 
-    Collection<T> getAll();
+    List<T> getAll();
 
     T delete(Long id);
 
