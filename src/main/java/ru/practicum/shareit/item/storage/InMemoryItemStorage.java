@@ -22,7 +22,7 @@ public class InMemoryItemStorage extends ItemStorage {
     public Item create(Item item) {
         item.setId(++counter);
         items.put(item.getId(), item);
-        log.info(item + " создан");
+        log.info("создан {} ", item);
         return item;
     }
 
@@ -30,7 +30,7 @@ public class InMemoryItemStorage extends ItemStorage {
     public Item update(Item item) {
         checkOwner(item);
         Item updateItem = updateItem(item, items.get(item.getId()));
-        log.info(updateItem + " обновлён");
+        log.info("обновлён {}", item);
         return items.put(updateItem.getId(),updateItem);
     }
 
