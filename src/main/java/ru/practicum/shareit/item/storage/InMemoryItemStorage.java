@@ -2,7 +2,7 @@ package ru.practicum.shareit.item.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,7 +97,9 @@ public class InMemoryItemStorage extends ItemStorage {
     }
 
     private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwnerId(), items.get(item.getId()).getOwnerId())) throw new ItemNotFoundException();
+        if (!Objects.equals(item.getOwnerId(), items.get(item.getId()).getOwnerId())) {
+            throw new EntityNotFoundException(item);
+        }
     }
 
 }

@@ -6,8 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.itemException.ItemNotFoundException;
-import ru.practicum.shareit.exception.itemException.ItemValidationException;
 import ru.practicum.shareit.exception.requestException.RequestValidationException;
 import ru.practicum.shareit.exception.userException.UserAlreadyExistException;
 import ru.practicum.shareit.exception.userException.UserNotFoundException;
@@ -49,11 +47,11 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    // 404
+    //404
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerItemNotFoundException(final ItemNotFoundException e) {
-        log.info("Вещь не найдена", e);
+    public ErrorResponse handlerEntityNotFoundException(final EntityNotFoundException e) {
+        log.info("Объект {} не найден", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }
 

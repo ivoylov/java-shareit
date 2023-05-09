@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.itemException.ItemValidationException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.ItemValidationException;
 import ru.practicum.shareit.exception.requestException.RequestValidationException;
-import ru.practicum.shareit.exception.userException.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.service.UserService;
@@ -78,7 +78,7 @@ public class ItemController {
     }
 
     private void checkItem(Item item) {
-        if (!userService.isExist(item.getOwnerId())) throw new UserNotFoundException();
+        if (!userService.isExist(item.getOwnerId())) throw new EntityNotFoundException(item);
         if (item.getAvailable() == null) throw new ItemValidationException();
         if (item.getDescription() == null) throw new ItemValidationException();
         if (item.getName() == null) throw new ItemValidationException();
