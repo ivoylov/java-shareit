@@ -45,15 +45,15 @@ public class ItemService implements CrudOperations<Item> {
         return itemStorage.delete(id);
     }
 
-    public Collection<Item> search(String text) {
+    public List<Item> search(String text) {
         return itemStorage.search(text);
     }
 
-    public Collection<Item> search(String text, Long ownerId) {
+    public List<Item> search(String text, Long ownerId) {
         return itemStorage.search(text, ownerId);
     }
 
-    public Collection<Item> getOwnerItems(Long ownerId) {
+    public List<Item> getOwnerItems(Long ownerId) {
         return itemStorage.getOwnerItems(ownerId);
     }
 

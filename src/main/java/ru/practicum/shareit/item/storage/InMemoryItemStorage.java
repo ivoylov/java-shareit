@@ -52,8 +52,8 @@ public class InMemoryItemStorage extends ItemStorage {
     }
 
     @Override
-    public Collection<Item> search(String text) {
-        Collection<Item> findItems = new ArrayList<>();
+    public List<Item> search(String text) {
+        List<Item> findItems = new ArrayList<>();
         for (Item item : items.values()) {
             if ((item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) &&
                     item.getAvailable()) {
@@ -64,8 +64,8 @@ public class InMemoryItemStorage extends ItemStorage {
     }
 
     @Override
-    public Collection<Item> search(String text, Long ownerId) {
-        Collection<Item> findItems = new ArrayList<>();
+    public List<Item> search(String text, Long ownerId) {
+        List<Item> findItems = new ArrayList<>();
         for (Item item : items.values()) {
             if ((item.getName().toLowerCase().contains(text) ||
                     item.getDescription().toLowerCase().contains(text)) &&
@@ -77,7 +77,7 @@ public class InMemoryItemStorage extends ItemStorage {
     }
 
     @Override
-    public Collection<Item> getOwnerItems(Long ownerId) {
+    public List<Item> getOwnerItems(Long ownerId) {
         return items.values().stream().filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
     }
 

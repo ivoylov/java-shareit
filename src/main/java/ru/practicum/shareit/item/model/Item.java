@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @RequiredArgsConstructor
 public class Item {
-
     private Long id;
     @NotEmpty
     private String name;
@@ -23,13 +22,4 @@ public class Item {
     private Boolean available;
     private Long ownerId;
     private Long requestId;
-
-    public Item(String name, String description, Boolean available, Long ownerId, Long requestId) {
-        this.name = name;
-        this.description = description;
-        this.available = available;
-        this.ownerId = ownerId;
-        this.requestId = requestId;
-    }
-
 }
