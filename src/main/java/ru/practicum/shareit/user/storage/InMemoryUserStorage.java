@@ -19,7 +19,7 @@ public class InMemoryUserStorage extends UserStorage {
         if (isExist(user)) throw new UserAlreadyExistException();
         user.setId(++counter);
         users.put(user.getId(), user);
-        log.info(user + " создан");
+        log.info("создан {}", user);
         return user;
     }
 
@@ -30,7 +30,7 @@ public class InMemoryUserStorage extends UserStorage {
             if (isExist(user)) throw new UserAlreadyExistException();
         }
         User updatedUser = updateUser(user, users.get(user.getId()));
-        log.info(updatedUser + " обновлён");
+        log.info("обновлён {}", user);
         return users.put(updatedUser.getId(),updatedUser);
     }
 
@@ -44,7 +44,7 @@ public class InMemoryUserStorage extends UserStorage {
         if (!users.containsKey(id)) {
             throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
         }
-        log.info("отдан пользователь с id " + id);
+        log.info("отдан пользователь с id {}", id);
         return users.get(id);
     }
 
@@ -59,7 +59,7 @@ public class InMemoryUserStorage extends UserStorage {
         if (!users.containsKey(id)) {
             throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
         }
-        log.info("Пользователь с id " + id + " удалён");
+        log.info("Пользователь с id {} удалён", id);
         return users.remove(id);
     }
 

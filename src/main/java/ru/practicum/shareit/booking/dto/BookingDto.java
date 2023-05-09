@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-//@Component
 @AllArgsConstructor
 public class BookingDto {
     private Long id;

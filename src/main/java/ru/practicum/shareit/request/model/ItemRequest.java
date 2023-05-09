@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-//@Component
 @Builder
 public class ItemRequest {
     private Long id;

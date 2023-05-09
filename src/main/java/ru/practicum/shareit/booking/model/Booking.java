@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-//@Component
 @Builder
 public class Booking {
     private Long id;

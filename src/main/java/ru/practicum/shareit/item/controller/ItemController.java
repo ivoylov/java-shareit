@@ -63,10 +63,7 @@ public class ItemController {
     public Collection<Item> search(@RequestParam String text, HttpServletRequest request) {
         if (text.isBlank() || text.isEmpty()) return new ArrayList<>();
         Long ownerId = getOwnerId(request);
-        //if (ownerId == null) {
-            return itemService.search(text.toLowerCase());
-        //}
-        //return itemService.search(text.toLowerCase(), ownerId);
+        return itemService.search(text.toLowerCase());
     }
 
     private Long getOwnerId(HttpServletRequest request) {
