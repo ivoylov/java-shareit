@@ -29,9 +29,8 @@ public class ItemController {
     private final UserService userService;
 
     @PostMapping
-    public ItemDto create(@Valid @RequestBody ItemDto itemDto, HttpServletRequest request) {
-        Long ownerId = getOwnerId(request);
-        if (ownerId == null) throw new EntityValidationException(request);
+    public ItemDto create(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        if (ownerId == null) throw new EntityValidationException(ownerId);
         Item item = ItemDtoMapper.toItem(itemDto);
         item.setOwnerId(ownerId);
         checkItem(item);
@@ -39,9 +38,8 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, HttpServletRequest request) {
-        Long ownerId = getOwnerId(request);
-        if (ownerId == null) throw new EntityValidationException(request);
+    public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        if (ownerId == null) throw new EntityValidationException(ownerId);
         Item item = ItemDtoMapper.toItem(itemDto);
         item.setOwnerId(ownerId);
         item.setId(id);
@@ -54,9 +52,9 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getOwnerItems(HttpServletRequest request) {
+    public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         ArrayList<ItemDto> itemsDto = new ArrayList<>();
-        for (Item item : itemService.getOwnerItems(getOwnerId(request))) {
+        for (Item item : itemService.getOwnerItems(ownerId)) {
             itemsDto.add(ItemDtoMapper.toItemDto(item));
         }
         return itemsDto;
@@ -71,14 +69,6 @@ public class ItemController {
     public List<Item> search(@RequestParam String text) {
         if (text.isBlank()) return new ArrayList<>();
         return itemService.search(text.toLowerCase());
-    }
-
-    private Long getOwnerId(HttpServletRequest request) {
-        try {
-            return Long.parseLong(request.getHeader("X-Sharer-User-Id"));
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     private void checkItem(Item item) {
