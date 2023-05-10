@@ -69,7 +69,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<Item> search(@RequestParam String text) {
-        if (text.isBlank() || text.isEmpty()) return new ArrayList<>();
+        if (text.isBlank()) return new ArrayList<>();
         return itemService.search(text.toLowerCase());
     }
 
