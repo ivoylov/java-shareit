@@ -64,10 +64,10 @@ public class InMemoryUserStorage extends UserStorage {
     }
 
     private User updateUser(User updatedUser, User userToUpdate) {
-        if (updatedUser.getEmail() != null) {
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
             userToUpdate.setEmail(updatedUser.getEmail());
         }
-        if (updatedUser.getName() != null) {
+        if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
             userToUpdate.setName(updatedUser.getName());
         }
         return userToUpdate;
