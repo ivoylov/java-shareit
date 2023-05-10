@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.EntityValidationException;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -22,19 +24,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
-        if (!isValid(user)) {
-            throw new EntityValidationException(user);
+    public UserDto create(@Valid @RequestBody UserDto userDto) {
+        if (!isValid(userDto)) {
+            throw new EntityValidationException(userDto);
         }
-        return userService.create(user);
+        User user = UserDtoMapper.toUser(userDto);
+        return UserDtoMapper.toUserDto(userService.create(user));
     }
 
     @PatchMapping("/{id}")
-    public User update(@RequestBody User user, @PathVariable @Min(1) Long id) {
+    public UserDto update(@RequestBody UserDto userDto, @PathVariable @Min(1) Long id) {
+        User user = UserDtoMapper.toUser(userDto);
         user.setId(id);
-        return userService.update(user);
+        return UserDtoMapper.toUserDto(userService.update(user));
     }
-
+    
     @DeleteMapping("/{id}")
     public User delete(@PathVariable @Min(1) Long id) {
         return userService.delete(id);
@@ -50,7 +54,7 @@ public class UserController {
         return userService.getAll();
     }
 
-    private boolean isValid(User user) {
+    private boolean isValid(UserDto user) {
         return isEmail(user.getEmail()) && isCorrectName(user.getName());
     }
 

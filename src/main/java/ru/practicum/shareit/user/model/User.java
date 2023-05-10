@@ -3,14 +3,12 @@ package ru.practicum.shareit.user.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 
 @Data
 @Builder
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class User {
 
@@ -26,16 +24,5 @@ public class User {
     private String name;
     @Email
     private String email;
-
-    public User(String name, String email) {
-        this.name = name;
-        this.email = email;
-    }
-
-    public User(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-    }
 
 }
