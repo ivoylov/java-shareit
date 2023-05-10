@@ -1,16 +1,16 @@
 package ru.practicum.shareit.user.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.Create;
+import ru.practicum.shareit.Update;
 import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Collection;
 
@@ -18,13 +18,12 @@ import java.util.Collection;
 @RequestMapping("/users")
 @AllArgsConstructor
 @Validated
-@Slf4j
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
+    public UserDto create(@Validated(Create.class) @RequestBody UserDto userDto) {
         if (!isValid(userDto)) {
             throw new EntityValidationException(userDto);
         }
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@RequestBody UserDto userDto, @PathVariable @Min(1) Long id) {
+    public UserDto update(@Validated(Update.class) @RequestBody UserDto userDto, @PathVariable @Min(1) Long id) {
         User user = UserDtoMapper.toUser(userDto);
         user.setId(id);
         return UserDtoMapper.toUserDto(userService.update(user));

@@ -3,8 +3,11 @@ package ru.practicum.shareit.item.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.ItemValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 public class ItemService implements CrudOperations<Item> {
 
     private final ItemStorage itemStorage;
+    private final UserService userService;
 
     @Override
     public Item create(Item item) {
@@ -49,12 +53,16 @@ public class ItemService implements CrudOperations<Item> {
         return itemStorage.search(text);
     }
 
-    public List<Item> search(String text, Long ownerId) {
-        return itemStorage.search(text, ownerId);
-    }
-
     public List<Item> getOwnerItems(Long ownerId) {
         return itemStorage.getOwnerItems(ownerId);
+    }
+
+    public void checkItem(Item item) {
+        if (!userService.isExist(item.getOwnerId())) throw new EntityNotFoundException(item);
+        if (item.getAvailable() == null) throw new ItemValidationException();
+        if (item.getDescription() == null) throw new ItemValidationException();
+        if (item.getName() == null) throw new ItemValidationException();
+        if (item.getName().isBlank()) throw new ItemValidationException();
     }
 
 }
