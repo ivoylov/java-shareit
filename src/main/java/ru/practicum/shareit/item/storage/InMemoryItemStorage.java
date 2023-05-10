@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class InMemoryItemStorage extends ItemStorage {
 
-    private final HashMap<Long, Item> items = new HashMap<>();
+    private final Map<Long, Item> items = new HashMap<>();
     private Long counter = 0L;
 
     @Override
