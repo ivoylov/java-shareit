@@ -16,6 +16,7 @@ import ru.practicum.shareit.user.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -67,7 +68,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<Item> search(@RequestParam String text) {
-        if (text.isBlank()) return new ArrayList<>();
+        if (text.isBlank()) return Collections.emptyList();
         return itemService.search(text.toLowerCase());
     }
 
