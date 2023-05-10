@@ -86,7 +86,7 @@ public class ItemController {
         if (item.getAvailable() == null) throw new ItemValidationException();
         if (item.getDescription() == null) throw new ItemValidationException();
         if (item.getName() == null) throw new ItemValidationException();
-        if (item.getName().isEmpty() || item.getName().isBlank()) throw new ItemValidationException();
+        if (item.getName().isBlank()) throw new ItemValidationException();
     }
 
 }
