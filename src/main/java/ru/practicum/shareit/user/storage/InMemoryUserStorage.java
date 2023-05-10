@@ -26,7 +26,7 @@ public class InMemoryUserStorage extends UserStorage {
     @Override
     public User update(User user) {
         if (!users.containsKey(user.getId())) throw new EntityNotFoundException(user);
-        if (user.getEmail() != null) {
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
             if (isExist(user)) throw new UserAlreadyExistException();
         }
         User updatedUser = updateUser(user, users.get(user.getId()));
