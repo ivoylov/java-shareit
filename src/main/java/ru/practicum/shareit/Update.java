@@ -1,3 +1,5 @@
 package ru.practicum.shareit;
 
-public interface Update {}
+public interface Update {
+    
+}
