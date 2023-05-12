@@ -3,12 +3,12 @@ package ru.practicum.shareit.item.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.Create;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +20,10 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto create(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        itemDto.setOwnerId(ownerId);
+        itemService.checkItemDtoOwner(itemDto);
         Item item = ItemDtoMapper.toItem(itemDto);
-        item.setOwnerId(ownerId);
-        itemService.checkItem(item);
         return ItemDtoMapper.toItemDto(itemService.create(item));
     }
 
