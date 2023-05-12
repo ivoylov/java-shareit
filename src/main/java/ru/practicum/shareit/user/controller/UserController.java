@@ -5,7 +5,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.Update;
-import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoMapper;
 import ru.practicum.shareit.user.model.User;
@@ -23,9 +22,6 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@Validated(Create.class) @RequestBody UserDto userDto) {
-        /*if (!isValid(userDto)) {
-            throw new EntityValidationException(userDto);
-        }*/
         User user = UserDtoMapper.toUser(userDto);
         return UserDtoMapper.toUserDto(userService.create(user));
     }
@@ -50,20 +46,6 @@ public class UserController {
     @GetMapping
     public Collection<User> getAll() {
         return userService.getAll();
-    }
-
-    private boolean isValid(UserDto user) {
-        return isEmail(user.getEmail()) && isCorrectName(user.getName());
-    }
-
-    private boolean isEmail(String email) {
-        if (email == null) return false;
-        return email.contains("@") && email.contains(".");
-    }
-
-    private boolean isCorrectName(String name) {
-        if (name == null) return false;
-        return !name.isBlank() && !name.isEmpty() && !name.contains(" ");
     }
 
 }
