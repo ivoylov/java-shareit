@@ -3,14 +3,12 @@ package ru.practicum.shareit.item.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +22,6 @@ public class ItemController {
 
     @PostMapping
     public ItemDto create(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        if (ownerId == null) throw new EntityValidationException(ownerId);
         Item item = ItemDtoMapper.toItem(itemDto);
         item.setOwnerId(ownerId);
         itemService.checkItem(item);
@@ -33,7 +30,6 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        if (ownerId == null) throw new EntityValidationException(ownerId);
         Item item = ItemDtoMapper.toItem(itemDto);
         item.setOwnerId(ownerId);
         item.setId(id);
@@ -47,11 +43,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        ArrayList<ItemDto> itemsDto = new ArrayList<>();
-        for (Item item : itemService.getOwnerItems(ownerId)) {
-            itemsDto.add(ItemDtoMapper.toItemDto(item));
-        }
-        return itemsDto;
+        return ItemDtoMapper.toItemDtoList(itemService.getOwnerItems(ownerId));
     }
 
     @GetMapping("/{id}")

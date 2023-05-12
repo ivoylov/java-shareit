@@ -3,6 +3,9 @@ package ru.practicum.shareit.item.dto;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @UtilityClass
 public class ItemDtoMapper {
 
@@ -24,6 +27,14 @@ public class ItemDtoMapper {
                 .ownerId(itemDto.getOwnerId())
                 .available(itemDto.getAvailable())
                 .build();
+    }
+
+    public List<ItemDto> toItemDtoList(List<Item> items) {
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item item : items) {
+            itemsDto.add(toItemDto(item));
+        }
+        return itemsDto;
     }
 
 }
