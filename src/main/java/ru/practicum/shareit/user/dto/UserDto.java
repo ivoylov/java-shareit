@@ -17,8 +17,6 @@ public class UserDto {
 
     @Min(1)
     private Long id;
-    @NotNull
-    @NotEmpty(message = "имя не должно быть пустым")
     @NotBlank(message = "имя должно содержать символы")
     @Length(min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH, message = "некорректная длина имени")
     private String name;
