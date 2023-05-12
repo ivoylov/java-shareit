@@ -23,9 +23,9 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@Validated(Create.class) @RequestBody UserDto userDto) {
-        if (!isValid(userDto)) {
+        /*if (!isValid(userDto)) {
             throw new EntityValidationException(userDto);
-        }
+        }*/
         User user = UserDtoMapper.toUser(userDto);
         return UserDtoMapper.toUserDto(userService.create(user));
     }
