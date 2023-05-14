@@ -5,10 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.shareit.Create;
+import ru.practicum.shareit.Update;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @Builder
@@ -20,10 +19,10 @@ public class UserDto {
 
     private Long id;
     @NotBlank(groups = Create.class, message = "имя должно содержать символы")
-    @Length(groups = Create.class, min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH, message = "некорректная длина имени")
+    @Size(groups = {Create.class, Update.class}, min = MIN_NAME_LENGTH, max = MAX_NAME_LENGTH, message = "некорректная длина имени")
     private String name;
-    @NotNull(groups = Create.class)
-    @Email(groups = Create.class)
+    @NotEmpty(groups = Create.class)
+    @Email(groups = {Create.class, Update.class})
     private String email;
 
 }

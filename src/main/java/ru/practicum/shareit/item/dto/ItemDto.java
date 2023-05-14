@@ -17,7 +17,7 @@ public class ItemDto {
     private Long id;
     @NotBlank(groups = Create.class)
     private String name;
-    @NotEmpty(groups = Create.class)
+    @NotBlank(groups = Create.class)
     private String description;
     @NotNull(groups = Create.class)
     private Boolean available;
