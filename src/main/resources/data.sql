@@ -1,0 +1,4 @@
+--INSERT INTO relationship_status (name) VALUES ('UNCONFIRMED');
+--INSERT INTO relationship_status (name) VALUES ('CONFIRM_BY_USER');
+--INSERT INTO relationship_status (name) VALUES ('CONFIRM_BY_FRIEND');
+--INSERT INTO relationship_status (name) VALUES ('CONFIRM');
