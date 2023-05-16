@@ -4,9 +4,13 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class InDbUserStorage extends UserStorage {
+
+    UserRepository userRepository;
+
     @Override
     public User create(User user) {
         return null;
@@ -24,7 +28,8 @@ public class InDbUserStorage extends UserStorage {
 
     @Override
     public User get(Long id) {
-        return null;
+        Optional<User> user = userRepository.findById(id);
+        return user.orElse(null);
     }
 
     @Override
