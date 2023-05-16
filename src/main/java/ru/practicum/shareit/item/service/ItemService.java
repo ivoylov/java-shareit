@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.InDbItemStorage;
 import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -17,6 +19,12 @@ public class ItemService implements CrudOperations<Item> {
 
     private final ItemStorage itemStorage;
     private final UserService userService;
+
+    @Autowired
+    public ItemService(InDbItemStorage itemStorage, UserService userService) {
+        this.itemStorage = itemStorage;
+        this.userService = userService;
+    }
 
     @Override
     public Item create(Item item) {
