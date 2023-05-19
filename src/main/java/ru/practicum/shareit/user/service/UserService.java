@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.InDbUserStorage;
+import ru.practicum.shareit.user.storage.InMemoryUserStorage;
+import ru.practicum.shareit.user.storage.UserRepository;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.List;
@@ -14,12 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService implements CrudOperations<User> {
 
-    private final UserStorage userStorage;
-
-    @Autowired
-    public UserService(InDbUserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+    private InDbUserStorage userStorage;
 
     @Override
     public User create(User user) {

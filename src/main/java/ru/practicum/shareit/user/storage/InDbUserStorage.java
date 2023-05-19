@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user.storage;
 
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
@@ -7,23 +9,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class InDbUserStorage extends UserStorage {
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public User create(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     @Override
     public Boolean isExist(Long id) {
-        return null;
+        return userRepository.existsById(id);
     }
 
     @Override
@@ -34,11 +37,13 @@ public class InDbUserStorage extends UserStorage {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return userRepository.findAll();
     }
 
     @Override
     public User delete(Long id) {
-        return null;
+        User user = get(id);
+        userRepository.deleteById(id);
+        return user;
     }
 }
