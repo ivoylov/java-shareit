@@ -23,6 +23,11 @@ public class InDbItemStorage extends ItemStorage {
     }
 
     @Override
+    public Boolean isExist(Item item) {
+        return null;
+    }
+
+    @Override
     public Item get(Long id) {
         return null;
     }

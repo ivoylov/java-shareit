@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +35,16 @@ public class InMemoryItemStorage extends ItemStorage {
     @Override
     public Boolean isExist(Long id) {
         return items.containsKey(id);
+    }
+
+    @Override
+    public Boolean isExist(Item item) {
+        for (Item checkedITem : items.values()) {
+            if (checkedITem.equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

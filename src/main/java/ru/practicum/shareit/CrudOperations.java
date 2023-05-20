@@ -9,6 +9,8 @@ public interface CrudOperations<T> {
 
     Boolean isExist(Long id);
 
+    Boolean isExist(T t);
+
     T get(Long id);
 
     List<T> getAll();

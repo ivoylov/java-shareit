@@ -30,6 +30,11 @@ public class InDbUserStorage extends UserStorage {
     }
 
     @Override
+    public Boolean isExist(User user) {
+        return null;
+    }
+
+    @Override
     public User get(Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);

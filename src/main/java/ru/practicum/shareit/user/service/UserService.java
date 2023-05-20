@@ -1,16 +1,16 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.UserAlreadyExistException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.InDbUserStorage;
-import ru.practicum.shareit.user.storage.InMemoryUserStorage;
-import ru.practicum.shareit.user.storage.UserRepository;
-import ru.practicum.shareit.user.storage.UserStorage;
 
+import java.util.Formatter;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -20,12 +20,18 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User create(User user) {
+        if (userStorage.isExist(user)) throw new UserAlreadyExistException();
         return userStorage.create(user);
     }
 
     @Override
     public User update(User user) {
-        return userStorage.update(user);
+        if (!userStorage.isExist(user.getId())) throw new EntityNotFoundException(user);
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            if (userStorage.isExist(user.getId())) throw new UserAlreadyExistException();
+        }
+        User updatedUser = updateUser(user, userStorage.get(user.getId()));
+        return userStorage.update(updatedUser);
     }
 
     @Override
@@ -34,7 +40,15 @@ public class UserService implements CrudOperations<User> {
     }
 
     @Override
+    public Boolean isExist(User user) {
+        return userStorage.isExist(user);
+    }
+
+    @Override
     public User get(Long id) {
+        if (!userStorage.isExist(id)) {
+            throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
+        }
         return userStorage.get(id);
     }
 
@@ -45,7 +59,24 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User delete(Long id) {
+        if (!userStorage.isExist(id)) {
+            throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
+        }
         return userStorage.delete(id);
+    }
+
+    private User updateUser(User updatedUser, User userToUpdate) {
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+            userToUpdate.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
+            userToUpdate.setName(updatedUser.getName());
+        }
+        return userToUpdate;
+    }
+
+    public static Boolean isSameUsers(User user1, User user2) {
+        return user1.getEmail().equals(user2.getEmail()) && !Objects.equals(user1.getId(), user2.getId());
     }
 
 }
