@@ -11,7 +11,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class InDbUserStorage extends UserStorage {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public User create(User user) {
@@ -58,4 +58,5 @@ public class InDbUserStorage extends UserStorage {
         userRepository.deleteById(id);
         return user;
     }
+
 }

@@ -1,59 +1,62 @@
 package ru.practicum.shareit.item.storage;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class InDbItemStorage extends ItemStorage {
+
+    private final ItemRepository itemRepository;
+
     @Override
     public Item create(Item item) {
-        return null;
+        return itemRepository.save(item);
     }
 
     @Override
     public Item update(Item item) {
-        return null;
+        itemRepository.update(item.getName(),item.getDescription(), item.getAvailable(), item.getId());
+        return item;
     }
 
     @Override
     public Boolean isExist(Long id) {
-        return null;
+        return itemRepository.existsById(id);
     }
 
     @Override
     public Boolean isExist(Item item) {
-        return null;
+        for (Item checkedItem : itemRepository.findAll()) {
+            if (checkedItem.equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public Item get(Long id) {
-        return null;
+        Optional<Item> item = itemRepository.findById(id);
+        if (item.isEmpty()) throw new EntityNotFoundException(item);
+        return item.orElse(null);
     }
 
     @Override
     public List<Item> getAll() {
-        return null;
+        return itemRepository.findAll();
     }
 
     @Override
     public Item delete(Long id) {
-        return null;
+        Item item = get(id);
+        itemRepository.deleteById(id);
+        return item;
     }
 
-    @Override
-    public List<Item> search(String text) {
-        return null;
-    }
-
-    @Override
-    public List<Item> getOwnerItems(Long ownerId) {
-        return null;
-    }
-
-    @Override
-    public List<Item> search(String text, Long ownerId) {
-        return null;
-    }
 }

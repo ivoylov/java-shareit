@@ -9,10 +9,12 @@ import ru.practicum.shareit.user.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
-
     @Modifying
     @Transactional
-    @Query(value = "UPDATE shareit_user SET name = :userName, email = :userEmail WHERE id = :userId", nativeQuery = true)
+    @Query(value =
+            "UPDATE shareit_user " +
+            "SET name = :userName, email = :userEmail " +
+            "WHERE id = :userId",
+            nativeQuery = true)
     void update(String userName, String userEmail, Long userId);
-
 }
