@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.exception.UserAlreadyExistException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.InDbUserStorage;
 
 import java.util.Formatter;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -20,18 +18,14 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User create(User user) {
-        if (userStorage.isExist(user)) throw new UserAlreadyExistException();
         return userStorage.create(user);
     }
 
     @Override
     public User update(User user) {
         if (!userStorage.isExist(user.getId())) throw new EntityNotFoundException(user);
-        if (user.getEmail() != null && !user.getEmail().isBlank()) {
-            if (userStorage.isExist(user.getId())) throw new UserAlreadyExistException();
-        }
-        User updatedUser = updateUser(user, userStorage.get(user.getId()));
-        return userStorage.update(updatedUser);
+        User userToUpdate = UserService.updateUser(user, userStorage.get(user.getId()));
+        return userStorage.update(userToUpdate);
     }
 
     @Override
@@ -65,7 +59,7 @@ public class UserService implements CrudOperations<User> {
         return userStorage.delete(id);
     }
 
-    private User updateUser(User updatedUser, User userToUpdate) {
+    public static User updateUser(User updatedUser, User userToUpdate) {
         if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
             userToUpdate.setEmail(updatedUser.getEmail());
         }
@@ -76,7 +70,7 @@ public class UserService implements CrudOperations<User> {
     }
 
     public static Boolean isSameUsers(User user1, User user2) {
-        return user1.getEmail().equals(user2.getEmail()) && !Objects.equals(user1.getId(), user2.getId());
+        return user1.getEmail().equals(user2.getEmail()) && user1.getId().equals(user2.getId());
     }
 
 }

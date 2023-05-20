@@ -5,7 +5,10 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -23,8 +26,9 @@ public class InMemoryUserStorage extends UserStorage {
 
     @Override
     public User update(User user) {
+        User updatedUser = UserService.updateUser(user, users.get(user.getId()));
         log.info("В памяти обновлён {}", user);
-        return users.put(user.getId(),user);
+        return users.put(updatedUser.getId(),updatedUser);
     }
 
     @Override

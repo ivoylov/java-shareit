@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.storage;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
@@ -21,7 +20,8 @@ public class InDbUserStorage extends UserStorage {
 
     @Override
     public User update(User user) {
-        return userRepository.save(user);
+        userRepository.update(user.getName(), user.getEmail(), user.getId());
+        return user;
     }
 
     @Override
@@ -31,7 +31,14 @@ public class InDbUserStorage extends UserStorage {
 
     @Override
     public Boolean isExist(User user) {
-        return null;
+        for (User checkedUser : userRepository.findAll()) {
+            if (checkedUser.getEmail().equals(user.getEmail())) {
+                if (!checkedUser.getId().equals(user.getId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
