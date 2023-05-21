@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.storage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class InDbBookingStorage extends BookingStorage {
 
     @Override
     public Booking get(Long id) {
-        return null;
+        return bookingRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -46,4 +47,9 @@ public class InDbBookingStorage extends BookingStorage {
     public Booking delete(Long id) {
         return null;
     }
+
+    public void updateBooking(Long bookingId, Integer status) {
+        bookingRepository.update(bookingId, status);
+    }
+
 }

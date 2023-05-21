@@ -27,4 +27,10 @@ public class BookingController {
         bookingDto.setStatus(WAITING);
         return bookingService.create(bookingDto);
     }
+
+    @PatchMapping("/{bookingId}")
+    public BookingDto approved (@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable Long bookingId, @RequestParam Boolean approved) {
+        return bookingService.updateBooking(ownerId, bookingId, approved);
+    }
+
 }

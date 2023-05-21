@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.model.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Long> {
+
     @Modifying
     @Transactional
     @Query(value =
@@ -17,4 +18,5 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
             "WHERE id = :itemId",
             nativeQuery = true)
     void update(String itemName, String itemDescription, Boolean itemAvailable, Long itemId);
+
 }
