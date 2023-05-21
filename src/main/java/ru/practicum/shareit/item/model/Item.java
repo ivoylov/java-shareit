@@ -14,7 +14,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "items")
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,5 +24,4 @@ public class Item {
     private Boolean available;
     @Column(nullable = false)
     private Long ownerId;
-
 }
