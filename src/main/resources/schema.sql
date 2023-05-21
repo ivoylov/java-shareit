@@ -21,13 +21,13 @@ CREATE TABLE IF NOT EXISTS bookings (
     status int
 );
 
-CREATE TABLE IF NOT EXISTS bookings (
+CREATE TABLE IF NOT EXISTS requests (
     id bigint not null generated always as identity primary key ,
     description varchar(255),
     requestor_id bigint
 );
 
-CREATE TABLE IF NOT EXISTS bookings (
+CREATE TABLE IF NOT EXISTS comments (
     id bigint not null generated always as identity primary key ,
     text varchar(255),
     item_id bigint,
