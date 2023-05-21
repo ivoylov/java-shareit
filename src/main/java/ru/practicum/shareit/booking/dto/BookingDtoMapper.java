@@ -1,16 +1,24 @@
 package ru.practicum.shareit.booking.dto;
 
+import lombok.AllArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.ItemRepository;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.storage.UserRepository;
 
+@AllArgsConstructor
 public class BookingDtoMapper {
 
-    public static BookingDto toBookingDto(Booking booking) {
+    public static BookingDto toBookingDto(Booking booking, Item item, User user) {
         return BookingDto.builder()
                 .id(booking.getId())
                 .bookerId(booking.getBookerId())
+                .booker(user)
                 .start(booking.getStart())
                 .end(booking.getEnd())
-                .item(booking.getItem())
+                .itemId(booking.getItemId())
+                .item(item)
                 .status(booking.getStatus())
                 .build();
     }
@@ -21,7 +29,7 @@ public class BookingDtoMapper {
                 .bookerId(bookingDto.getBookerId())
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
-                .item(bookingDto.getItem())
+                .itemId(bookingDto.getItemId())
                 .status(bookingDto.getStatus())
                 .build();
     }

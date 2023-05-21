@@ -9,6 +9,9 @@ import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.item.storage.ItemRepository;
+import ru.practicum.shareit.user.storage.UserRepository;
+
 import static ru.practicum.shareit.booking.model.Status.*;
 
 @RestController
@@ -17,10 +20,11 @@ import static ru.practicum.shareit.booking.model.Status.*;
 public class BookingController {
 
     private final BookingService bookingService;
+
     @PostMapping
     public BookingDto create (@Validated(Create.class) @RequestBody BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
         bookingDto.setBookerId(userId);
         bookingDto.setStatus(WAITING);
-        return BookingDtoMapper.toBookingDto(bookingService.create(BookingDtoMapper.toBooking(bookingDto)));
+        return bookingService.create(bookingDto);
     }
 }

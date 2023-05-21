@@ -24,9 +24,7 @@ public class Booking {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
     @Column(name = "item_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    private Long itemId;
     @Column(name = "booker_id", nullable = false)
     private Long bookerId;
     private Status status;
