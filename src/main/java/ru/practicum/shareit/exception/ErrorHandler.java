@@ -43,6 +43,14 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    //400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerItemAvailableException(final ItemAvailableException e) {
+        log.info("Вещь недоступна для бронирования", e);
+        return new ErrorResponse(e.getMessage());
+    }
+
     //500
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
