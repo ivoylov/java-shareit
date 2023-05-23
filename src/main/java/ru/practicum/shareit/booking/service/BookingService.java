@@ -17,7 +17,10 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 import static ru.practicum.shareit.booking.model.Status.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +58,10 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public BookingDto get(Long id) {
-        return null;
+        Booking booking = bookingStorage.get(id);
+        User user = userService.get(booking.getBookerId());
+        Item item = itemService.get(booking.getItemId());
+        return BookingDtoMapper.toBookingDto(booking, item, user);
     }
 
     @Override
@@ -68,12 +74,41 @@ public class BookingService implements CrudOperations<BookingDto> {
         return null;
     }
 
-    public BookingDto updateBooking(Long ownerId, Long bookingId, boolean approved) {
+    public BookingDto updateBooking(Long bookerId, Long bookingId, boolean approved) {
         Integer statusId = approved ? APPROVED.getId() : WAITING.getId();
         bookingStorage.updateBooking(bookingId, statusId);
         Booking booking = bookingStorage.get(bookingId);
-        User user = userService.get(ownerId);
-        Item item = itemService.get(bookingId);
+        User user = userService.get(booking.getBookerId());
+        Item item = itemService.get(booking.getItemId());
         return BookingDtoMapper.toBookingDto(booking, item, user);
     }
+
+    public List<BookingDto> getAllForUser(Long bookersId) {
+        if (!userService.isExist(bookersId)) throw new EntityNotFoundException(userService.get(bookersId));
+        List<Booking> bookingsList = bookingStorage.getAllForBookers(bookersId);
+        List<BookingDto> bookingDtoList = new ArrayList<>();
+        for (Booking booking : bookingsList) {
+            BookingDto bookingDto = BookingDtoMapper.toBookingDto(
+                    booking,
+                    itemService.get(booking.getItemId()),
+                    userService.get(booking.getBookerId()));
+            bookingDtoList.add(bookingDto);
+        }
+        return bookingDtoList;
+    }
+
+    public List<BookingDto> getAllByState(String status) {
+        if (!Arrays.stream(values()).collect(Collectors.toList()).contains(status)) throw new EntityNotFoundException(status);
+        List<Booking> bookingsList = bookingStorage.getAllByState(status);
+        List<BookingDto> bookingDtoList = new ArrayList<>();
+        for (Booking booking : bookingsList) {
+            BookingDto bookingDto = BookingDtoMapper.toBookingDto(
+                    booking,
+                    itemService.get(booking.getItemId()),
+                    userService.get(booking.getBookerId()));
+            bookingDtoList.add(bookingDto);
+        }
+        return bookingDtoList;
+    }
+
 }

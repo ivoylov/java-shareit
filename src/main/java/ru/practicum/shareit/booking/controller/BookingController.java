@@ -12,6 +12,8 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.storage.UserRepository;
 
+import java.util.List;
+
 import static ru.practicum.shareit.booking.model.Status.*;
 
 @RestController
@@ -22,15 +24,26 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingDto create (@Validated(Create.class) @RequestBody BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public BookingDto create(@Validated(Create.class) @RequestBody BookingDto bookingDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
         bookingDto.setBookerId(userId);
         bookingDto.setStatus(WAITING);
         return bookingService.create(bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto approved (@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable Long bookingId, @RequestParam Boolean approved) {
+    public BookingDto approved(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable Long bookingId, @RequestParam Boolean approved) {
         return bookingService.updateBooking(ownerId, bookingId, approved);
+    }
+
+    @GetMapping("/{bookingId}")
+    public BookingDto get(@PathVariable Long bookingId) {
+        return bookingService.get(bookingId);
+    }
+
+    @GetMapping
+    public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") Long bookerId,
+                                            @RequestParam(required = false) String state) {
+        return bookingService.getAllForUser(bookerId);
     }
 
 }

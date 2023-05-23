@@ -48,8 +48,19 @@ public class InDbBookingStorage extends BookingStorage {
         return null;
     }
 
+    @Override
     public void updateBooking(Long bookingId, Integer status) {
         bookingRepository.update(bookingId, status);
+    }
+
+    @Override
+    public List<Booking> getAllForBookers(Long bookersId) {
+        return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookersId);
+    }
+
+    @Override
+    public List<Booking> getAllByState(String state) {
+        return bookingRepository.findBookingsByStatus(state);
     }
 
 }

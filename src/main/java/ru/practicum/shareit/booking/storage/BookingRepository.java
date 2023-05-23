@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
+import java.util.List;
+
 @Repository
 public interface BookingRepository extends JpaRepository<Booking,Long> {
 
@@ -19,5 +21,8 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
             "WHERE id = :bookingId",
             nativeQuery = true)
     void update(Long bookingId, Integer bookingStatus);
+
+    List<Booking> findBookingsByBookerIdOrderByIdDesc(Long bookerId);
+    List<Booking> findBookingsByStatus(String state);
 
 }
