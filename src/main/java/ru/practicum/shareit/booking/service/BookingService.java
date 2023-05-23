@@ -83,23 +83,9 @@ public class BookingService implements CrudOperations<BookingDto> {
         return BookingDtoMapper.toBookingDto(booking, item, user);
     }
 
-    public List<BookingDto> getAllForUser(Long bookersId) {
+    public List<BookingDto> getAllForUser(Long bookersId, String state) {
         if (!userService.isExist(bookersId)) throw new EntityNotFoundException(userService.get(bookersId));
-        List<Booking> bookingsList = bookingStorage.getAllForBookers(bookersId);
-        List<BookingDto> bookingDtoList = new ArrayList<>();
-        for (Booking booking : bookingsList) {
-            BookingDto bookingDto = BookingDtoMapper.toBookingDto(
-                    booking,
-                    itemService.get(booking.getItemId()),
-                    userService.get(booking.getBookerId()));
-            bookingDtoList.add(bookingDto);
-        }
-        return bookingDtoList;
-    }
-
-    public List<BookingDto> getAllByState(String status) {
-        if (!Arrays.stream(values()).collect(Collectors.toList()).contains(status)) throw new EntityNotFoundException(status);
-        List<Booking> bookingsList = bookingStorage.getAllByState(status);
+        List<Booking> bookingsList = bookingStorage.getAllForBookers(bookersId, state);
         List<BookingDto> bookingDtoList = new ArrayList<>();
         for (Booking booking : bookingsList) {
             BookingDto bookingDto = BookingDtoMapper.toBookingDto(

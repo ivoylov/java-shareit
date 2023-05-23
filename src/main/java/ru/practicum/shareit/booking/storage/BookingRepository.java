@@ -23,6 +23,6 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     void update(Long bookingId, Integer bookingStatus);
 
     List<Booking> findBookingsByBookerIdOrderByIdDesc(Long bookerId);
-    List<Booking> findBookingsByStatus(String state);
+    List<Booking> findBookingsByBookerIdAndStatusOrderByBookerIdDesc(Long bookerId, Status status);
 
 }

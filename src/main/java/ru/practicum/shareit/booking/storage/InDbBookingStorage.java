@@ -54,13 +54,10 @@ public class InDbBookingStorage extends BookingStorage {
     }
 
     @Override
-    public List<Booking> getAllForBookers(Long bookersId) {
-        return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookersId);
-    }
-
-    @Override
-    public List<Booking> getAllByState(String state) {
-        return bookingRepository.findBookingsByStatus(state);
+    public List<Booking> getAllForBookers(Long bookersId, String state) {
+        if (state.equals("ALL")) return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookersId);
+        Status status = Status.valueOf(state);
+        return bookingRepository.findBookingsByBookerIdAndStatusOrderByBookerIdDesc(bookersId, status);
     }
 
 }

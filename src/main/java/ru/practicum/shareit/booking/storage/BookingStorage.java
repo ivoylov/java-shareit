@@ -9,7 +9,6 @@ import java.util.List;
 public abstract class BookingStorage implements CrudOperations<Booking> {
 
     public abstract void updateBooking(Long bookingId, Integer status);
-    public abstract List<Booking> getAllForBookers(Long bookersId);
-    public abstract List<Booking> getAllByState(String state);
+    public abstract List<Booking> getAllForBookers(Long bookersId, String state);
 
 }
