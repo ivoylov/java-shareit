@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,5 +25,10 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
 
     List<Booking> findBookingsByBookerIdOrderByIdDesc(Long bookerId);
     List<Booking> findBookingsByBookerIdAndStatusOrderByBookerIdDesc(Long bookerId, Status status);
+    List<Booking> findBookingsByStartAfter(LocalDateTime start);
+    List<Booking> findBookingsByOwnerIdOrderByIdDesc(Long ownerId);
+    List<Booking> findBookingsByOwnerIdAndStatusOrderByOwnerIdDesc(Long bookerId, Status status);
+    Booking findBookingByIdAndAndBookerId(Long bookingId, Long bookerId);
+    Booking findBookingByItemId(Long itemId);
 
 }

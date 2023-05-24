@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -54,10 +56,42 @@ public class InDbBookingStorage extends BookingStorage {
     }
 
     @Override
-    public List<Booking> getAllForBookers(Long bookersId, String state) {
-        if (state.equals("ALL")) return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookersId);
-        Status status = Status.valueOf(state);
-        return bookingRepository.findBookingsByBookerIdAndStatusOrderByBookerIdDesc(bookersId, status);
+    public List<Booking> getAllForBooker(Long bookersId, String state) {
+        if (state.equals("ALL")) {
+            return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookersId);
+        } else {
+            Status status = Status.valueOf(state);
+            if (status == Status.FUTURE) {
+                return bookingRepository.findBookingsByStartAfter(LocalDateTime.now());
+            }
+            else {
+                return bookingRepository.findBookingsByBookerIdAndStatusOrderByBookerIdDesc(bookersId, status);
+            }
+        }
     }
 
+    @Override
+    public Booking getForBooker(Long bookingId, Long bookerId) {
+        return bookingRepository.findBookingByIdAndAndBookerId(bookingId,bookerId);
+    }
+
+    @Override
+    public List<Booking> getAllForOwner(Long ownerId, String state) {
+        if (state.equals("ALL")) {
+            return bookingRepository.findBookingsByOwnerIdOrderByIdDesc(ownerId);
+        } else {
+            Status status = Status.valueOf(state);
+            if (status == Status.FUTURE) {
+                return bookingRepository.findBookingsByStartAfter(LocalDateTime.now());
+            }
+            else {
+                return bookingRepository.findBookingsByOwnerIdAndStatusOrderByOwnerIdDesc(ownerId, status);
+            }
+        }
+    }
+
+    @Override
+    public Booking getByItemId(Long itemId) {
+        return bookingRepository.findBookingByItemId(itemId);
+    }
 }
