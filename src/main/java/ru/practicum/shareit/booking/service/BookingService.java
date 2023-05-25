@@ -17,9 +17,7 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static ru.practicum.shareit.booking.model.Status.APPROVED;
 import static ru.practicum.shareit.booking.model.Status.WAITING;
 
 @Service
@@ -32,22 +30,35 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public BookingDto create(BookingDto bookingDto) {
-        if (!itemService.get(bookingDto.getItemId()).getAvailable()) throw new ItemAvailableException(bookingDto);
-        if (!userService.isExist(bookingDto.getBookerId())) throw new EntityNotFoundException(userService.get(bookingDto.getBookerId()));
-        if (!bookingDto.isBookingTimeValid()) throw new EntityValidationException(bookingDto);
-        Booking booking = bookingStorage.getByItemId(bookingDto.getItemId());
-        if (booking != null && booking.getStatus() == APPROVED) throw new EntityValidationException(bookingDto);
+
+        checkCreatingBookingDto(bookingDto);
+
         User user = userService.get(bookingDto.getBookerId());
         Item item = itemService.get(bookingDto.getItemId());
         User owner = userService.get(item.getOwnerId());
-        bookingDto.setOwner(owner);
-        Booking createBooking = bookingStorage.create(BookingDtoMapper.toBooking(bookingDto));
-        return BookingDtoMapper.toBookingDto(createBooking, item, user);
+
+        Booking booking = BookingDtoMapper.toBooking(bookingDto);
+        booking.setOwnerId(owner.getId());
+        booking.setStatus(WAITING);
+
+        Booking createdBooking = bookingStorage.create(booking);
+        return BookingDtoMapper.toBookingDto(createdBooking, item, user);
+
     }
 
     @Override
-    public BookingDto update(BookingDto booking) {
-        return null;
+    public BookingDto update(BookingDto bookingDto) {
+
+        Booking bookingToUpdate = bookingStorage.get(bookingDto.getId());
+
+        checkUpdatingBooking(bookingDto, bookingToUpdate);
+        bookingToUpdate.setStatus(bookingDto.getStatus());
+
+        Booking updatedBooking = bookingStorage.update(bookingToUpdate);
+        User user = userService.get(updatedBooking.getBookerId());
+        Item item = itemService.get(updatedBooking.getItemId());
+        return BookingDtoMapper.toBookingDto(updatedBooking, item, user);
+
     }
 
     @Override
@@ -58,14 +69,6 @@ public class BookingService implements CrudOperations<BookingDto> {
     @Override
     public Boolean isExist(BookingDto booking) {
         return null;
-    }
-
-    public BookingDto getForBooker(Long id, Long bookerId) {
-        Booking booking = bookingStorage.getForBooker(id, bookerId);
-        if (booking == null) throw new EntityNotFoundException(id);
-        User user = userService.get(booking.getBookerId());
-        Item item = itemService.get(booking.getItemId());
-        return BookingDtoMapper.toBookingDto(booking, item, user);
     }
 
     @Override
@@ -87,46 +90,93 @@ public class BookingService implements CrudOperations<BookingDto> {
         return null;
     }
 
-    public BookingDto updateBooking(Long bookerId, Long bookingId, boolean approved) {
-        Booking booking = bookingStorage.get(bookingId);
-        if (booking.getStatus() == APPROVED) throw new EntityValidationException(booking);
-        if (Objects.equals(booking.getBookerId(), bookerId)) throw new EntityNotFoundException(booking);
-        Integer statusId = approved ? APPROVED.getId() : WAITING.getId();
-        bookingStorage.updateBooking(bookingId, statusId);
-        Booking updatedBooking = bookingStorage.get(bookingId);
-        User user = userService.get(updatedBooking.getBookerId());
-        Item item = itemService.get(updatedBooking.getItemId());
-        return BookingDtoMapper.toBookingDto(updatedBooking, item, user);
+    public List<BookingDto> getAllForUser(Long userId, String state) {
+        if (!userService.isExist(userId)) {
+            throw new EntityNotFoundException(userId);
+        }
+        switch (state) {
+            case "ALL":
+                return toBookingDtoList(bookingStorage.getAllBookingsForUser(userId));
+            case "CURRENT":
+                toBookingDtoList(bookingStorage.getAllCurrentBookingsForUser(userId));
+                break;
+            case "PAST":
+                toBookingDtoList(bookingStorage.getAllPastBookingsForUser(userId));
+                break;
+            case "FUTURE":
+                toBookingDtoList(bookingStorage.getAllFutureBookingsForUser(userId));
+                break;
+            case "WAITING":
+                toBookingDtoList(bookingStorage.getAllWaitingBookingsForUser(userId));
+                break;
+            case "REJECTED":
+                toBookingDtoList(bookingStorage.getAllRejectedBookingsForUser(userId));
+                break;
+            default:
+                throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
+        }
+        return null;
     }
 
-    public List<BookingDto> getAllForUser(Long bookersId, String state) {
-        if (state.equals("UNSUPPORTED_STATUS")) throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
-        if (!userService.isExist(bookersId)) throw new EntityNotFoundException(userService.get(bookersId));
-        List<Booking> bookingsList = bookingStorage.getAllForBooker(bookersId, state);
-        List<BookingDto> bookingDtoList = new ArrayList<>();
+    public List<BookingDto> getAllForOwner(Long userId, String state) {
+        if (!userService.isExist(userId)) {
+            throw new EntityNotFoundException(userId);
+        }
+        switch (state) {
+            case "ALL":
+                return toBookingDtoList(bookingStorage.getAllBookingsForOwner(userId));
+            case "CURRENT":
+                toBookingDtoList(bookingStorage.getAllCurrentBookingsForOwner(userId));
+                break;
+            case "PAST":
+                toBookingDtoList(bookingStorage.getAllPastBookingsForOwner(userId));
+                break;
+            case "FUTURE":
+                toBookingDtoList(bookingStorage.getAllFutureBookingsForOwner(userId));
+                break;
+            case "WAITING":
+                toBookingDtoList(bookingStorage.getAllWaitingBookingsForOwner(userId));
+                break;
+            case "REJECTED":
+                toBookingDtoList(bookingStorage.getAllRejectedBookingsForOwner(userId));
+                break;
+            default:
+                throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
+        }
+        return null;
+    }
+
+    private List<BookingDto> toBookingDtoList(List<Booking> bookingsList) {
+        List<BookingDto> bookingsDtoList = new ArrayList<>();
         for (Booking booking : bookingsList) {
             BookingDto bookingDto = BookingDtoMapper.toBookingDto(
                     booking,
                     itemService.get(booking.getItemId()),
                     userService.get(booking.getBookerId()));
-            bookingDtoList.add(bookingDto);
+            bookingsDtoList.add(bookingDto);
         }
-        return bookingDtoList;
+        return bookingsDtoList;
     }
 
-    public List<BookingDto> getAllForOwner(Long ownerId, String state) {
-        if (state.equals("UNSUPPORTED_STATUS")) throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
-        if (!userService.isExist(ownerId)) throw new EntityNotFoundException(userService.get(ownerId));
-        List<Booking> bookingsList = bookingStorage.getAllForOwner(ownerId, state);
-        List<BookingDto> bookingDtoList = new ArrayList<>();
-        for (Booking booking : bookingsList) {
-            BookingDto bookingDto = BookingDtoMapper.toBookingDto(
-                    booking,
-                    itemService.get(booking.getItemId()),
-                    userService.get(booking.getBookerId()));
-            bookingDtoList.add(bookingDto);
+    private void checkCreatingBookingDto(BookingDto bookingDto) {
+        if (!itemService.get(bookingDto.getItemId()).getAvailable()) {
+            throw new ItemAvailableException(bookingDto);
         }
-        return bookingDtoList;
+        if (!userService.isExist(bookingDto.getBookerId())) {
+            throw new EntityNotFoundException(userService.get(bookingDto.getBookerId()));
+        }
+        if (!bookingDto.isBookingTimeValid()) {
+            throw new EntityValidationException(bookingDto);
+        }
+    }
+
+    private void checkUpdatingBooking(BookingDto bookingDto, Booking booking) {
+        if (booking.getStatus() != WAITING) {
+            throw new EntityValidationException(bookingDto);
+        }
+        if (bookingDto.getOwnerId().equals(booking.getBookerId())) {
+            throw new EntityNotFoundException(booking);//TODO сделать новую более подходящую ошибку
+        }
     }
 
 }

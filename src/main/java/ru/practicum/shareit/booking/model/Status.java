@@ -5,8 +5,7 @@ public enum Status {
     CANCELED(0),
     WAITING(1),
     APPROVED(2),
-    REJECTED(3),
-    FUTURE(4);
+    REJECTED(3);
 
     private int id;
 

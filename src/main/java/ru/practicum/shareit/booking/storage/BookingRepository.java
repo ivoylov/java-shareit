@@ -21,14 +21,15 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
             "SET status = :bookingStatus " +
             "WHERE id = :bookingId",
             nativeQuery = true)
-    void update(Long bookingId, Integer bookingStatus);
+    void update(Integer bookingStatus, Long bookingId);
 
-    List<Booking> findBookingsByBookerIdOrderByIdDesc(Long bookerId);
-    List<Booking> findBookingsByBookerIdAndStatusOrderByBookerIdDesc(Long bookerId, Status status);
-    List<Booking> findBookingsByStartAfter(LocalDateTime start);
-    List<Booking> findBookingsByOwnerIdOrderByIdDesc(Long ownerId);
-    List<Booking> findBookingsByOwnerIdAndStatusOrderByOwnerIdDesc(Long bookerId, Status status);
-    Booking findBookingByIdAndAndBookerId(Long bookingId, Long bookerId);
-    Booking findBookingByItemId(Long itemId);
+    List<Booking> findBookingsByBookerIdOrderByIdDesc(Long userId);
+    List<Booking> findBookingsByOwnerIdOrderByIdDesc(Long userId);
+    List<Booking> findBookingsByBookerIdAndStatus(Long userId, Status status);
+    List<Booking> findBookingsByBookerIdAndStartAfter(Long userId, LocalDateTime now);
+    List<Booking> findBookingsByBookerIdAndEndBefore(Long userId, LocalDateTime now);
+    List<Booking> findBookingsByOwnerIdAndStatus(Long userId, Status status);
+    List<Booking> findBookingsByOwnerIdAndStartAfter(Long userId, LocalDateTime now);
+    List<Booking> findBookingsByOwnerIdAndEndBefore(Long userId, LocalDateTime now);
 
 }

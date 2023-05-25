@@ -26,9 +26,11 @@ public class BookingDto {
     private LocalDateTime end;
     @NotNull(groups = Create.class)
     private Long itemId;
+    private Item item;
+    @JsonIgnore
+    private Long ownerId;
     @JsonIgnore
     private User owner;
-    private Item item;
     private Long bookerId;
     private User booker;
     private Status status;

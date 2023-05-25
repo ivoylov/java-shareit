@@ -25,7 +25,7 @@ public class BookingDtoMapper {
         return Booking.builder()
                 .id(bookingDto.getId())
                 .bookerId(bookingDto.getBookerId())
-                .ownerId(bookingDto.getOwner().getId())
+                .ownerId(bookingDto.getOwnerId())
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
                 .itemId(bookingDto.getItemId())

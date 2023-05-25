@@ -7,10 +7,27 @@ import java.util.List;
 
 public abstract class BookingStorage implements CrudOperations<Booking> {
 
-    public abstract void updateBooking(Long bookingId, Integer status);
-    public abstract List<Booking> getAllForBooker(Long bookersId, String state);
-    public abstract List<Booking> getAllForOwner(Long ownerId, String state);
-    public abstract Booking getForBooker(Long bookingId, Long bookerId);
-    public abstract Booking getByItemId(Long itemId);
+    public abstract List<Booking> getAllBookingsForUser(Long userId);
+    public abstract List<Booking> getAllCurrentBookingsForUser(Long userId);
+
+    public abstract List<Booking> getAllPastBookingsForUser(Long userId);
+
+    public abstract List<Booking> getAllFutureBookingsForUser(Long userId);
+
+    public abstract List<Booking> getAllWaitingBookingsForUser(Long userId);
+
+    public abstract List<Booking> getAllRejectedBookingsForUser(Long userId);
+
+    public abstract List<Booking> getAllBookingsForOwner(Long userId);
+
+    public abstract List<Booking> getAllCurrentBookingsForOwner(Long userId);
+
+    public abstract List<Booking> getAllPastBookingsForOwner(Long userId);
+
+    public abstract List<Booking> getAllFutureBookingsForOwner(Long userId);
+
+    public abstract List<Booking> getAllWaitingBookingsForOwner(Long userId);
+
+    public abstract List<Booking> getAllRejectedBookingsForOwner(Long userId);
 
 }
