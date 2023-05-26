@@ -66,7 +66,7 @@ public class InDbBookingStorage extends BookingStorage {
 
     @Override
     public List<Booking> getAllFutureBookingsForUser(Long userId) {
-        return bookingRepository.findBookingsByBookerIdAndStartAfter(userId, LocalDateTime.now());
+        return bookingRepository.findBookingsByBookerIdAndStartAfterOrderByStart(userId, LocalDateTime.now());
     }
 
     @Override

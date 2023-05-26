@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collections;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final CommentService commentService;
 
     @PostMapping
     public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
@@ -54,6 +57,15 @@ public class ItemController {
     public List<Item> search(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
         return itemService.search(text.toLowerCase());
+    }
+
+    @PostMapping ("/{itemId}/comment")
+    public Comment createComment(@RequestHeader("X-Sharer-User-Id") Long authorId,
+                                 @PathVariable Long itemId,
+                                 @Validated(Create.class) @RequestBody Comment comment) {
+        comment.setItemId(itemId);
+        comment.setAuthorId(authorId);
+        return commentService.create(comment);
     }
 
 }

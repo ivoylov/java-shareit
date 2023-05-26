@@ -1,11 +1,14 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.EntityValidationException;
@@ -16,12 +19,14 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.practicum.shareit.booking.model.Status.WAITING;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BookingService implements CrudOperations<BookingDto> {
 
     private final InDbBookingStorage bookingStorage;
@@ -41,6 +46,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         booking.setOwnerId(owner.getId());
         booking.setStatus(WAITING);
 
+        log.info(BookingService.class + " create " + booking);
         Booking createdBooking = bookingStorage.create(booking);
         return BookingDtoMapper.toBookingDto(createdBooking, item, user);
 
@@ -90,32 +96,32 @@ public class BookingService implements CrudOperations<BookingDto> {
         return null;
     }
 
-    public List<BookingDto> getAllForUser(Long userId, String state) {
+    public List<BookingDto> getAllForBooker(Long userId, State state) {
         if (!userService.isExist(userId)) {
             throw new EntityNotFoundException(userId);
         }
         switch (state) {
-            case "ALL":
+            case ALL:
                 return toBookingDtoList(bookingStorage.getAllBookingsForUser(userId));
-            case "CURRENT":
+            case CURRENT:
                 toBookingDtoList(bookingStorage.getAllCurrentBookingsForUser(userId));
                 break;
-            case "PAST":
+            case PAST:
                 toBookingDtoList(bookingStorage.getAllPastBookingsForUser(userId));
                 break;
-            case "FUTURE":
+            case FUTURE:
                 toBookingDtoList(bookingStorage.getAllFutureBookingsForUser(userId));
                 break;
-            case "WAITING":
+            case WAITING:
                 toBookingDtoList(bookingStorage.getAllWaitingBookingsForUser(userId));
                 break;
-            case "REJECTED":
+            case REJECTED:
                 toBookingDtoList(bookingStorage.getAllRejectedBookingsForUser(userId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public List<BookingDto> getAllForOwner(Long userId, String state) {
@@ -175,7 +181,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             throw new EntityValidationException(bookingDto);
         }
         if (bookingDto.getOwnerId().equals(booking.getBookerId())) {
-            throw new EntityNotFoundException(booking);//TODO сделать новую более подходящую ошибку
+            throw new EntityValidationException(booking);
         }
     }
 

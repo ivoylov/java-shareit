@@ -22,6 +22,6 @@ public class Item {
     private String description;
     @Column(nullable = false)
     private Boolean available;
-    @Column(nullable = false)
+    @Column(name = "owner_id", nullable = false)
     private Long ownerId;
 }
