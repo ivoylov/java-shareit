@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.exception.ItemAvailableException;
+import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
@@ -38,7 +39,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         checkCreatingBookingDto(bookingDto);
 
         User user = userService.get(bookingDto.getBookerId());
-        Item item = itemService.get(bookingDto.getItemId());
+        Item item = ItemDtoMapper.toItem(itemService.get(bookingDto.getItemId()));
         User owner = userService.get(item.getOwnerId());
 
         Booking booking = BookingDtoMapper.toBooking(bookingDto);
@@ -62,7 +63,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         log.info(BookingService.class + " update " + bookingToUpdate);
         Booking updatedBooking = bookingStorage.update(bookingToUpdate);
         User user = userService.get(updatedBooking.getBookerId());
-        Item item = itemService.get(updatedBooking.getItemId());
+        Item item = ItemDtoMapper.toItem(itemService.get(updatedBooking.getItemId()));
         return BookingDtoMapper.toBookingDto(updatedBooking, item, user);
 
     }
@@ -83,7 +84,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         Booking booking = bookingStorage.get(id);
         if (booking == null) throw new EntityNotFoundException(id);
         User user = userService.get(booking.getBookerId());
-        Item item = itemService.get(booking.getItemId());
+        Item item = ItemDtoMapper.toItem(itemService.get(booking.getItemId()));
         return BookingDtoMapper.toBookingDto(booking, item, user);
     }
 
@@ -199,7 +200,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         for (Booking booking : bookingsList) {
             BookingDto bookingDto = BookingDtoMapper.toBookingDto(
                     booking,
-                    itemService.get(booking.getItemId()),
+                    ItemDtoMapper.toItem(itemService.get(booking.getItemId())),
                     userService.get(booking.getBookerId()));
             bookingsDtoList.add(bookingDto);
         }
@@ -207,7 +208,7 @@ public class BookingService implements CrudOperations<BookingDto> {
     }
 
     private void checkCreatingBookingDto(BookingDto bookingDto) {
-        Item item = itemService.get(bookingDto.getItemId());
+        Item item = ItemDtoMapper.toItem(itemService.get(bookingDto.getItemId()));
         log.info(BookingService.class + " check bookingDto " + bookingDto);
         if (!item.getAvailable()) {
             log.info("вещь недоступна");
@@ -254,6 +255,16 @@ public class BookingService implements CrudOperations<BookingDto> {
             log.info(BookingService.class + " bookingDto.getOwnerId().equals(booking.getBookerId() " + bookingDto);
             throw new EntityNotFoundException("ошибка при смене статуса: пользователь не является владельцем");
         }
+    }
+
+    public Booking getLastBookingForItem(Long itemId) {
+        log.info(BookingService.class + " get last booking for itemId=" + itemId);
+        return bookingStorage.getLastBookingForItem(itemId);
+    }
+
+    public Booking getNextBookingForItem(Long itemId) {
+        log.info(BookingService.class + " get next booking for itemId=" + itemId);
+        return bookingStorage.getNextBookingForItem(itemId);
     }
 
 }

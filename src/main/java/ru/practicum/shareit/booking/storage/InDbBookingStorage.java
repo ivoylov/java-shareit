@@ -134,4 +134,15 @@ public class InDbBookingStorage implements BookingStorage {
         return bookingRepository.findBookingsByItemIdAndStartAfter(itemId, LocalDateTime.now());
     }
 
+    @Override
+    public Booking getLastBookingForItem(Long itemId) {
+        log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
+        return bookingRepository.findBookingByItemIdAndEndBeforeOrderByEndAsc(itemId, LocalDateTime.now());
+    }
+
+    @Override
+    public Booking getNextBookingForItem(Long itemId) {
+        log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
+        return bookingRepository.findBookingByItemIdAndStartAfterOrderByStartAsc(itemId, LocalDateTime.now());
+    }
 }

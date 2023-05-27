@@ -3,6 +3,8 @@ package ru.practicum.shareit.item.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
@@ -21,11 +23,15 @@ public class ItemService implements CrudOperations<ItemDto> {
 
     private final InDbItemStorage itemStorage;
     private final UserService userService;
+    private final BookingService bookingService;
 
     @Override
     public ItemDto create(ItemDto itemDto) {
         checkItemDtoOwner(itemDto);
-        return ItemDtoMapper.toItemDto(itemStorage.create(ItemDtoMapper.toItem(itemDto)));
+        Item item = itemStorage.create(ItemDtoMapper.toItem(itemDto));
+        Booking lastBooking = bookingService.getLastBookingForItem(item.getId());
+        Booking nextBooking = bookingService.getNextBookingForItem(item.getId());
+        return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
     }
 
     @Override
