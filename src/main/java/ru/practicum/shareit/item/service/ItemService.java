@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.InDbItemStorage;
 import ru.practicum.shareit.user.service.UserService;
@@ -16,26 +17,28 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ItemService implements CrudOperations<Item> {
+public class ItemService implements CrudOperations<ItemDto> {
 
     private final InDbItemStorage itemStorage;
     private final UserService userService;
 
     @Override
-    public Item create(Item item) {
-        return itemStorage.create(item);
+    public ItemDto create(ItemDto itemDto) {
+        checkItemDtoOwner(itemDto);
+        return ItemDtoMapper.toItemDto(itemStorage.create(ItemDtoMapper.toItem(itemDto)));
     }
 
     @Override
-    public Item update(Item item) {
+    public ItemDto update(ItemDto itemDto) {
+        Item item = ItemDtoMapper.toItem(itemDto);
         checkOwner(item);
         Item updateItem = ItemService.updateItem(item, itemStorage.get(item.getId()));
-        return itemStorage.update(updateItem);
+        return ItemDtoMapper.toItemDto(itemStorage.update(updateItem));
     }
 
     @Override
-    public Item get(Long id) {
-        return itemStorage.get(id);
+    public ItemDto get(Long id) {
+        return ItemDtoMapper.toItemDto(itemStorage.get(id));
     }
 
     @Override
@@ -44,37 +47,41 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     @Override
-    public Boolean isExist(Item item) {
-        return itemStorage.isExist(item);
+    public Boolean isExist(ItemDto itemDto) {
+        return itemStorage.isExist(ItemDtoMapper.toItem(itemDto));
     }
 
     @Override
-    public List<Item> getAll() {
-        return itemStorage.getAll();
+    public List<ItemDto> getAll() {
+        return ItemDtoMapper.toItemDtoList(itemStorage.getAll());
     }
 
     @Override
-    public Item delete(Long id) {
-        return itemStorage.delete(id);
+    public ItemDto delete(Long id) {
+        return ItemDtoMapper.toItemDto(itemStorage.delete(id));
     }
 
-    public List<Item> search(String text) {
-        List<Item> findItems = new ArrayList<>();
+    public List<ItemDto> search(String text) {
+        List<ItemDto> findItems = new ArrayList<>();
         for (Item item : itemStorage.getAll()) {
-            if ((item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) &&
+            if ((item.getName().toLowerCase().contains(text) ||
+                    item.getDescription().toLowerCase().contains(text)) &&
                     item.getAvailable()) {
-                findItems.add(item);
+                findItems.add(ItemDtoMapper.toItemDto(item));
             }
         }
         return findItems;
     }
 
-    public List<Item> getOwnerItems(Long ownerId) {
-        return itemStorage.getAll().stream().filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
+    public List<ItemDto> getOwnerItems(Long ownerId) {
+        return  ItemDtoMapper.toItemDtoList(itemStorage.getAll().stream()
+                .filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList()));
     }
 
     public void checkItemDtoOwner(ItemDto itemDto) {
-        if (!userService.isExist(itemDto.getOwnerId())) throw new EntityNotFoundException(itemDto);
+        if (!userService.isExist(itemDto.getOwnerId())) {
+            throw new EntityNotFoundException(itemDto);
+        }
     }
 
     public static Item updateItem(Item updatedItem, Item itemToUpdate) {

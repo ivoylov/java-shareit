@@ -25,36 +25,33 @@ public class ItemController {
     @PostMapping
     public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         itemDto.setOwnerId(ownerId);
-        itemService.checkItemDtoOwner(itemDto);
-        Item item = ItemDtoMapper.toItem(itemDto);
-        return ItemDtoMapper.toItemDto(itemService.create(item));
+        return itemService.create(itemDto);
     }
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        Item item = ItemDtoMapper.toItem(itemDto);
-        item.setOwnerId(ownerId);
-        item.setId(id);
-        return ItemDtoMapper.toItemDto(itemService.update(item));
+        itemDto.setOwnerId(ownerId);
+        itemDto.setId(id);
+        return itemService.update(itemDto);
     }
 
     @DeleteMapping("/{id}")
     public ItemDto delete(@PathVariable Long id) {
-        return ItemDtoMapper.toItemDto(itemService.delete(id));
+        return itemService.delete(id);
     }
 
     @GetMapping
     public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return ItemDtoMapper.toItemDtoList(itemService.getOwnerItems(ownerId));
+        return itemService.getOwnerItems(ownerId);
     }
 
     @GetMapping("/{id}")
     public ItemDto get(@PathVariable Long id) {
-        return ItemDtoMapper.toItemDto(itemService.get(id));
+        return itemService.get(id);
     }
 
     @GetMapping("/search")
-    public List<Item> search(@RequestParam String text) {
+    public List<ItemDto> search(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
         return itemService.search(text.toLowerCase());
     }
