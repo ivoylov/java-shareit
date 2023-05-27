@@ -119,7 +119,7 @@ public class BookingService implements CrudOperations<BookingDto> {
     }
 
     public List<BookingDto> getAllForBooker(Long bookerId, String stateString) {
-        log.info(BookingService.class + " get " + "bookerId " + bookerId + " state " + stateString);
+        log.info(BookingService.class + " get " + "bookerId=" + bookerId + " state=" + stateString);
         State state = State.valueOf(stateString);
         if (!userService.isExist(bookerId)) {
             throw new EntityNotFoundException(bookerId);
@@ -127,20 +127,28 @@ public class BookingService implements CrudOperations<BookingDto> {
         ArrayList<Booking> bookingsList;
         switch (state) {
             case ALL:
-                log.info(InDbBookingStorage.class + " get all bookings for bookerId=" + bookerId);
+                log.info(BookingService.class + " get all bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForBooker(bookerId));
                 break;
             case CURRENT:
-                log.info(InDbBookingStorage.class + " get all current bookings for bookerId=" + bookerId);
+                log.info(BookingService.class + " get all current bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForBooker(bookerId));
                 break;
             case PAST:
-                log.info(InDbBookingStorage.class + " get all past bookings for bookerId=" + bookerId);
+                log.info(BookingService.class + " get all past bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForBooker(bookerId));
                 break;
             case FUTURE:
-                log.info(InDbBookingStorage.class + " get all future bookings for bookerId=" + bookerId);
+                log.info(BookingService.class + " get all future bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForBooker(bookerId));
+                break;
+            case REJECTED:
+                log.info(BookingService.class + " get all rejected bookings for ownerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForOwner(bookerId));
+                break;
+            case WAITING:
+                log.info(BookingService.class + " get all waiting bookings for ownerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForOwner(bookerId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
@@ -171,20 +179,28 @@ public class BookingService implements CrudOperations<BookingDto> {
         ArrayList<Booking> bookingsList;
         switch (state) {
             case ALL:
-                log.info(InDbBookingStorage.class + " get all bookings for ownerId=" + ownerId);
+                log.info(BookingService.class + " get all bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForOwner(ownerId));
                 break;
             case CURRENT:
-                log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
+                log.info(BookingService.class + " get all current bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForOwner(ownerId));
                 break;
             case PAST:
-                log.info(InDbBookingStorage.class + " get all past bookings for ownerId=" + ownerId);
+                log.info(BookingService.class + " get all past bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForOwner(ownerId));
                 break;
             case FUTURE:
-                log.info(InDbBookingStorage.class + " get all future bookings for ownerId=" + ownerId);
+                log.info(BookingService.class + " get all future bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForOwner(ownerId));
+                break;
+            case REJECTED:
+                log.info(BookingService.class + " get all rejected bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForOwner(ownerId));
+                break;
+            case WAITING:
+                log.info(BookingService.class + " get all waiting bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForOwner(ownerId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
