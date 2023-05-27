@@ -2,13 +2,11 @@ package ru.practicum.shareit.booking.model;
 
 public enum State {
 
-    ALL(0),
-    CURRENT(1),
-    PAST(2),
-    FUTURE(3),
-    WAITING(4),
-    REJECTED(5),
-    CANCELED(6);
+    UNSUPPORTED_STATUS(0),
+    ALL(1),
+    CURRENT(2),
+    PAST(3),
+    FUTURE(4);
 
     private int id;
 

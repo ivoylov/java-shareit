@@ -17,8 +17,8 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static ru.practicum.shareit.booking.model.Status.WAITING;
@@ -79,12 +79,32 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public BookingDto get(Long id) {
-        log.info(BookingService.class + " get " + " bookingId " + id);
+        log.info(BookingService.class + " getBooking " + " bookingId " + id);
         Booking booking = bookingStorage.get(id);
         if (booking == null) throw new EntityNotFoundException(id);
         User user = userService.get(booking.getBookerId());
         Item item = itemService.get(booking.getItemId());
         return BookingDtoMapper.toBookingDto(booking, item, user);
+    }
+
+    public BookingDto get(Long bookingId, Long userId) {
+        log.info(BookingService.class + " GET booking by booker" + " userId="+ userId + " bookingId=" + bookingId);
+        Booking booking = bookingStorage.get(bookingId);
+        if (booking == null) {
+            throw new EntityNotFoundException("bookingId=" + bookingId);
+        } else {
+            checkUserToGet(booking, userId);
+        }
+        return get(bookingId);
+    }
+
+    private void checkUserToGet(Booking booking, Long userId) {
+        log.info(BookingService.class + " checkUserToGet, booking=" + booking + ", userId=" + userId);
+        if (!booking.getBookerId().equals(userId) &&
+            !booking.getOwnerId().equals(userId)) {
+            log.info("Запрос инфо о бронировании от не пользователя и не владельца");
+            throw new EntityNotFoundException("userId=" + userId);
+        }
     }
 
     @Override
@@ -97,62 +117,81 @@ public class BookingService implements CrudOperations<BookingDto> {
         return null;
     }
 
-    public List<BookingDto> getAllForBooker(Long bookerId, State state) {
-        log.info(BookingService.class + " get " + " bookerId " + bookerId + " state " + state);
+    public List<BookingDto> getAllForBooker(Long bookerId, String stateString) {
+        log.info(BookingService.class + " get " + "bookerId " + bookerId + " state " + stateString);
+        State state = State.valueOf(stateString);
         if (!userService.isExist(bookerId)) {
             throw new EntityNotFoundException(bookerId);
         }
+        ArrayList<Booking> bookingsList;
         switch (state) {
             case ALL:
-                return toBookingDtoList(bookingStorage.getAllBookingsForUser(bookerId));
+                log.info(InDbBookingStorage.class + " get all bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForBooker(bookerId));
+                break;
             case CURRENT:
-                toBookingDtoList(bookingStorage.getAllCurrentBookingsForUser(bookerId));
+                log.info(InDbBookingStorage.class + " get all current bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForBooker(bookerId));
                 break;
             case PAST:
-                toBookingDtoList(bookingStorage.getAllPastBookingsForUser(bookerId));
+                log.info(InDbBookingStorage.class + " get all past bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForBooker(bookerId));
                 break;
             case FUTURE:
-                toBookingDtoList(bookingStorage.getAllFutureBookingsForUser(bookerId));
-                break;
-            case WAITING:
-                toBookingDtoList(bookingStorage.getAllWaitingBookingsForUser(bookerId));
-                break;
-            case REJECTED:
-                toBookingDtoList(bookingStorage.getAllRejectedBookingsForUser(bookerId));
+                log.info(InDbBookingStorage.class + " get all future bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForBooker(bookerId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        return Collections.emptyList();
+        LocalDateTime now = LocalDateTime.now();
+        log.info("текущее время=" + now);
+        logBookingList(bookingsList);
+        return toBookingDtoList(bookingsList);
     }
 
-    public List<BookingDto> getAllForOwner(Long ownerId, String state) {
-        log.info(BookingService.class + " get " + " ownerId " + ownerId + " state " + state);
+    private void logBookingList(List<Booking> bookingsList) {
+        if (bookingsList.isEmpty()) {
+            log.info("список бронирований пуст");
+        } else {
+            log.info("найденные бронирования");
+            for (Booking booking : bookingsList) {
+                log.info(booking.toString());
+            }
+        }
+    }
+
+    public List<BookingDto> getAllForOwner(Long ownerId, String stateString) {
+        log.info(BookingService.class + " get " + "ownerId " + ownerId + " state " + stateString);
+        State state = State.valueOf(stateString);
         if (!userService.isExist(ownerId)) {
             throw new EntityNotFoundException(ownerId);
         }
+        ArrayList<Booking> bookingsList;
         switch (state) {
-            case "ALL":
-                return toBookingDtoList(bookingStorage.getAllBookingsForOwner(ownerId));
-            case "CURRENT":
-                toBookingDtoList(bookingStorage.getAllCurrentBookingsForOwner(ownerId));
+            case ALL:
+                log.info(InDbBookingStorage.class + " get all bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForOwner(ownerId));
                 break;
-            case "PAST":
-                toBookingDtoList(bookingStorage.getAllPastBookingsForOwner(ownerId));
+            case CURRENT:
+                log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForOwner(ownerId));
                 break;
-            case "FUTURE":
-                toBookingDtoList(bookingStorage.getAllFutureBookingsForOwner(ownerId));
+            case PAST:
+                log.info(InDbBookingStorage.class + " get all past bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForOwner(ownerId));
                 break;
-            case "WAITING":
-                toBookingDtoList(bookingStorage.getAllWaitingBookingsForOwner(ownerId));
-                break;
-            case "REJECTED":
-                toBookingDtoList(bookingStorage.getAllRejectedBookingsForOwner(ownerId));
+            case FUTURE:
+                log.info(InDbBookingStorage.class + " get all future bookings for ownerId=" + ownerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForOwner(ownerId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        return null;
+        LocalDateTime now = LocalDateTime.now();
+        log.info("текущее время=" + now);
+        logBookingList(bookingsList);
+        return toBookingDtoList(bookingsList);
     }
 
     private List<BookingDto> toBookingDtoList(List<Booking> bookingsList) {
@@ -168,25 +207,52 @@ public class BookingService implements CrudOperations<BookingDto> {
     }
 
     private void checkCreatingBookingDto(BookingDto bookingDto) {
+        Item item = itemService.get(bookingDto.getItemId());
         log.info(BookingService.class + " check bookingDto " + bookingDto);
-        if (!itemService.get(bookingDto.getItemId()).getAvailable()) {
-            throw new ItemAvailableException(bookingDto);
+        if (!item.getAvailable()) {
+            log.info("вещь недоступна");
+            throw new ItemAvailableException(item);
         }
         if (!userService.isExist(bookingDto.getBookerId())) {
-            throw new EntityNotFoundException(userService.get(bookingDto.getBookerId()));
+            log.info("пользователь не найден");
+            throw new EntityNotFoundException("userId=" + userService.get(bookingDto.getBookerId()));
         }
         if (!bookingDto.isBookingTimeValid()) {
+            log.info("некорректное время");
             throw new EntityValidationException(bookingDto);
         }
+        if (!isItemAvailableOnRequestDate(bookingDto)) {
+            log.info("вещь недоступна на указанное время");
+            throw new EntityValidationException(bookingDto);
+        }
+        if (bookingDto.getBookerId().equals(item.getOwnerId())) {
+            log.info("бронировать владельцу запрещено");
+            throw new EntityNotFoundException(bookingDto);
+        }
+    }
+
+    private boolean isItemAvailableOnRequestDate(BookingDto bookingDto) {
+        LocalDateTime bookingStart = bookingDto.getStart();
+        LocalDateTime bookingEnd = bookingDto.getEnd();
+        ArrayList<Booking> bookings = new ArrayList<>(bookingStorage.getAllFutureBookingsForItem(bookingDto.getItemId()));
+        for (Booking booking : bookings) {
+            if ((bookingStart.isAfter(booking.getStart()) && bookingStart.isBefore(booking.getEnd())) ||
+                (bookingEnd.isAfter(booking.getStart()) && bookingEnd.isBefore(booking.getEnd()))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void checkUpdatingBooking(BookingDto bookingDto, Booking booking) {
         log.info(BookingService.class + " check updatingBooking " + bookingDto);
         if (booking.getStatus() != WAITING) {
-            throw new EntityValidationException(bookingDto);
+            log.info(BookingService.class + " booking.getStatus() != WAITING " + bookingDto);
+            throw new EntityValidationException("ошибка при смене статуса: бронирование не находится в ожидании");
         }
         if (bookingDto.getOwnerId().equals(booking.getBookerId())) {
-            throw new EntityValidationException(booking);
+            log.info(BookingService.class + " bookingDto.getOwnerId().equals(booking.getBookerId() " + bookingDto);
+            throw new EntityNotFoundException("ошибка при смене статуса: пользователь не является владельцем");
         }
     }
 

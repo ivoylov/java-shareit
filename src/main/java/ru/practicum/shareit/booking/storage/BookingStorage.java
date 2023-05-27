@@ -5,29 +5,30 @@ import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
 
-public abstract class BookingStorage implements CrudOperations<Booking> {
+public interface BookingStorage extends CrudOperations<Booking> {
 
-    public abstract List<Booking> getAllBookingsForUser(Long userId);
-    public abstract List<Booking> getAllCurrentBookingsForUser(Long userId);
+    List<Booking> getAllBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllPastBookingsForUser(Long userId);
+    List<Booking> getAllCurrentBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllFutureBookingsForUser(Long userId);
+    List<Booking> getAllPastBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllWaitingBookingsForUser(Long userId);
+    List<Booking> getAllFutureBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllRejectedBookingsForUser(Long userId);
+    List<Booking> getAllWaitingBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllBookingsForOwner(Long userId);
+    List<Booking> getAllRejectedBookingsForBooker(Long userId);
 
-    public abstract List<Booking> getAllCurrentBookingsForOwner(Long userId);
+    List<Booking> getAllBookingsForOwner(Long userId);
 
-    public abstract List<Booking> getAllPastBookingsForOwner(Long userId);
+    List<Booking> getAllCurrentBookingsForOwner(Long userId);
 
-    public abstract List<Booking> getAllFutureBookingsForOwner(Long userId);
+    List<Booking> getAllPastBookingsForOwner(Long userId);
 
-    public abstract List<Booking> getAllWaitingBookingsForOwner(Long userId);
+    List<Booking> getAllFutureBookingsForOwner(Long userId);
 
-    public abstract List<Booking> getAllRejectedBookingsForOwner(Long userId);
+    List<Booking> getAllWaitingBookingsForOwner(Long userId);
 
+    List<Booking> getAllRejectedBookingsForOwner(Long userId);
+    List<Booking> getAllFutureBookingsForItem(Long itemId);
 }

@@ -5,15 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.booking.service.BookingService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @AllArgsConstructor
 @Slf4j
-public class InDbBookingStorage extends BookingStorage {
+public class InDbBookingStorage implements BookingStorage {
 
     private final BookingRepository bookingRepository;
 
@@ -42,7 +42,7 @@ public class InDbBookingStorage extends BookingStorage {
 
     @Override
     public Booking get(Long id) {
-        log.info(InDbBookingStorage.class + " get bookingId" + id);
+        log.info(InDbBookingStorage.class + " get bookingId=" + id);
         return bookingRepository.findById(id).orElse(null);
     }
 
@@ -57,74 +57,81 @@ public class InDbBookingStorage extends BookingStorage {
     }
 
     @Override
-    public List<Booking> getAllBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdOrderByIdDesc(userId);
+    public List<Booking> getAllBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all bookings for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId);
     }
 
     @Override
-    public List<Booking> getAllCurrentBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdAndStatus(userId,Status.APPROVED);
+    public List<Booking> getAllCurrentBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all current bookings for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdAndStatus(bookerId,Status.APPROVED);
     }
 
     @Override
-    public List<Booking> getAllPastBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdAndEndBefore(userId, LocalDateTime.now());
+    public List<Booking> getAllPastBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all past bookings for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdAndEndBefore(bookerId, LocalDateTime.now());
     }
 
     @Override
-    public List<Booking> getAllFutureBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdAndStartAfterOrderByStart(userId, LocalDateTime.now());
+    public List<Booking> getAllFutureBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all future bookings for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now());
     }
 
     @Override
-    public List<Booking> getAllWaitingBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdAndStatus(userId,Status.WAITING);
+    public List<Booking> getAllWaitingBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all waiting bookings for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdAndStatus(bookerId,Status.WAITING);
     }
 
     @Override
-    public List<Booking> getAllRejectedBookingsForUser(Long userId) {
-        log.info(InDbBookingStorage.class + " get all booking for bookerId=" + userId);
-        return bookingRepository.findBookingsByBookerIdAndStatus(userId,Status.REJECTED);
+    public List<Booking> getAllRejectedBookingsForBooker(Long bookerId) {
+        log.info(InDbBookingStorage.class + " get all rejected booking for bookerId=" + bookerId);
+        return bookingRepository.findBookingsByBookerIdAndStatus(bookerId,Status.REJECTED);
     }
 
     @Override
     public List<Booking> getAllBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdOrderByIdDesc(ownerId);
     }
 
     @Override
     public List<Booking> getAllCurrentBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.APPROVED);
     }
 
     @Override
     public List<Booking> getAllPastBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all past bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdAndEndBefore(ownerId, LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllFutureBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all future bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdAndStartAfter(ownerId, LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllWaitingBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all waiting bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.WAITING);
     }
 
     @Override
     public List<Booking> getAllRejectedBookingsForOwner(Long ownerId) {
-        log.info(InDbBookingStorage.class + " get all booking for ownerId=" + ownerId);
+        log.info(InDbBookingStorage.class + " get all rejected bookings for ownerId=" + ownerId);
         return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.REJECTED);
     }
+
+    @Override
+    public List<Booking> getAllFutureBookingsForItem(Long itemId) {
+        log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
+        return bookingRepository.findBookingsByItemIdAndStartAfter(itemId, LocalDateTime.now());
+    }
+
 }

@@ -39,12 +39,13 @@ public class BookingController {
     Затем статус бронирования становится либо APPROVED, либо REJECTED.
      */
     @PatchMapping("/{bookingId}")
-    public BookingDto approved(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public BookingDto approved(@RequestHeader("X-Sharer-User-Id") Long userId,
                                @PathVariable Long bookingId,
                                @RequestParam Boolean approved) {
         BookingDto bookingDto = BookingDto.builder()
                 .id(bookingId)
-                .ownerId(ownerId)
+                .ownerId(userId)
+                .bookerId(userId)
                 .status(approved ? APPROVED : REJECTED)
                 .build();
         log.info(BookingController.class + " PATCH " + bookingDto);
@@ -59,8 +60,8 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     public BookingDto get(@RequestHeader("X-Sharer-User-Id") Long userId,
                           @PathVariable Long bookingId) {
-        log.info(BookingController.class + " GET " + " userId= "+ userId + " bookingId= " + bookingId);
-        return bookingService.get(bookingId);
+        log.info(BookingController.class + " GET" + " userId="+ userId + " bookingId=" + bookingId);
+        return bookingService.get(bookingId, userId);
     }
 
     //Получение списка всех бронирований текущего пользователя.
@@ -68,7 +69,7 @@ public class BookingController {
     public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") Long bookerId,
                                             @RequestParam(defaultValue = "ALL") String state) {
         log.info(BookingController.class + " GET " + " bookerId= "+ bookerId + " state= " + state);
-        return bookingService.getAllForBooker(bookerId, State.valueOf(state));
+        return bookingService.getAllForBooker(bookerId, state);
     }
 
     //Получение списка бронирований для всех вещей текущего пользователя.

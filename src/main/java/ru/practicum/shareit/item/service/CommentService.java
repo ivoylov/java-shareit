@@ -56,8 +56,8 @@ public class CommentService implements CrudOperations<Comment> {
     }
 
     private void checkComment(Comment comment) {
-        if (bookingService.getAllForBooker(comment.getAuthorId(), State.PAST).isEmpty() ||
-            bookingService.getAllForBooker(comment.getAuthorId(), State.CURRENT).isEmpty()) {
+        if (bookingService.getAllForBooker(comment.getAuthorId(), State.PAST.toString()).isEmpty() ||
+            bookingService.getAllForBooker(comment.getAuthorId(), State.CURRENT.toString()).isEmpty()) {
             throw new EntityValidationException(comment.getAuthorId());
         }
     }
