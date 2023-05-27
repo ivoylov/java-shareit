@@ -101,7 +101,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllCurrentBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.APPROVED);
+        return bookingRepository.findBookingsByOwnerIdAndStatusOrderByIdDesc(ownerId,Status.APPROVED);
     }
 
     @Override
@@ -113,19 +113,19 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllFutureBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all future bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStartAfter(ownerId, LocalDateTime.now());
+        return bookingRepository.findBookingsByOwnerIdAndStartAfterOrderByIdDesc(ownerId, LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllWaitingBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all waiting bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.WAITING);
+        return bookingRepository.findBookingsByOwnerIdAndStatusOrderByIdDesc(ownerId,Status.WAITING);
     }
 
     @Override
     public List<Booking> getAllRejectedBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all rejected bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStatus(ownerId,Status.REJECTED);
+        return bookingRepository.findBookingsByOwnerIdAndStatusOrderByIdDesc(ownerId,Status.REJECTED);
     }
 
     @Override
