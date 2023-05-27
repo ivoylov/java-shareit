@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.Create;
+import ru.practicum.shareit.booking.model.Booking;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,5 +23,8 @@ public class ItemDto {
     private Boolean available;
     @JsonIgnore
     private Long ownerId;
+    @JsonIgnore
     private Long requestId;
+    private Booking lastBooking;
+    private Booking nextBooking;
 }

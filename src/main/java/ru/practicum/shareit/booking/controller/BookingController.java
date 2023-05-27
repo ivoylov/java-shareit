@@ -39,13 +39,12 @@ public class BookingController {
     Затем статус бронирования становится либо APPROVED, либо REJECTED.
      */
     @PatchMapping("/{bookingId}")
-    public BookingDto approved(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public BookingDto approved(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                @PathVariable Long bookingId,
                                @RequestParam Boolean approved) {
         BookingDto bookingDto = BookingDto.builder()
                 .id(bookingId)
-                .ownerId(userId)
-                .bookerId(userId)
+                .ownerId(ownerId)
                 .status(approved ? APPROVED : REJECTED)
                 .build();
         log.info(BookingController.class + " PATCH " + bookingDto);
