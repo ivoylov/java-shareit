@@ -1,10 +1,12 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
@@ -14,23 +16,23 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ItemService implements CrudOperations<ItemDto> {
 
     private final InDbItemStorage itemStorage;
+    private final InDbBookingStorage bookingStorage;
     private final UserService userService;
-    private final BookingService bookingService;
 
     @Override
     public ItemDto create(ItemDto itemDto) {
         checkItemDtoOwner(itemDto);
         Item item = itemStorage.create(ItemDtoMapper.toItem(itemDto));
-        Booking lastBooking = bookingService.getLastBookingForItem(item.getId());
-        Booking nextBooking = bookingService.getNextBookingForItem(item.getId());
+        Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+        Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
         return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
     }
 
@@ -38,13 +40,22 @@ public class ItemService implements CrudOperations<ItemDto> {
     public ItemDto update(ItemDto itemDto) {
         Item item = ItemDtoMapper.toItem(itemDto);
         checkOwner(item);
-        Item updateItem = ItemService.updateItem(item, itemStorage.get(item.getId()));
-        return ItemDtoMapper.toItemDto(itemStorage.update(updateItem));
+        Item updateItem = updateItem(item, itemStorage.get(item.getId()));
+        Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+        Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+        return ItemDtoMapper.toItemDto(itemStorage.update(updateItem), lastBooking, nextBooking);
     }
 
     @Override
     public ItemDto get(Long id) {
-        return ItemDtoMapper.toItemDto(itemStorage.get(id));
+        log.info(ItemService.class + " get itemId=" + id);
+        Item item = itemStorage.get(id);
+        log.info(item.toString());
+        Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+        log.info("last booking=" + lastBooking);
+        Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+        log.info("last booking=" + nextBooking);
+        return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
     }
 
     @Override
@@ -59,28 +70,31 @@ public class ItemService implements CrudOperations<ItemDto> {
 
     @Override
     public List<ItemDto> getAll() {
-        return ItemDtoMapper.toItemDtoList(itemStorage.getAll());
+        return toItemDtoList(itemStorage.getAll());
     }
 
     @Override
     public ItemDto delete(Long id) {
-        return ItemDtoMapper.toItemDto(itemStorage.delete(id));
+        Item item = itemStorage.get(id);
+        Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+        Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+        return ItemDtoMapper.toItemDto(itemStorage.delete(id), lastBooking, nextBooking);
     }
 
     public List<ItemDto> search(String text) {
-        List<ItemDto> findItems = new ArrayList<>();
+        List<Item> findItems = new ArrayList<>();
         for (Item item : itemStorage.getAll()) {
             if ((item.getName().toLowerCase().contains(text) ||
-                    item.getDescription().toLowerCase().contains(text)) &&
-                    item.getAvailable()) {
-                findItems.add(ItemDtoMapper.toItemDto(item));
+                item.getDescription().toLowerCase().contains(text)) &&
+                item.getAvailable()) {
+                    findItems.add(item);
             }
         }
-        return findItems;
+        return toItemDtoList(findItems);
     }
 
     public List<ItemDto> getOwnerItems(Long ownerId) {
-        return  ItemDtoMapper.toItemDtoList(itemStorage.getAll().stream()
+        return  toItemDtoList(itemStorage.getAll().stream()
                 .filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList()));
     }
 
@@ -104,9 +118,19 @@ public class ItemService implements CrudOperations<ItemDto> {
     }
 
     private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwnerId(), itemStorage.get(item.getId()).getOwnerId())) {
+        if (!item.getOwnerId().equals(itemStorage.get(item.getId()).getOwnerId())) {
             throw new EntityNotFoundException(item);
         }
+    }
+
+    private List<ItemDto> toItemDtoList(List<Item> items) {
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item item : items) {
+            Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+            Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+            itemsDto.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking));
+        }
+        return itemsDto;
     }
 
 }

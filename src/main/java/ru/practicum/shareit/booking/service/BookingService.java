@@ -257,14 +257,4 @@ public class BookingService implements CrudOperations<BookingDto> {
         }
     }
 
-    public Booking getLastBookingForItem(Long itemId) {
-        log.info(BookingService.class + " get last booking for itemId=" + itemId);
-        return bookingStorage.getLastBookingForItem(itemId);
-    }
-
-    public Booking getNextBookingForItem(Long itemId) {
-        log.info(BookingService.class + " get next booking for itemId=" + itemId);
-        return bookingStorage.getNextBookingForItem(itemId);
-    }
-
 }

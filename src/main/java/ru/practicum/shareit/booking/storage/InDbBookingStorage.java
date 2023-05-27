@@ -136,13 +136,19 @@ public class InDbBookingStorage implements BookingStorage {
 
     @Override
     public Booking getLastBookingForItem(Long itemId) {
-        log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
-        return bookingRepository.findBookingByItemIdAndEndBeforeOrderByEndAsc(itemId, LocalDateTime.now());
+        log.info(InDbBookingStorage.class + " get last booking for item itemId=" + itemId);
+        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndEndBeforeOrderByEndAsc(itemId, LocalDateTime.now()));
+        if (bookings.isEmpty()) return null;
+        return bookings.get(0);
     }
 
     @Override
     public Booking getNextBookingForItem(Long itemId) {
-        log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
-        return bookingRepository.findBookingByItemIdAndStartAfterOrderByStartAsc(itemId, LocalDateTime.now());
+        log.info(InDbBookingStorage.class + " get next booking for item itemId=" + itemId);
+        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(), Status.APPROVED));
+        if (bookings.isEmpty()) return null;
+        return bookings.get(0);
+        //return bookingRepository.findBookingsByItemIdAndStartAfterOrderByStartAsc(itemId, LocalDateTime.now()).get(0);
     }
+
 }

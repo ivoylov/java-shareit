@@ -18,6 +18,8 @@ public class ItemDtoMapper {
                 .description(item.getDescription())
                 .ownerId(item.getOwnerId())
                 .available(item.getAvailable())
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
                 .build();
     }
 
@@ -29,14 +31,6 @@ public class ItemDtoMapper {
                 .ownerId(itemDto.getOwnerId())
                 .available(itemDto.getAvailable())
                 .build();
-    }
-
-    public List<ItemDto> toItemDtoList(List<Item> items) {
-        List<ItemDto> itemsDto = new ArrayList<>();
-        for (Item item : items) {
-            itemsDto.add(toItemDto(item));
-        }
-        return itemsDto;
     }
 
 }

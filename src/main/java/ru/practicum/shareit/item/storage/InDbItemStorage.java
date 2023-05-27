@@ -1,16 +1,21 @@
 package ru.practicum.shareit.item.storage;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class InDbItemStorage extends ItemStorage {
+@Slf4j
+public class InDbItemStorage implements ItemStorage {
 
     private final ItemRepository itemRepository;
 
