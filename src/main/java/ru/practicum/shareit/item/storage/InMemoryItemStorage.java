@@ -61,4 +61,8 @@ public class InMemoryItemStorage implements ItemStorage {
         return items.remove(id);
     }
 
+    @Override
+    public List<Item> get(Long itemId, Long ownerId) {
+        return null;
+    }
 }

@@ -133,4 +133,10 @@ public class ItemService implements CrudOperations<ItemDto> {
         return itemsDto;
     }
 
+    public ItemDto get(Long itemId, Long ownerId) {
+        log.info(ItemService.class + " get itemId=" + itemId + " for ownerId=" + ownerId);
+        List<Item> items = itemStorage.get(itemId, ownerId);
+        log.info(items.toString());
+        return null;
+    }
 }

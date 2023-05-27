@@ -64,4 +64,10 @@ public class InDbItemStorage implements ItemStorage {
         return item;
     }
 
+    @Override
+    public List<Item> get(Long itemId, Long ownerId) {
+        List<Item> items = itemRepository.findItemsByIdAndOwnerId(itemId, ownerId);
+        if (items.isEmpty()) throw new EntityNotFoundException(items);
+        return items;
+    }
 }

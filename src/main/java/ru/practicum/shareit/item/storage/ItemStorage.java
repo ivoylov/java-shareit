@@ -4,6 +4,8 @@ import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 
-public interface ItemStorage extends CrudOperations<Item> {
+import java.util.List;
 
+public interface ItemStorage extends CrudOperations<Item> {
+    List<Item> get(Long itemId, Long ownerId);
 }
