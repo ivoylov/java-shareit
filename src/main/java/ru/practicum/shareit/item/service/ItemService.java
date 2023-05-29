@@ -5,18 +5,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.CommentStorage;
 import ru.practicum.shareit.item.storage.InDbItemStorage;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +29,7 @@ public class ItemService implements CrudOperations<ItemDto> {
     private final InDbItemStorage itemStorage;
     private final InDbBookingStorage bookingStorage;
     private final UserService userService;
+    private final CommentStorage commentStorage;
 
     @Override
     public ItemDto create(ItemDto itemDto) {
@@ -33,7 +37,8 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item item = itemStorage.create(ItemDtoMapper.toItem(itemDto));
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
+        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments);
     }
 
     @Override
@@ -43,7 +48,8 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item updateItem = updateItem(item, itemStorage.get(item.getId()));
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        return ItemDtoMapper.toItemDto(itemStorage.update(updateItem), lastBooking, nextBooking);
+        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        return ItemDtoMapper.toItemDto(itemStorage.update(updateItem), lastBooking, nextBooking, comments);
     }
 
     @Override
@@ -51,11 +57,13 @@ public class ItemService implements CrudOperations<ItemDto> {
         log.info(ItemService.class + " get itemId=" + id);
         Item item = itemStorage.get(id);
         log.info(item.toString());
-        Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
-        log.info("last booking=" + lastBooking);
-        Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        log.info("last booking=" + nextBooking);
-        return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
+        //Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+        //log.info("last booking=" + lastBooking);
+        //Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+        //log.info("last booking=" + nextBooking);
+        //return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
+        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        return ItemDtoMapper.toItemDto(item, null, null, comments);
     }
 
     @Override
@@ -78,7 +86,8 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item item = itemStorage.get(id);
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        return ItemDtoMapper.toItemDto(itemStorage.delete(id), lastBooking, nextBooking);
+        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        return ItemDtoMapper.toItemDto(itemStorage.delete(id), lastBooking, nextBooking, comments);
     }
 
     public List<ItemDto> search(String text) {
@@ -94,8 +103,20 @@ public class ItemService implements CrudOperations<ItemDto> {
     }
 
     public List<ItemDto> getOwnerItems(Long ownerId) {
-        return  toItemDtoList(itemStorage.getAll().stream()
-                .filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList()));
+        log.info(ItemService.class + " get for ownerId=" + ownerId);
+        //return  toItemDtoList(itemStorage.getAll().stream()
+        //        .filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList()));
+        List<ItemDto> ownerItems = new ArrayList<>();
+        for (Item item : itemStorage.getOwnerItems(ownerId)) {
+            log.info(ItemService.class + " бронирования запрашивает владелец get itemId=" + ownerId);
+            Booking lastBooking = bookingStorage.getLastBookingForItemByOwner(item.getId(), ownerId);
+            log.info("last booking=" + lastBooking);
+            Booking nextBooking = bookingStorage.getNextBookingForItemByOwner(item.getId(), ownerId);
+            log.info("last booking=" + nextBooking);
+            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+            ownerItems.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments));
+        }
+        return ownerItems;
     }
 
     public void checkItemDtoOwner(ItemDto itemDto) {
@@ -128,15 +149,36 @@ public class ItemService implements CrudOperations<ItemDto> {
         for (Item item : items) {
             Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
             Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-            itemsDto.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking));
+            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+            itemsDto.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments));
         }
         return itemsDto;
     }
 
-    public ItemDto get(Long itemId, Long ownerId) {
-        log.info(ItemService.class + " get itemId=" + itemId + " for ownerId=" + ownerId);
-        List<Item> items = itemStorage.get(itemId, ownerId);
-        log.info(items.toString());
-        return null;
+    public ItemDto get(Long itemId, Long userId) {
+        log.info(ItemService.class + " get itemId=" + itemId + " for userId=" + userId);
+        Item item = itemStorage.get(itemId);
+        log.info(item.toString());
+        if (item.getOwnerId().equals(userId)) {
+            log.info(ItemService.class + " бронирования запрашивает владелец get itemId=" + itemId + " for userId=" + userId);
+            Booking lastBooking = bookingStorage.getLastBookingForItemByOwner(item.getId(), userId);
+            log.info("last booking=" + lastBooking);
+            Booking nextBooking = bookingStorage.getNextBookingForItemByOwner(item.getId(), userId);
+            log.info("last booking=" + nextBooking);
+            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+            return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments);
+        } else {
+            log.info(ItemService.class + " бронирования запрашивает не владелец get itemId=" + itemId + " for userId=" + userId);
+            return get(itemId);
+        }
+    }
+
+    private List<CommentDto> toCommentDtoList(List<Comment> commentList) {
+        if (commentList.isEmpty()) return Collections.emptyList();
+        ArrayList<CommentDto> commentDtoList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            commentDtoList.add(CommentDtoMapper.toCommentDto(comment, userService.get(comment.getAuthorId())));
+        }
+        return commentDtoList;
     }
 }

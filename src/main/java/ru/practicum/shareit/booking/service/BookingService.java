@@ -15,6 +15,7 @@ import ru.practicum.shareit.exception.ItemAvailableException;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.storage.CommentStorage;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -32,6 +33,7 @@ public class BookingService implements CrudOperations<BookingDto> {
     private final InDbBookingStorage bookingStorage;
     private final ItemService itemService;
     private final UserService userService;
+    private final CommentStorage commentStorage;
 
     @Override
     public BookingDto create(BookingDto bookingDto) {
@@ -143,12 +145,12 @@ public class BookingService implements CrudOperations<BookingDto> {
                 bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForBooker(bookerId));
                 break;
             case REJECTED:
-                log.info(BookingService.class + " get all rejected bookings for ownerId=" + bookerId);
-                bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForOwner(bookerId));
+                log.info(BookingService.class + " get all rejected bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForBooker(bookerId));
                 break;
             case WAITING:
-                log.info(BookingService.class + " get all waiting bookings for ownerId=" + bookerId);
-                bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForOwner(bookerId));
+                log.info(BookingService.class + " get all waiting bookings for bookerId=" + bookerId);
+                bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForBooker(bookerId));
                 break;
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");

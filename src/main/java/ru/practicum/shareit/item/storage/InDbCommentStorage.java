@@ -43,6 +43,11 @@ public class InDbCommentStorage implements CommentStorage {
     }
 
     @Override
+    public List<Comment> getAllForItem(Long itemId) {
+        return commentRepository.findAllByItemId(itemId);
+    }
+
+    @Override
     public Comment delete(Long id) {
         return null;
     }

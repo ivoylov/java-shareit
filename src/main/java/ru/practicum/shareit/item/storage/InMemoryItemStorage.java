@@ -65,4 +65,9 @@ public class InMemoryItemStorage implements ItemStorage {
     public List<Item> get(Long itemId, Long ownerId) {
         return null;
     }
+
+    @Override
+    public List<Item> getOwnerItems(Long ownerId) {
+        return null;
+    }
 }

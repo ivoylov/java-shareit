@@ -5,28 +5,34 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.EntityValidationException;
+import ru.practicum.shareit.item.dto.CommentDtoMapper;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.storage.InDbCommentStorage;
+import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class CommentService implements CrudOperations<Comment> {
+public class CommentService implements CrudOperations<CommentDto> {
 
     private final InDbCommentStorage inDbCommentStorage;
     private final BookingService bookingService;
+    private final UserService userService;
 
     @Override
-    public Comment create(Comment comment) {
-        checkComment(comment);
-        return inDbCommentStorage.create(comment);
+    public CommentDto create(CommentDto commentDto) {
+        checkCommentDto(commentDto);
+        Comment comment = CommentDtoMapper.toComment(commentDto);
+        comment.setCreatedDate(LocalDateTime.now());
+        return CommentDtoMapper.toCommentDto(inDbCommentStorage.create(comment), userService.get(commentDto.getAuthorId()));
     }
 
     @Override
-    public Comment update(Comment comment) {
+    public CommentDto update(CommentDto comment) {
         return null;
     }
 
@@ -36,26 +42,26 @@ public class CommentService implements CrudOperations<Comment> {
     }
 
     @Override
-    public Boolean isExist(Comment comment) {
+    public Boolean isExist(CommentDto comment) {
         return null;
     }
 
     @Override
-    public Comment get(Long id) {
+    public CommentDto get(Long id) {
         return null;
     }
 
     @Override
-    public List<Comment> getAll() {
+    public List<CommentDto> getAll() {
         return null;
     }
 
     @Override
-    public Comment delete(Long id) {
+    public CommentDto delete(Long id) {
         return null;
     }
 
-    private void checkComment(Comment comment) {
+    private void checkCommentDto(CommentDto comment) {
         if (bookingService.getAllForBooker(comment.getAuthorId(), State.PAST.toString()).isEmpty() ||
             bookingService.getAllForBooker(comment.getAuthorId(), State.CURRENT.toString()).isEmpty()) {
             throw new EntityValidationException(comment.getAuthorId());

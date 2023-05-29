@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.service.CommentService;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 @AllArgsConstructor
+@Slf4j
 public class ItemController {
 
     private final ItemService itemService;
@@ -40,13 +43,15 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        log.info(ItemController.class + "/GET ownerId=" + ownerId);
         return itemService.getOwnerItems(ownerId);
     }
 
     @GetMapping("/{itemId}")
     public ItemDto get(@PathVariable Long itemId,
-                       @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return itemService.get(itemId);
+                       @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info(ItemController.class + "/GET itemId=" + itemId + "; userId=" + userId);
+        return userId == null ? itemService.get(itemId):itemService.get(itemId, userId);
     }
 
     @GetMapping("/search")
@@ -56,12 +61,12 @@ public class ItemController {
     }
 
     @PostMapping ("/{itemId}/comment")
-    public Comment createComment(@RequestHeader("X-Sharer-User-Id") Long authorId,
+    public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") Long authorId,
                                  @PathVariable Long itemId,
-                                 @Validated(Create.class) @RequestBody Comment comment) {
-        comment.setItemId(itemId);
-        comment.setAuthorId(authorId);
-        return commentService.create(comment);
+                                 @Validated(Create.class) @RequestBody CommentDto commentDto) {
+        commentDto.setItemId(itemId);
+        commentDto.setAuthorId(authorId);
+        return commentService.create(commentDto);
     }
 
 }

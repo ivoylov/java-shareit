@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS items (
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
-    id bigint not null generated always as identity primary key ,
+    id bigint not null generated always as identity primary key,
     start_date date not null,
     end_date date not null,
     item_id bigint not null references items(id),
@@ -23,15 +23,16 @@ CREATE TABLE IF NOT EXISTS bookings (
 );
 
 CREATE TABLE IF NOT EXISTS requests (
-    id bigint not null generated always as identity primary key ,
+    id bigint not null generated always as identity primary key,
     description varchar(255),
     requestor_id bigint not null references shareit_user(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
-    id bigint not null generated always as identity primary key ,
+    id bigint not null generated always as identity primary key,
     text varchar(255),
-    item_id bigint not null references items(id) ,
-    author_id bigint not null references shareit_user(id)
+    item_id bigint not null references items(id),
+    author_id bigint not null references shareit_user(id),
+    created_date date not null
 );
 

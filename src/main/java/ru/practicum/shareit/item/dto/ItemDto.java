@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.model.Booking;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,4 +28,5 @@ public class ItemDto {
     private Long requestId;
     private Booking lastBooking;
     private Booking nextBooking;
+    private List<CommentDto> comments;
 }

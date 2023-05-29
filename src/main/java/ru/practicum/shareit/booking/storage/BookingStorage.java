@@ -37,4 +37,7 @@ public interface BookingStorage extends CrudOperations<Booking> {
 
     Booking getNextBookingForItem(Long itemId);
 
+    Booking getLastBookingForItemByOwner(Long id, Long userId);
+
+    Booking getNextBookingForItemByOwner(Long id, Long userId);
 }

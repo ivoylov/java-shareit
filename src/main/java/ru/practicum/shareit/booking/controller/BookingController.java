@@ -30,7 +30,7 @@ public class BookingController {
     public BookingDto create(@Validated(Create.class) @RequestBody BookingDto bookingDto,
                              @RequestHeader("X-Sharer-User-Id") Long userId) {
         bookingDto.setBookerId(userId);
-        log.info(BookingController.class + " POST " + bookingDto);
+        log.info(BookingController.class + " POST/ " + bookingDto);
         return bookingService.create(bookingDto);
     }
 
@@ -47,7 +47,7 @@ public class BookingController {
                 .ownerId(ownerId)
                 .status(approved ? APPROVED : REJECTED)
                 .build();
-        log.info(BookingController.class + " PATCH " + bookingDto);
+        log.info(BookingController.class + " PATCH/ " + bookingDto);
         return bookingService.update(bookingDto);
     }
 
@@ -59,7 +59,7 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     public BookingDto get(@RequestHeader("X-Sharer-User-Id") Long userId,
                           @PathVariable Long bookingId) {
-        log.info(BookingController.class + " GET" + " userId=" + userId + " bookingId=" + bookingId);
+        log.info(BookingController.class + " GET/ " + " userId=" + userId + " bookingId=" + bookingId);
         return bookingService.get(bookingId, userId);
     }
 
@@ -67,7 +67,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") Long bookerId,
                                             @RequestParam(defaultValue = "ALL") String state) {
-        log.info(BookingController.class + " GET " + " bookerId="+ bookerId + " state=" + state);
+        log.info(BookingController.class + " GET/ " + " bookerId="+ bookerId + " state=" + state);
         return bookingService.getAllForBooker(bookerId, state);
     }
 
@@ -75,7 +75,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> get(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                           @RequestParam(defaultValue = "ALL") String state) {
-        log.info(BookingController.class + " GET " + " ownerId= "+ ownerId + " state= " + state);
+        log.info(BookingController.class + " GET/ " + " ownerId= "+ ownerId + " state= " + state);
         return bookingService.getAllForOwner(ownerId, state);
     }
 
