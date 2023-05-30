@@ -57,11 +57,6 @@ public class ItemService implements CrudOperations<ItemDto> {
         log.info(ItemService.class + " get itemId=" + id);
         Item item = itemStorage.get(id);
         log.info(item.toString());
-        //Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
-        //log.info("last booking=" + lastBooking);
-        //Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        //log.info("last booking=" + nextBooking);
-        //return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking);
         List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
         return ItemDtoMapper.toItemDto(item, null, null, comments);
     }
@@ -104,8 +99,6 @@ public class ItemService implements CrudOperations<ItemDto> {
 
     public List<ItemDto> getOwnerItems(Long ownerId) {
         log.info(ItemService.class + " get for ownerId=" + ownerId);
-        //return  toItemDtoList(itemStorage.getAll().stream()
-        //        .filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList()));
         List<ItemDto> ownerItems = new ArrayList<>();
         for (Item item : itemStorage.getOwnerItems(ownerId)) {
             log.info(ItemService.class + " бронирования запрашивает владелец get itemId=" + ownerId);
@@ -164,7 +157,7 @@ public class ItemService implements CrudOperations<ItemDto> {
             Booking lastBooking = bookingStorage.getLastBookingForItemByOwner(item.getId(), userId);
             log.info("last booking=" + lastBooking);
             Booking nextBooking = bookingStorage.getNextBookingForItemByOwner(item.getId(), userId);
-            log.info("last booking=" + nextBooking);
+            log.info("next booking=" + nextBooking);
             List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
             return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments);
         } else {

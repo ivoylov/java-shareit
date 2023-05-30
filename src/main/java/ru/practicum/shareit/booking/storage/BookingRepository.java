@@ -27,13 +27,19 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     List<Booking> findBookingsByOwnerIdOrderByIdDesc(Long userId);
     List<Booking> findBookingsByBookerIdAndStatus(Long userId, Status status);
     List<Booking> findBookingsByBookerIdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime now);
-    List<Booking> findBookingsByBookerIdAndEndBefore(Long userId, LocalDateTime now);
+    List<Booking> findBookingsByBookerIdAndStartBeforeAndEndAfter(Long bookerId, LocalDateTime start, LocalDateTime end);
+    List<Booking> findBookingsByBookerIdAndEndBeforeOrderByEndDesc(Long userId, LocalDateTime now);
     List<Booking> findBookingsByOwnerIdAndStatusOrderByIdDesc(Long userId, Status status);
     List<Booking> findBookingsByOwnerIdAndStartAfterOrderByIdDesc(Long userId, LocalDateTime now);
-    List<Booking> findBookingsByOwnerIdAndEndBefore(Long userId, LocalDateTime now);
+    List<Booking> findBookingsByOwnerIdAndStartBeforeAndEndAfterOrderByEndDesc(Long bookerId, LocalDateTime start, LocalDateTime end);
+    List<Booking> findBookingsByOwnerIdAndEndBeforeOrderByEndDesc(Long userId, LocalDateTime now);
     List<Booking> findBookingsByItemIdAndStartAfter(Long itemId, LocalDateTime now);
     List<Booking> findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(Long itemId, LocalDateTime now, Status status);
     List<Booking> findBookingsByItemIdAndOwnerIdAndStartAfterAndStatusOrderByIdDesc(Long itemId, Long bookerId, LocalDateTime now, Status status);
-    List<Booking> findBookingsByItemIdAndOwnerIdAndEndBeforeAndStatusOrderByIdDesc(Long itemId, Long bookerId, LocalDateTime now, Status status);
+
+    List<Booking> findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndBeforeAndEndAfterAndStatusOrderByIdDesc(Long itemId, Long bookerId, LocalDateTime now1, LocalDateTime now2, LocalDateTime now3, Status status);
+
+    List<Booking> findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndBeforeAndStatus(Long itemId, Long bookerId, LocalDateTime start, LocalDateTime end, Status status);
+    List<Booking> findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndAfterAndStatus(Long itemId, Long bookerId, LocalDateTime start, LocalDateTime end, Status status);
     List<Booking> findBookingsByItemIdAndEndBeforeOrderByEndAsc(Long itemId, LocalDateTime now);
 }
