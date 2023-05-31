@@ -19,7 +19,11 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
             "SET name = :itemName, description = :itemDescription, available = :itemAvailable " +
             "WHERE id = :itemId",
             nativeQuery = true)
+
     void update(String itemName, String itemDescription, Boolean itemAvailable, Long itemId);
+
     List<Item> findItemsByIdAndOwnerId(Long itemId, Long ownerId);
+
     List<Item> findItemsByOwnerIdOrderById(Long ownerId);
+
 }

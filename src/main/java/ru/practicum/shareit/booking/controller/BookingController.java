@@ -67,7 +67,7 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") Long bookerId,
                                             @RequestParam(defaultValue = "ALL") String state) {
-        log.info(BookingController.class + " GET/ " + " bookerId="+ bookerId + " state=" + state);
+        log.info(BookingController.class + " GET/ " + " bookerId=" + bookerId + " state=" + state);
         return bookingService.getAllForBooker(bookerId, state);
     }
 
@@ -75,7 +75,7 @@ public class BookingController {
     @GetMapping("/owner")
     public List<BookingDto> get(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                           @RequestParam(defaultValue = "ALL") String state) {
-        log.info(BookingController.class + " GET/ " + " ownerId= "+ ownerId + " state= " + state);
+        log.info(BookingController.class + " GET/ " + " ownerId= " + ownerId + " state= " + state);
         return bookingService.getAllForOwner(ownerId, state);
     }
 

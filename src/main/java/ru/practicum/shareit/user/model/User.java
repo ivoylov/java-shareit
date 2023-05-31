@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="shareit_user")
+@Table(name = "shareit_user")
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;

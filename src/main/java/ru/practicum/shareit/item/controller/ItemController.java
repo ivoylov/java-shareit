@@ -50,7 +50,7 @@ public class ItemController {
     public ItemDto get(@PathVariable Long itemId,
                        @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info(ItemController.class + "/GET itemId=" + itemId + "; userId=" + userId);
-        return userId == null ? itemService.get(itemId):itemService.get(itemId, userId);
+        return userId == null ? itemService.get(itemId) : itemService.get(itemId, userId);
     }
 
     @GetMapping("/search")

@@ -91,7 +91,7 @@ public class BookingService implements CrudOperations<BookingDto> {
     }
 
     public BookingDto get(Long bookingId, Long userId) {
-        log.info(BookingService.class + " GET booking by booker" + " userId="+ userId + " bookingId=" + bookingId);
+        log.info(BookingService.class + " GET booking by booker" + " userId=" + userId + " bookingId=" + bookingId);
         Booking booking = bookingStorage.get(bookingId);
         if (booking == null) {
             throw new EntityNotFoundException("bookingId=" + bookingId);
