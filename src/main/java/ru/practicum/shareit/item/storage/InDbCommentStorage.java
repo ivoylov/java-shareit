@@ -19,27 +19,27 @@ public class InDbCommentStorage implements CommentStorage {
 
     @Override
     public Comment update(Comment comment) {
-        return null;
+        return commentRepository.save(comment);
     }
 
     @Override
     public Boolean isExist(Long id) {
-        return null;
+        return commentRepository.findById(id).isPresent();
     }
 
     @Override
     public Boolean isExist(Comment comment) {
-        return null;
+        return commentRepository.findById(comment.getId()).isPresent();
     }
 
     @Override
     public Comment get(Long id) {
-        return null;
+        return commentRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Comment> getAll() {
-        return null;
+        return commentRepository.findAll();
     }
 
     @Override
@@ -49,7 +49,9 @@ public class InDbCommentStorage implements CommentStorage {
 
     @Override
     public Comment delete(Long id) {
-        return null;
+        Comment comment = get(id);
+        commentRepository.delete(get(id));
+        return comment;
     }
 
 }

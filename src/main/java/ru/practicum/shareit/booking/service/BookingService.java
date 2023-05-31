@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
+import ru.practicum.shareit.booking.storage.BookingStorage;
 import ru.practicum.shareit.booking.storage.InDbBookingStorage;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.EntityValidationException;
@@ -33,7 +34,6 @@ public class BookingService implements CrudOperations<BookingDto> {
     private final InDbBookingStorage bookingStorage;
     private final ItemService itemService;
     private final UserService userService;
-    private final CommentStorage commentStorage;
 
     @Override
     public BookingDto create(BookingDto bookingDto) {
@@ -72,12 +72,12 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public Boolean isExist(Long id) {
-        return null;
+        return bookingStorage.isExist(id);
     }
 
     @Override
-    public Boolean isExist(BookingDto booking) {
-        return null;
+    public Boolean isExist(BookingDto bookingDto) {
+        return bookingStorage.isExist(BookingDtoMapper.toBooking(bookingDto));
     }
 
     @Override
@@ -112,12 +112,15 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public List<BookingDto> getAll() {
-        return null;
+        return toBookingDtoList(bookingStorage.getAll());
     }
 
     @Override
     public BookingDto delete(Long id) {
-        return null;
+        Booking booking = BookingDtoMapper.toBooking(get(id));
+        User user = userService.get(booking.getBookerId());
+        Item item = ItemDtoMapper.toItem(itemService.get(booking.getItemId()));
+        return BookingDtoMapper.toBookingDto(booking, item, user);
     }
 
     public List<BookingDto> getAllForBooker(Long bookerId, String stateString) {

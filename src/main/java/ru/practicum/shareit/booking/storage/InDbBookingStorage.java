@@ -32,12 +32,12 @@ public class InDbBookingStorage implements BookingStorage {
 
     @Override
     public Boolean isExist(Long id) {
-        return null;
+        return bookingRepository.findById(id).isPresent();
     }
 
     @Override
     public Boolean isExist(Booking booking) {
-        return null;
+        return bookingRepository.findById(booking.getId()).isPresent();
     }
 
     @Override
@@ -48,12 +48,14 @@ public class InDbBookingStorage implements BookingStorage {
 
     @Override
     public List<Booking> getAll() {
-        return null;
+        return bookingRepository.findAll();
     }
 
     @Override
     public Booking delete(Long id) {
-        return null;
+        Booking booking = get(id);
+        bookingRepository.delete(booking);
+        return booking;
     }
 
     @Override
@@ -65,7 +67,6 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllCurrentBookingsForBooker(Long bookerId) {
         log.info(InDbBookingStorage.class + " get all current bookings for bookerId=" + bookerId);
-        //return bookingRepository.findBookingsByBookerIdAndStatus(bookerId,Status.APPROVED);
         return bookingRepository.findBookingsByBookerIdAndStartBeforeAndEndAfter(bookerId, LocalDateTime.now(), LocalDateTime.now());
     }
 
@@ -102,7 +103,6 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllCurrentBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
-        //return bookingRepository.findBookingsByOwnerIdAndStatusOrderByIdDesc(ownerId,Status.APPROVED);
         return bookingRepository.findBookingsByOwnerIdAndStartBeforeAndEndAfterOrderByEndDesc(ownerId, LocalDateTime.now(), LocalDateTime.now());
     }
 
