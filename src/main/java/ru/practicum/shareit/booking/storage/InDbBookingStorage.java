@@ -8,7 +8,6 @@ import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -156,13 +155,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public Booking getLastBookingForItemByOwner(Long itemId, Long userId) {
         log.info(InDbBookingStorage.class + " get last booking for item itemId=" + itemId + " userId=" + userId);
-        //ArrayList<Booking> booking1 = new ArrayList<>(bookingRepository.findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndBeforeAndStatus(itemId, userId, LocalDateTime.now(), LocalDateTime.now(), Status.APPROVED));
-        //ArrayList<Booking> booking2 = new ArrayList<>(bookingRepository.findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndAfterAndStatus(itemId, userId, LocalDateTime.now(), LocalDateTime.now(), Status.APPROVED));
-        //ArrayList<Booking> bookings = new ArrayList<>(booking1);
-        //booking1.addAll(booking2);
-        //bookings.sort(Comparator.comparing(Booking::getEnd));
-        //ArrayList<Booking> sortedBooking =  new ArrayList<>(bookings.sort((b1, b2) -> b1.getStart().compareTo(b2.getStart())));
-        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndOwnerIdAndStartBeforeAndEndBeforeAndEndAfterAndStatusOrderByIdDesc(itemId, userId, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), Status.APPROVED));
+        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartBeforeAndStatusOrderByEndDesc(itemId, LocalDateTime.now(), Status.APPROVED);
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
@@ -170,7 +163,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public Booking getNextBookingForItemByOwner(Long itemId, Long userId) {
         log.info(InDbBookingStorage.class + " get next booking for item itemId=" + itemId + " userId=" + userId);
-        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndOwnerIdAndStartAfterAndStatusOrderByIdDesc(itemId, userId, LocalDateTime.now(), Status.APPROVED));
+        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(), Status.APPROVED);
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
