@@ -6,12 +6,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import java.util.List;
 
-import static ru.practicum.shareit.booking.model.Status.*;
+import static ru.practicum.shareit.booking.model.Status.APPROVED;
+import static ru.practicum.shareit.booking.model.Status.REJECTED;
 
 @RestController
 @RequestMapping("/bookings")
