@@ -18,6 +18,7 @@ import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +157,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
         return toBookingDtoList(bookingsList);
@@ -208,7 +209,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
         return toBookingDtoList(bookingsList);

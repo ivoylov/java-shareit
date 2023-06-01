@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.storage.InDbCommentStorage;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Service
@@ -24,7 +25,7 @@ public class CommentService {
     public CommentDto create(CommentDto commentDto) {
         checkCommentDto(commentDto);
         Comment comment = CommentDtoMapper.toComment(commentDto);
-        comment.setCreatedDate(LocalDateTime.now());
+        comment.setCreatedDate(LocalDateTime.now(Clock.systemUTC()));
         return CommentDtoMapper.toCommentDto(inDbCommentStorage.create(comment), userService.get(commentDto.getAuthorId()));
     }
 
