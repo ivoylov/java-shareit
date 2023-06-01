@@ -157,7 +157,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(Clock.systemDefaultZone());
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
         return BookingDtoMapper.toBookingDtoList(bookingsList, itemService, userService);
@@ -209,7 +209,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(Clock.systemDefaultZone());
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
         return BookingDtoMapper.toBookingDtoList(bookingsList, itemService, userService);
