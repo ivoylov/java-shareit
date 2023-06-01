@@ -37,12 +37,7 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public Boolean isExist(Item item) {
-        for (Item checkedITem : items.values()) {
-            if (checkedITem.equals(item)) {
-                return true;
-            }
-        }
-        return false;
+        return items.containsKey(item.getId());
     }
 
     @Override

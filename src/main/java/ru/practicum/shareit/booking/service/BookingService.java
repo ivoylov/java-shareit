@@ -111,7 +111,7 @@ public class BookingService implements CrudOperations<BookingDto> {
 
     @Override
     public List<BookingDto> getAll() {
-        return toBookingDtoList(bookingStorage.getAll());
+        return BookingDtoMapper.toBookingDtoList(bookingStorage.getAll(), itemService, userService);
     }
 
     @Override
@@ -157,10 +157,10 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
+        LocalDateTime now = LocalDateTime.now();
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
-        return toBookingDtoList(bookingsList);
+        return BookingDtoMapper.toBookingDtoList(bookingsList, itemService, userService);
     }
 
     private void logBookingList(List<Booking> bookingsList) {
@@ -209,22 +209,10 @@ public class BookingService implements CrudOperations<BookingDto> {
             default:
                 throw new EntityValidationException(state, "Unknown state: UNSUPPORTED_STATUS");
         }
-        LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
+        LocalDateTime now = LocalDateTime.now();
         log.info("текущее время=" + now);
         logBookingList(bookingsList);
-        return toBookingDtoList(bookingsList);
-    }
-
-    private List<BookingDto> toBookingDtoList(List<Booking> bookingsList) {
-        List<BookingDto> bookingsDtoList = new ArrayList<>();
-        for (Booking booking : bookingsList) {
-            BookingDto bookingDto = BookingDtoMapper.toBookingDto(
-                    booking,
-                    ItemDtoMapper.toItem(itemService.get(booking.getItemId())),
-                    userService.get(booking.getBookerId()));
-            bookingsDtoList.add(bookingDto);
-        }
-        return bookingsDtoList;
+        return BookingDtoMapper.toBookingDtoList(bookingsList, itemService, userService);
     }
 
     private void checkCreatingBookingDto(BookingDto bookingDto) {

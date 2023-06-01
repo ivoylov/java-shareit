@@ -37,7 +37,7 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item item = itemStorage.create(ItemDtoMapper.toItem(itemDto));
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
         return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments);
     }
 
@@ -48,7 +48,7 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item updateItem = updateItem(item, itemStorage.get(item.getId()));
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
         return ItemDtoMapper.toItemDto(itemStorage.update(updateItem), lastBooking, nextBooking, comments);
     }
 
@@ -57,7 +57,7 @@ public class ItemService implements CrudOperations<ItemDto> {
         log.info(ItemService.class + " get itemId=" + id);
         Item item = itemStorage.get(id);
         log.info(item.toString());
-        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
         return ItemDtoMapper.toItemDto(item, null, null, comments);
     }
 
@@ -73,7 +73,7 @@ public class ItemService implements CrudOperations<ItemDto> {
 
     @Override
     public List<ItemDto> getAll() {
-        return toItemDtoList(itemStorage.getAll());
+        return ItemDtoMapper.toItemDtoList(itemStorage.getAll(), bookingStorage, commentStorage, userService);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ItemService implements CrudOperations<ItemDto> {
         Item item = itemStorage.get(id);
         Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
         Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-        List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+        List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
         return ItemDtoMapper.toItemDto(itemStorage.delete(id), lastBooking, nextBooking, comments);
     }
 
@@ -94,19 +94,16 @@ public class ItemService implements CrudOperations<ItemDto> {
                     findItems.add(item);
             }
         }
-        return toItemDtoList(findItems);
+        return ItemDtoMapper.toItemDtoList(findItems, bookingStorage, commentStorage, userService);
     }
 
     public List<ItemDto> getOwnerItems(Long ownerId) {
         log.info(ItemService.class + " get for ownerId=" + ownerId);
         List<ItemDto> ownerItems = new ArrayList<>();
         for (Item item : itemStorage.getOwnerItems(ownerId)) {
-            log.info(ItemService.class + " бронирования запрашивает владелец get itemId=" + ownerId);
             Booking lastBooking = bookingStorage.getLastBookingForItemByOwner(item.getId(), ownerId);
-            log.info("last booking=" + lastBooking);
             Booking nextBooking = bookingStorage.getNextBookingForItemByOwner(item.getId(), ownerId);
-            log.info("last booking=" + nextBooking);
-            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+            List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
             ownerItems.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments));
         }
         return ownerItems;
@@ -137,17 +134,6 @@ public class ItemService implements CrudOperations<ItemDto> {
         }
     }
 
-    private List<ItemDto> toItemDtoList(List<Item> items) {
-        List<ItemDto> itemsDto = new ArrayList<>();
-        for (Item item : items) {
-            Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
-            Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
-            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
-            itemsDto.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments));
-        }
-        return itemsDto;
-    }
-
     public ItemDto get(Long itemId, Long userId) {
         log.info(ItemService.class + " get itemId=" + itemId + " for userId=" + userId);
         Item item = itemStorage.get(itemId);
@@ -158,7 +144,7 @@ public class ItemService implements CrudOperations<ItemDto> {
             log.info("last booking=" + lastBooking);
             Booking nextBooking = bookingStorage.getNextBookingForItemByOwner(item.getId(), userId);
             log.info("next booking=" + nextBooking);
-            List<CommentDto> comments = toCommentDtoList(commentStorage.getAllForItem(item.getId()));
+            List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
             return ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments);
         } else {
             log.info(ItemService.class + " бронирования запрашивает не владелец get itemId=" + itemId + " for userId=" + userId);
@@ -166,12 +152,4 @@ public class ItemService implements CrudOperations<ItemDto> {
         }
     }
 
-    private List<CommentDto> toCommentDtoList(List<Comment> commentList) {
-        if (commentList.isEmpty()) return Collections.emptyList();
-        ArrayList<CommentDto> commentDtoList = new ArrayList<>();
-        for (Comment comment : commentList) {
-            commentDtoList.add(CommentDtoMapper.toCommentDto(comment, userService.get(comment.getAuthorId())));
-        }
-        return commentDtoList;
-    }
 }

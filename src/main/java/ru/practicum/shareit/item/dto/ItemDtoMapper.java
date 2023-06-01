@@ -2,8 +2,12 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.storage.BookingStorage;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.storage.CommentStorage;
+import ru.practicum.shareit.user.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @UtilityClass
@@ -30,6 +34,17 @@ public class ItemDtoMapper {
                 .ownerId(itemDto.getOwnerId())
                 .available(itemDto.getAvailable())
                 .build();
+    }
+
+    public List<ItemDto> toItemDtoList(List<Item> items, BookingStorage bookingStorage, CommentStorage commentStorage, UserService userService) {
+        List<ItemDto> itemsDto = new ArrayList<>();
+        for (Item item : items) {
+            Booking lastBooking = bookingStorage.getLastBookingForItem(item.getId());
+            Booking nextBooking = bookingStorage.getNextBookingForItem(item.getId());
+            List<CommentDto> comments = CommentDtoMapper.toCommentDtoList(commentStorage.getAllForItem(item.getId()), userService);
+            itemsDto.add(ItemDtoMapper.toItemDto(item, lastBooking, nextBooking, comments));
+        }
+        return itemsDto;
     }
 
 }

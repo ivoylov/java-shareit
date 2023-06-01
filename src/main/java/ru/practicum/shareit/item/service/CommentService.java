@@ -25,7 +25,7 @@ public class CommentService {
     public CommentDto create(CommentDto commentDto) {
         checkCommentDto(commentDto);
         Comment comment = CommentDtoMapper.toComment(commentDto);
-        comment.setCreatedDate(LocalDateTime.now(Clock.systemUTC()));
+        comment.setCreatedDate(LocalDateTime.now());
         return CommentDtoMapper.toCommentDto(inDbCommentStorage.create(comment), userService.get(commentDto.getAuthorId()));
     }
 

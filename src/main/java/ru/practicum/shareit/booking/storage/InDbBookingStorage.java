@@ -68,19 +68,19 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllCurrentBookingsForBooker(Long bookerId) {
         log.info(InDbBookingStorage.class + " get all current bookings for bookerId=" + bookerId);
-        return bookingRepository.findBookingsByBookerIdAndStartBeforeAndEndAfter(bookerId, LocalDateTime.now(Clock.systemUTC()), LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByBookerIdAndStartBeforeAndEndAfter(bookerId, LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllPastBookingsForBooker(Long bookerId) {
         log.info(InDbBookingStorage.class + " get all past bookings for bookerId=" + bookerId);
-        return bookingRepository.findBookingsByBookerIdAndEndBeforeOrderByEndDesc(bookerId, LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByBookerIdAndEndBeforeOrderByEndDesc(bookerId, LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllFutureBookingsForBooker(Long bookerId) {
         log.info(InDbBookingStorage.class + " get all future bookings for bookerId=" + bookerId);
-        return bookingRepository.findBookingsByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now());
     }
 
     @Override
@@ -104,19 +104,19 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllCurrentBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all current bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStartBeforeAndEndAfterOrderByEndDesc(ownerId, LocalDateTime.now(Clock.systemUTC()), LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByOwnerIdAndStartBeforeAndEndAfterOrderByEndDesc(ownerId, LocalDateTime.now(), LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllPastBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all past bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndEndBeforeOrderByEndDesc(ownerId, LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByOwnerIdAndEndBeforeOrderByEndDesc(ownerId, LocalDateTime.now());
     }
 
     @Override
     public List<Booking> getAllFutureBookingsForOwner(Long ownerId) {
         log.info(InDbBookingStorage.class + " get all future bookings for ownerId=" + ownerId);
-        return bookingRepository.findBookingsByOwnerIdAndStartAfterOrderByIdDesc(ownerId, LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByOwnerIdAndStartAfterOrderByIdDesc(ownerId, LocalDateTime.now());
     }
 
     @Override
@@ -134,13 +134,13 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public List<Booking> getAllFutureBookingsForItem(Long itemId) {
         log.info(InDbBookingStorage.class + " get all future bookings for itemId=" + itemId);
-        return bookingRepository.findBookingsByItemIdAndStartAfter(itemId, LocalDateTime.now(Clock.systemUTC()));
+        return bookingRepository.findBookingsByItemIdAndStartAfter(itemId, LocalDateTime.now());
     }
 
     @Override
     public Booking getLastBookingForItem(Long itemId) {
         log.info(InDbBookingStorage.class + " get last booking for item itemId=" + itemId);
-        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndEndBeforeOrderByEndAsc(itemId, LocalDateTime.now(Clock.systemUTC())));
+        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndEndBeforeOrderByEndAsc(itemId, LocalDateTime.now()));
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
@@ -148,7 +148,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public Booking getNextBookingForItem(Long itemId) {
         log.info(InDbBookingStorage.class + " get next booking for item itemId=" + itemId);
-        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(Clock.systemUTC()), Status.APPROVED));
+        ArrayList<Booking> bookings = new ArrayList<>(bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(), Status.APPROVED));
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
@@ -156,7 +156,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public Booking getLastBookingForItemByOwner(Long itemId, Long userId) {
         log.info(InDbBookingStorage.class + " get last booking for item itemId=" + itemId + " userId=" + userId);
-        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartBeforeAndStatusOrderByEndDesc(itemId, LocalDateTime.now(Clock.systemUTC()), Status.APPROVED);
+        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartBeforeAndStatusOrderByEndDesc(itemId, LocalDateTime.now(), Status.APPROVED);
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
@@ -164,7 +164,7 @@ public class InDbBookingStorage implements BookingStorage {
     @Override
     public Booking getNextBookingForItemByOwner(Long itemId, Long userId) {
         log.info(InDbBookingStorage.class + " get next booking for item itemId=" + itemId + " userId=" + userId);
-        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(Clock.systemUTC()), Status.APPROVED);
+        List<Booking> bookings = bookingRepository.findBookingsByItemIdAndStartAfterAndStatusOrderByStartAsc(itemId, LocalDateTime.now(), Status.APPROVED);
         if (bookings.isEmpty()) return null;
         return bookings.get(0);
     }
