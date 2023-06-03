@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @Slf4j
 public class RequestController {
-    
+
 
 }
