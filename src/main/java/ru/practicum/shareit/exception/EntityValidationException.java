@@ -6,6 +6,10 @@ public class EntityValidationException extends EntityException {
         super(o);
     }
 
+    public EntityValidationException(Object o, String message) {
+        super(o,message);
+    }
+
     public Object getEntity() {
         return super.getEntity();
     }
