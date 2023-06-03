@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class RequestDto {
+    private Long id;
     @NotNull (groups = {Update.class, Create.class}, message = "описание не может быть пустым")
     @NotBlank (groups = {Update.class, Create.class}, message = "должно быть описание")
     private String description;
