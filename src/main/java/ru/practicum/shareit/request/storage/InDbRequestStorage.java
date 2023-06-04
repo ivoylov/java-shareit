@@ -2,7 +2,10 @@ package ru.practicum.shareit.request.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.model.Request;
 
 import java.util.Collections;
@@ -42,19 +45,23 @@ public class InDbRequestStorage implements RequestStorage {
     }
 
     @Override
-    public List<Request> getAll() {
-        return requestRepository.findAll();
-    }
-
-    @Override
     public Request delete(Long id) {
         Request request = requestRepository.getReferenceById(id);
         requestRepository.delete(request);
         return request;
     }
 
-    public List<Request> search() {
-        return Collections.emptyList();
+    @Override
+    public List<Request> getAll() {
+        return requestRepository.findAll();
+    }
+
+    public List<Request> getOwn(Long requestorId) {
+        return requestRepository.findRequestsByRequestorId(requestorId);
+    }
+
+    public List<Request> getAll(int from, int size) {
+        return requestRepository.findAll(PageRequest.of(from, size)).getContent();
     }
 
 }

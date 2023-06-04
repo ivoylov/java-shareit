@@ -13,18 +13,18 @@ public class RequestDtoMapper {
     public RequestDto toRequestDto(Request request) {
         return RequestDto.builder()
                 .id(request.getId())
-                .created(request.getCreated())
+                .created(request.getCreatedDate())
                 .description(request.getDescription())
-                .requestor(request.getRequestor())
+                .requestorId(request.getRequestorId())
                 .build();
     }
 
     public Request toRequest(RequestDto requestDto) {
         return Request.builder()
                 .id(requestDto.getId())
-                .created(requestDto.getCreated())
+                .createdDate(requestDto.getCreated())
                 .description(requestDto.getDescription())
-                .requestor(requestDto.getRequestor())
+                .requestorId(requestDto.getRequestorId())
                 .build();
     }
 

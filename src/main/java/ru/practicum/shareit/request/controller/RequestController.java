@@ -2,10 +2,17 @@ package ru.practicum.shareit.request.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.Create;
+import ru.practicum.shareit.Update;
 import ru.practicum.shareit.request.service.RequestService;
 import ru.practicum.shareit.request.dto.RequestDto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,20 +27,26 @@ public class RequestController {
     //POST /requests — добавить новый запрос вещи.
     // Основная часть запроса — текст запроса, где пользователь описывает, какая именно вещь ему нужна.
     @PostMapping
-    public RequestDto create(@RequestBody RequestDto requestDto) {
+    public RequestDto create(@RequestHeader("X-Sharer-User-Id") Long requestorId,
+                             @Validated(Create.class) @RequestBody RequestDto requestDto) {
+        requestDto.setRequestorId(requestorId);
+        log.info(RequestController.class + " POST/ requestDto={}", requestDto);
         return requestService.create(requestDto);
     }
 
     @PatchMapping
-    public RequestDto update(@RequestBody RequestDto requestDto) {
+    public RequestDto update(@RequestHeader("X-Sharer-User-Id") Long requestorId,
+                             @Validated(Update.class) @RequestBody RequestDto requestDto) {
+        requestDto.setId(requestorId);
+        log.info(RequestController.class + " UPDATE/ requestDto={}", requestDto);
         return requestService.update(requestDto);
     }
 
     //GET /requests/{requestId} — получить данные об одном конкретном запросе вместе с данными об ответах на него в том же формате, что и в эндпоинте GET /requests.
     // Посмотреть данные об отдельном запросе может любой пользователь.
-    @GetMapping
-    public RequestDto getRequest(@RequestBody RequestDto requestDto) {
-        return requestService.get(requestDto.getId());
+    @GetMapping("/{requestId} ")
+    public RequestDto get(@PathVariable Long requestId) {
+        return requestService.get(requestId);
     }
 
     //GET /requests — получить список своих запросов вместе с данными об ответах на них.
@@ -41,8 +54,9 @@ public class RequestController {
     // Так в дальнейшем, используя указанные id вещей, можно будет получить подробную информацию о каждой вещи.
     // Запросы должны возвращаться в отсортированном порядке от более новых к более старым.
     @GetMapping
-    public List<RequestDto> getAll() {
-        return requestService.getAll();
+    public List<RequestDto> getOwn(@RequestHeader("X-Sharer-User-Id") Long requestorId) {
+        log.info(RequestController.class + " getOwn/ requestorId={}", requestorId);
+        return requestService.getOwn(requestorId);
     }
 
     //GET /requests/all?from={from}&size={size} — получить список запросов, созданных другими пользователями.
@@ -50,9 +64,12 @@ public class RequestController {
     // Запросы сортируются по дате создания: от более новых к более старым.
     // Результаты должны возвращаться постранично.
     // Для этого нужно передать два параметра: from — индекс первого элемента, начиная с 0, и size — количество элементов для отображения.
-    @GetMapping
-    public List<RequestDto> searchRequests() {
-        return requestService.search();
+    @GetMapping("/all")
+    public List<RequestDto> getAll(@RequestHeader("X-Sharer-User-Id") @Min(1) Long requestorId,
+                                   @Nullable @RequestParam Integer from,
+                                   @Nullable @RequestParam Integer size) {
+        log.info(RequestController.class + " all/ requestorId={}, from={}, size={}", requestorId, from, size);
+        return requestService.getAll(requestorId, from, size);
     }
 
 }
