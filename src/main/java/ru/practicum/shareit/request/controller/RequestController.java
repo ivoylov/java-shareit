@@ -3,6 +3,7 @@ package ru.practicum.shareit.request.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +67,8 @@ public class RequestController {
     // Для этого нужно передать два параметра: from — индекс первого элемента, начиная с 0, и size — количество элементов для отображения.
     @GetMapping("/all")
     public List<RequestDto> getAll(@RequestHeader("X-Sharer-User-Id") @Min(1) Long requestorId,
-                                   @Nullable @RequestParam Integer from,
-                                   @Nullable @RequestParam Integer size) {
+                                   @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                   @RequestParam(defaultValue = "20") @Min(1) Integer size) {
         log.info(RequestController.class + " all/ requestorId={}, from={}, size={}", requestorId, from, size);
         return requestService.getAll(requestorId, from, size);
     }

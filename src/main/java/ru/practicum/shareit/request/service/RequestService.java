@@ -13,6 +13,8 @@ import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.storage.InDbRequestStorage;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,57 +31,62 @@ public class RequestService implements CrudOperations<RequestDto> {
     public RequestDto create(RequestDto requestDto) {
         checkRequestDto(requestDto);
         Request request = RequestDtoMapper.toRequest(requestDto);
+        request.setCreatedDate(LocalDateTime.now(Clock.systemDefaultZone()));
+        log.info(RequestService.class + " create, requestDto={}", requestDto);
         return RequestDtoMapper.toRequestDto(inDbRequestStorage.create(request));
     }
 
     @Override
     public RequestDto update(RequestDto requestDto) {
+        log.info(RequestService.class + " update, requestDto={}", requestDto);
         Request request = RequestDtoMapper.toRequest(requestDto);
         return RequestDtoMapper.toRequestDto(inDbRequestStorage.update(request));
     }
 
     @Override
     public Boolean isExist(Long id) {
+        log.info(RequestService.class + " isExist, requestId={}", id);
         return inDbRequestStorage.isExist(id);
     }
 
     @Override
     public Boolean isExist(RequestDto requestDto) {
+        log.info(RequestService.class + " get, requestDto={}", requestDto);
         return inDbRequestStorage.isExist(RequestDtoMapper.toRequest(requestDto));
     }
 
     @Override
     public RequestDto get(Long id) {
+        log.info(RequestService.class + " get, requestId={}", id);
         return RequestDtoMapper.toRequestDto(inDbRequestStorage.get(id));
     }
 
     @Override
     public List<RequestDto> getAll() {
+        log.info(RequestService.class + " get all");
         return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll());
     }
 
     @Override
     public RequestDto delete(Long id) {
+        log.info(RequestService.class + " delete, userId={}", id);
         return RequestDtoMapper.toRequestDto(inDbRequestStorage.delete(id));
     }
 
     public List<RequestDto> getOwn(Long requestorId) {
+        log.info(RequestService.class + " get own, requestorId={}", requestorId);
         checkUser(requestorId);
         return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getOwn(requestorId));
     }
 
     public List<RequestDto> getAll(Long requestorId, Integer from, Integer size) {
         log.info(RequestService.class + " get all");
-        if (from == null || size == null) {
-            return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll());
-        } else {
-            checkParam(requestorId, from, size);
-            return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(from, size));
-        }
-
+        checkParam(requestorId, from, size);
+        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(from, size));
     }
 
     private void checkParam(Long requestorId, Integer from, Integer size) {
+        log.info(RequestService.class + " check param");
         checkUser(requestorId);
         checkFrom(from);
         checkSize(size);
