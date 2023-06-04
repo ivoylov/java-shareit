@@ -23,6 +23,7 @@ public class ItemDtoMapper {
                 .lastBooking(lastBooking)
                 .nextBooking(nextBooking)
                 .comments(comments)
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -33,6 +34,7 @@ public class ItemDtoMapper {
                 .description(itemDto.getDescription())
                 .ownerId(itemDto.getOwnerId())
                 .available(itemDto.getAvailable())
+                .requestId(itemDto.getRequestId())
                 .build();
     }
 

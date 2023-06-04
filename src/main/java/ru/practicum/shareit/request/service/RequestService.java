@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.EntityValidationException;
+import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.dto.RequestDtoMapper;
 import ru.practicum.shareit.request.model.Request;
@@ -26,6 +27,7 @@ public class RequestService implements CrudOperations<RequestDto> {
     private final Integer MIN_SIZE = 1;
     private final InDbRequestStorage inDbRequestStorage;
     private final UserService userService;
+    private final ItemService itemService;
 
     @Override
     public RequestDto create(RequestDto requestDto) {
@@ -33,14 +35,14 @@ public class RequestService implements CrudOperations<RequestDto> {
         Request request = RequestDtoMapper.toRequest(requestDto);
         request.setCreatedDate(LocalDateTime.now(Clock.systemDefaultZone()));
         log.info(RequestService.class + " create, requestDto={}", requestDto);
-        return RequestDtoMapper.toRequestDto(inDbRequestStorage.create(request));
+        return RequestDtoMapper.toRequestDto(inDbRequestStorage.create(request), itemService);
     }
 
     @Override
     public RequestDto update(RequestDto requestDto) {
         log.info(RequestService.class + " update, requestDto={}", requestDto);
         Request request = RequestDtoMapper.toRequest(requestDto);
-        return RequestDtoMapper.toRequestDto(inDbRequestStorage.update(request));
+        return RequestDtoMapper.toRequestDto(inDbRequestStorage.update(request), itemService);
     }
 
     @Override
@@ -58,31 +60,31 @@ public class RequestService implements CrudOperations<RequestDto> {
     @Override
     public RequestDto get(Long id) {
         log.info(RequestService.class + " get, requestId={}", id);
-        return RequestDtoMapper.toRequestDto(inDbRequestStorage.get(id));
+        return RequestDtoMapper.toRequestDto(inDbRequestStorage.get(id), itemService);
     }
 
     @Override
     public List<RequestDto> getAll() {
         log.info(RequestService.class + " get all");
-        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll());
+        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(), itemService);
     }
 
     @Override
     public RequestDto delete(Long id) {
         log.info(RequestService.class + " delete, userId={}", id);
-        return RequestDtoMapper.toRequestDto(inDbRequestStorage.delete(id));
+        return RequestDtoMapper.toRequestDto(inDbRequestStorage.delete(id), itemService);
     }
 
     public List<RequestDto> getOwn(Long requestorId) {
         log.info(RequestService.class + " get own, requestorId={}", requestorId);
         checkUser(requestorId);
-        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getOwn(requestorId));
+        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getOwn(requestorId), itemService);
     }
 
     public List<RequestDto> getAll(Long requestorId, Integer from, Integer size) {
         log.info(RequestService.class + " get all");
         checkParam(requestorId, from, size);
-        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(from, size));
+        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(from, size), itemService);
     }
 
     private void checkParam(Long requestorId, Integer from, Integer size) {
