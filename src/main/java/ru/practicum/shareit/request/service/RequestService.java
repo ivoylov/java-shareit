@@ -75,6 +75,11 @@ public class RequestService implements CrudOperations<RequestDto> {
         return RequestDtoMapper.toRequestDto(inDbRequestStorage.delete(id), itemService);
     }
 
+    public RequestDto get(RequestDto requestDto) {
+        checkRequestDto(requestDto);
+        return RequestDtoMapper.toRequestDto(inDbRequestStorage.get(requestDto.getId()), itemService);
+    }
+
     public List<RequestDto> getOwn(Long requestorId) {
         log.info(RequestService.class + " get own, requestorId={}", requestorId);
         checkUser(requestorId);
@@ -95,29 +100,37 @@ public class RequestService implements CrudOperations<RequestDto> {
     }
 
     private void checkSize(Integer size) {
-        log.info(RequestService.class + "check size={}", size);
+        log.info(RequestService.class + " check page size={}", size);
         if (size < MIN_SIZE) {
-            throw new EntityValidationException("size < 1");
+            throw new EntityValidationException("page size < " + MIN_SIZE);
         }
     }
 
     private void checkFrom(Integer from) {
-        log.info(RequestService.class + "check from={}", from);
+        log.info(RequestService.class + " check page from={}", from);
         if (from < MIN_FROM) {
-            throw new EntityValidationException("size < 1");
+            throw new EntityValidationException("page from < " + MIN_FROM);
         }
     }
 
     private void checkUser(Long requestorId) {
-        log.info(RequestService.class + "check userId={}", requestorId);
+        log.info(RequestService.class + " check userId={}", requestorId);
         if (!userService.isExist(requestorId)) {
             throw new EntityNotFoundException("не найден userId=" + requestorId);
         }
     }
 
+    private void checkRequestId(Long requestId) {
+        log.info(RequestService.class + " check requestId={}", requestId);
+        if (!isExist(requestId)) {
+            throw new EntityNotFoundException("не найден requestId=" + requestId);
+        }
+    }
+
     private void checkRequestDto(RequestDto requestDto) {
-        log.info(RequestService.class + "check requestDto={}", requestDto);
+        log.info(RequestService.class + " check requestDto={}", requestDto);
         checkUser(requestDto.getRequestorId());
+        checkRequestId(requestDto.getId());
     }
 
 }

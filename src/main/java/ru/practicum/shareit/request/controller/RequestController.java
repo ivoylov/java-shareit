@@ -2,9 +2,6 @@ package ru.practicum.shareit.request.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
@@ -13,8 +10,6 @@ import ru.practicum.shareit.request.service.RequestService;
 import ru.practicum.shareit.request.dto.RequestDto;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,6 +33,7 @@ public class RequestController {
     @PatchMapping
     public RequestDto update(@RequestHeader("X-Sharer-User-Id") Long requestorId,
                              @Validated(Update.class) @RequestBody RequestDto requestDto) {
+        requestDto.setRequestorId(requestorId);
         requestDto.setId(requestorId);
         log.info(RequestController.class + " UPDATE/ requestDto={}", requestDto);
         return requestService.update(requestDto);
@@ -45,9 +41,14 @@ public class RequestController {
 
     //GET /requests/{requestId} — получить данные об одном конкретном запросе вместе с данными об ответах на него в том же формате, что и в эндпоинте GET /requests.
     // Посмотреть данные об отдельном запросе может любой пользователь.
-    @GetMapping("/{requestId} ")
-    public RequestDto get(@PathVariable Long requestId) {
-        return requestService.get(requestId);
+    @GetMapping("/{requestId}")
+    public RequestDto get(@RequestHeader("X-Sharer-User-Id") Long requestorId,
+                          @PathVariable Long requestId) {
+        RequestDto requestDto = new RequestDto();
+        requestDto.setRequestorId(requestorId);
+        requestDto.setId(requestId);
+        log.info(RequestController.class + " get/ requestDto={}", requestDto);
+        return requestService.get(requestDto);
     }
 
     //GET /requests — получить список своих запросов вместе с данными об ответах на них.
