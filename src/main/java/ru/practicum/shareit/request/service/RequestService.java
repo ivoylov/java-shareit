@@ -31,7 +31,7 @@ public class RequestService implements CrudOperations<RequestDto> {
 
     @Override
     public RequestDto create(RequestDto requestDto) {
-        checkRequestDto(requestDto);
+        checkUser(requestDto.getRequestorId());
         Request request = RequestDtoMapper.toRequest(requestDto);
         request.setCreatedDate(LocalDateTime.now(Clock.systemDefaultZone()));
         log.info(RequestService.class + " create, requestDto={}", requestDto);

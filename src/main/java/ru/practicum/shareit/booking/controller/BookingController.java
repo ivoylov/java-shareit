@@ -6,8 +6,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.service.BookingPageableService;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.storage.BookingPageableStorage;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 import static ru.practicum.shareit.booking.model.Status.APPROVED;
@@ -19,7 +22,7 @@ import static ru.practicum.shareit.booking.model.Status.REJECTED;
 @Slf4j
 public class BookingController {
 
-    private final BookingService bookingService;
+    private final BookingPageableService bookingService;
 
     /*
     добавление нового запроса на бронирование
@@ -65,18 +68,22 @@ public class BookingController {
 
     //Получение списка всех бронирований текущего пользователя.
     @GetMapping
-    public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") Long bookerId,
-                                            @RequestParam(defaultValue = "ALL") String state) {
-        log.info(BookingController.class + " GET/ " + " bookerId=" + bookerId + " state=" + state);
-        return bookingService.getAllForBooker(bookerId, state);
+    public List<BookingDto> getAllForBooker(@RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId,
+                                            @RequestParam(defaultValue = "ALL") String state,
+                                            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                            @RequestParam(defaultValue = "20") @Min(1) Integer size) {
+        log.info(BookingController.class + " GET/ bookerId={}, state={}, from={}, size={}", bookerId, state, from, size);
+        return bookingService.getAllForBooker(bookerId, state, from, size);
     }
 
     //Получение списка бронирований для всех вещей текущего пользователя.
     @GetMapping("/owner")
     public List<BookingDto> get(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                          @RequestParam(defaultValue = "ALL") String state) {
+                                @RequestParam(defaultValue = "ALL") String state,
+                                @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                @RequestParam(defaultValue = "20") @Min(1) Integer size) {
         log.info(BookingController.class + " GET/ " + " ownerId= " + ownerId + " state= " + state);
-        return bookingService.getAllForOwner(ownerId, state);
+        return bookingService.getAllForOwner(ownerId, state, from, size);
     }
 
 }
