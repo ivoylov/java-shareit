@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
@@ -67,7 +68,14 @@ public class InDbBookingPageableStorage implements BookingPageableStorage {
     @Override
     public List<Booking> getAllBookingsForBooker(Long bookerId, int page, int size) {
         log.info(InDbBookingStorage.class + " get all bookings for bookerId=" + bookerId);
-        return bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId, PageRequest.of(page, size));
+        List result = bookingRepository.findBookingsByBookerIdOrderByIdDesc(bookerId, PageRequest.of(page, size));
+        if (result.size() == 0) {
+            while (page > 0) {
+                page--;
+                return getAllBookingsForBooker(bookerId, page, size);
+            }
+        }
+        return result;
     }
 
     @Override

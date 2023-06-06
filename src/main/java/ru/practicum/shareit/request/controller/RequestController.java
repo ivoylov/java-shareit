@@ -71,7 +71,8 @@ public class RequestController {
                                    @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                    @RequestParam(defaultValue = "20") @Min(1) Integer size) {
         log.info(RequestController.class + " all/ requestorId={}, from={}, size={}", requestorId, from, size);
-        return requestService.getAll(requestorId, from, size);
+        //return requestService.getAll(requestorId, from, size);
+        return requestService.getAllByAnotherUser(requestorId, from, size);
     }
 
 }

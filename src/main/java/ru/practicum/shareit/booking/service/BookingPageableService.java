@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.booking.model.Booking;
@@ -131,7 +132,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     public List<BookingDto> getAllForBooker(Long bookerId, String stateString, int page, int size) {
-        log.info(BookingService.class + " get " + "bookerId=" + bookerId + " state=" + stateString);
+        log.info(BookingService.class + " GET/ bookerId={}, state={}, from={}, size={}", bookerId, stateString, page, size);
         State state = State.valueOf(stateString);
         if (!userService.isExist(bookerId)) {
             throw new EntityNotFoundException(bookerId);

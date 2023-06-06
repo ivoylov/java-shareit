@@ -56,6 +56,11 @@ public class InDbRequestStorage implements RequestStorage {
         return requestRepository.findAll();
     }
 
+    @Override
+    public List<Request> getAllByAnotherUser(Long requestorId, Integer from, Integer size) {
+        return requestRepository.findRequestsByRequestorIdIsNot(requestorId, PageRequest.of(from, size));
+    }
+
     public List<Request> getOwn(Long requestorId) {
         return requestRepository.findRequestsByRequestorId(requestorId);
     }

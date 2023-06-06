@@ -92,6 +92,12 @@ public class RequestService implements CrudOperations<RequestDto> {
         return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAll(from, size), itemService);
     }
 
+    public List<RequestDto> getAllByAnotherUser(Long requestorId, Integer from, Integer size) {
+        log.info(RequestService.class + " get all by another user");
+        checkParam(requestorId, from, size);
+        return RequestDtoMapper.toRequestDtoList(inDbRequestStorage.getAllByAnotherUser(requestorId, from, size), itemService);
+    }
+
     private void checkParam(Long requestorId, Integer from, Integer size) {
         log.info(RequestService.class + " check param");
         checkUser(requestorId);

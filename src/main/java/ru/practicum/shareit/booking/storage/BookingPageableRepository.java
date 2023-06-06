@@ -24,6 +24,10 @@ public interface BookingPageableRepository extends JpaRepository<Booking, Long> 
 
     List<Booking> findBookingsByBookerIdOrderByIdDesc(Long userId, Pageable pageable);
 
+    List<Booking> findBookingsByBookerId(Long userId, Pageable pageable);
+
+    List<Booking> findBookingsByBookerId(Long userId);
+
     List<Booking> findBookingsByOwnerIdOrderByIdDesc(Long userId, Pageable pageable);
 
     List<Booking> findBookingsByBookerIdAndStatus(Long userId, Status status, Pageable pageable);
