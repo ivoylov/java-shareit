@@ -22,8 +22,8 @@ import java.util.List;
 @Slf4j
 public class RequestService implements CrudOperations<RequestDto> {
 
-    private final Integer MIN_FROM = 0;
-    private final Integer MIN_SIZE = 1;
+    private final Integer minFrom = 0;
+    private final Integer minSize = 1;
     private final InDbRequestStorage inDbRequestStorage;
     private final UserService userService;
     private final ItemService itemService;
@@ -106,15 +106,15 @@ public class RequestService implements CrudOperations<RequestDto> {
 
     private void checkSize(Integer size) {
         log.info(RequestService.class + " check page size={}", size);
-        if (size < MIN_SIZE) {
-            throw new EntityValidationException("page size < " + MIN_SIZE);
+        if (size < minSize) {
+            throw new EntityValidationException("page size < " + minSize);
         }
     }
 
     private void checkFrom(Integer from) {
         log.info(RequestService.class + " check page from={}", from);
-        if (from < MIN_FROM) {
-            throw new EntityValidationException("page from < " + MIN_FROM);
+        if (from < minFrom) {
+            throw new EntityValidationException("page from < " + minFrom);
         }
     }
 
