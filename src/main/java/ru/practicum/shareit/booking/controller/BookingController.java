@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.service.BookingPageableService;
-import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.booking.storage.BookingPageableStorage;
 
 import javax.validation.constraints.Min;
 import java.util.List;

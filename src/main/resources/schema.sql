@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS bookings;
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS requests;
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS shareit_user;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
+DROP TABLE IF EXISTS items CASCADE;
+DROP TABLE IF EXISTS shareit_user CASCADE;
 
 CREATE TABLE IF NOT EXISTS shareit_user (
     id bigint not null generated always as identity primary key,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS items (
      description varchar (512),
      available boolean not null,
      owner_id bigint not null references shareit_user(id),
-     request_id bigint
+     request_id bigint references requests(id)
 );
 
 CREATE TABLE IF NOT EXISTS bookings (

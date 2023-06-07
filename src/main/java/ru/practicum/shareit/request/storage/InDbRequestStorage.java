@@ -2,13 +2,10 @@ package ru.practicum.shareit.request.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.model.Request;
 
-import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
