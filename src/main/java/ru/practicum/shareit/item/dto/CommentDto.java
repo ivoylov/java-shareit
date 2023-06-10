@@ -1,8 +1,10 @@
 package ru.practicum.shareit.item.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.Update;
 
@@ -12,6 +14,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentDto {
     private static final int MIN_COMMENT_LENGTH = 1;
     private static final int MAX_COMMENT_LENGTH = 255;
