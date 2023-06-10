@@ -2,6 +2,8 @@ package ru.practicum.shareit.test.booking;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +14,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.TestBookingDto;
+import ru.practicum.shareit.booking.service.BookingPageableService;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import java.nio.charset.StandardCharsets;
@@ -23,6 +27,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
@@ -34,23 +39,23 @@ class BookingControllerTest {
     @InjectMocks
     private BookingController bookingController;
     @Mock
-    private BookingService bookingService;
+    private BookingPageableService bookingService;
     private MockMvc mvc;
     private BookingDto bookingDto;
-    private TestBookingDto testBookingDto;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private Long userId;
+    private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
 
-        LocalDateTime start = LocalDateTime.now(Clock.systemDefaultZone());
-        LocalDateTime end = LocalDateTime.now(Clock.systemDefaultZone()).plusHours(1);
+        mapper = JsonMapper.builder()
+                .findAndAddModules()
+                .build();
 
-        String startString = start.toString();
-        String endString = end.toString();
+        LocalDateTime start = LocalDateTime.now(Clock.systemDefaultZone()).plusHours(1);
+        LocalDateTime end = LocalDateTime.now(Clock.systemDefaultZone()).plusHours(2);
 
-        Long bookerId = 1L;
-        Long itemId = 1L;
+        userId = 1L;
 
         mvc = MockMvcBuilders
                 .standaloneSetup(bookingController)
@@ -60,14 +65,7 @@ class BookingControllerTest {
                 .itemId(1L)
                 .start(start)
                 .end(end)
-                .bookerId(1L)
-                .build();
-
-        testBookingDto = TestBookingDto.builder()
-                .itemId(itemId)
-                .start(startString)
-                .end(endString)
-                .bookerId(bookerId)
+                .bookerId(userId)
                 .build();
 
     }
@@ -75,28 +73,20 @@ class BookingControllerTest {
     @Test
     void create() throws Exception {
 
-        Mockito
-                .when(bookingService.create(any()))
+        when(bookingService.create(any()))
                 .thenReturn(bookingDto);
 
-        mvc.perform(post("/bookings")
-                        .content(mapper.writeValueAsString(testBookingDto))
+        mvc.perform(MockMvcRequestBuilders.post("/bookings")
+                        .content(mapper.writeValueAsString(bookingDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", userId)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-                //.andExpect(jsonPath("$.id").value("1"));
-        //.andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
-          //      .andExpect(jsonPath("$.firstName", is(userDto.getFirstName())))
-            //    .andExpect(jsonPath("$.lastName", is(userDto.getLastName())))
-             //   .andExpect(jsonPath("$.email", is(userDto.getEmail())));
-
-                /*
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.version").value("0.1"))
-                .andDo(MockMvcResultHandlers.print());
-                */
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itemId", is(bookingDto.getId()), Long.class))
+                .andExpect(jsonPath("$.bookerId", is(bookingDto.getBookerId())))
+                .andExpect(jsonPath("$.start", is(bookingDto.getStart())))
+                .andExpect(jsonPath("$.end", is(bookingDto.getEnd())));
 
     }
 

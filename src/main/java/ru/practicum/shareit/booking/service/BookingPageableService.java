@@ -47,7 +47,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
         booking.setOwnerId(owner.getId());
         booking.setStatus(WAITING);
 
-        log.info(BookingService.class + " create " + booking);
+        log.info(BookingPageableService.class + " create " + booking);
         Booking createdBooking = bookingStorage.create(booking);
         return BookingDtoMapper.toBookingDto(createdBooking, item, user);
 
@@ -61,7 +61,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
         checkUpdatingBooking(bookingDto, bookingToUpdate);
         bookingToUpdate.setStatus(bookingDto.getStatus());
 
-        log.info(BookingService.class + " update " + bookingToUpdate);
+        log.info(BookingPageableService.class + " update " + bookingToUpdate);
         Booking updatedBooking = bookingStorage.update(bookingToUpdate);
         User user = userService.get(updatedBooking.getBookerId());
         Item item = ItemDtoMapper.toItem(itemService.get(updatedBooking.getItemId()));
@@ -81,7 +81,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
 
     @Override
     public BookingDto get(Long id) {
-        log.info(BookingService.class + " getBooking " + " bookingId " + id);
+        log.info(BookingPageableService.class + " getBooking " + " bookingId " + id);
         Booking booking = bookingStorage.get(id);
         if (booking == null) throw new EntityNotFoundException(id);
         User user = userService.get(booking.getBookerId());
@@ -90,7 +90,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     public BookingDto get(Long bookingId, Long userId) {
-        log.info(BookingService.class + " GET booking by booker" + " userId=" + userId + " bookingId=" + bookingId);
+        log.info(BookingPageableService.class + " GET booking by booker" + " userId=" + userId + " bookingId=" + bookingId);
         Booking booking = bookingStorage.get(bookingId);
         if (booking == null) {
             throw new EntityNotFoundException("bookingId=" + bookingId);
@@ -101,7 +101,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     private void checkUserToGet(Booking booking, Long userId) {
-        log.info(BookingService.class + " checkUserToGet, booking=" + booking + ", userId=" + userId);
+        log.info(BookingPageableService.class + " checkUserToGet, booking=" + booking + ", userId=" + userId);
         if (!booking.getBookerId().equals(userId) &&
                 !booking.getOwnerId().equals(userId)) {
             log.info("Запрос инфо о бронировании от не пользователя и не владельца");
@@ -129,7 +129,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     public List<BookingDto> getAllForBooker(Long bookerId, String stateString, int page, int size) {
-        log.info(BookingService.class + " GET/ bookerId={}, state={}, from={}, size={}", bookerId, stateString, page, size);
+        log.info(BookingPageableService.class + " GET/ bookerId={}, state={}, from={}, size={}", bookerId, stateString, page, size);
         State state = State.valueOf(stateString);
         if (!userService.isExist(bookerId)) {
             throw new EntityNotFoundException(bookerId);
@@ -137,27 +137,27 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
         ArrayList<Booking> bookingsList;
         switch (state) {
             case ALL:
-                log.info(BookingService.class + " get all bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForBooker(bookerId, page, size));
                 break;
             case CURRENT:
-                log.info(BookingService.class + " get all current bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all current bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForBooker(bookerId, page, size));
                 break;
             case PAST:
-                log.info(BookingService.class + " get all past bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all past bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForBooker(bookerId, page, size));
                 break;
             case FUTURE:
-                log.info(BookingService.class + " get all future bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all future bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForBooker(bookerId, page, size));
                 break;
             case REJECTED:
-                log.info(BookingService.class + " get all rejected bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all rejected bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForBooker(bookerId, page, size));
                 break;
             case WAITING:
-                log.info(BookingService.class + " get all waiting bookings for bookerId=" + bookerId);
+                log.info(BookingPageableService.class + " get all waiting bookings for bookerId=" + bookerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForBooker(bookerId, page, size));
                 break;
             default:
@@ -181,7 +181,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     public List<BookingDto> getAllForOwner(Long ownerId, String stateString, int page, int size) {
-        log.info(BookingService.class + " get " + "ownerId " + ownerId + " state " + stateString);
+        log.info(BookingPageableService.class + " get " + "ownerId " + ownerId + " state " + stateString);
         State state = State.valueOf(stateString);
         if (!userService.isExist(ownerId)) {
             throw new EntityNotFoundException(ownerId);
@@ -189,27 +189,27 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
         ArrayList<Booking> bookingsList;
         switch (state) {
             case ALL:
-                log.info(BookingService.class + " get all bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllBookingsForOwner(ownerId, page, size));
                 break;
             case CURRENT:
-                log.info(BookingService.class + " get all current bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all current bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllCurrentBookingsForOwner(ownerId, page, size));
                 break;
             case PAST:
-                log.info(BookingService.class + " get all past bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all past bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllPastBookingsForOwner(ownerId, page, size));
                 break;
             case FUTURE:
-                log.info(BookingService.class + " get all future bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all future bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllFutureBookingsForOwner(ownerId, page, size));
                 break;
             case REJECTED:
-                log.info(BookingService.class + " get all rejected bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all rejected bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllRejectedBookingsForOwner(ownerId, page, size));
                 break;
             case WAITING:
-                log.info(BookingService.class + " get all waiting bookings for ownerId=" + ownerId);
+                log.info(BookingPageableService.class + " get all waiting bookings for ownerId=" + ownerId);
                 bookingsList = new ArrayList<>(bookingStorage.getAllWaitingBookingsForOwner(ownerId, page, size));
                 break;
             default:
@@ -223,7 +223,7 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
 
     private void checkCreatingBookingDto(BookingDto bookingDto) {
         Item item = ItemDtoMapper.toItem(itemService.get(bookingDto.getItemId()));
-        log.info(BookingService.class + " check bookingDto " + bookingDto);
+        log.info(BookingPageableService.class + " check bookingDto " + bookingDto);
         if (!item.getAvailable()) {
             log.info("вещь недоступна");
             throw new ItemAvailableException(item);
@@ -260,13 +260,13 @@ public class BookingPageableService implements CrudOperations<BookingDto> {
     }
 
     private void checkUpdatingBooking(BookingDto bookingDto, Booking booking) {
-        log.info(BookingService.class + " check updatingBooking " + bookingDto);
+        log.info(BookingPageableService.class + " check updatingBooking " + bookingDto);
         if (booking.getStatus() != WAITING) {
-            log.info(BookingService.class + " booking.getStatus() != WAITING " + bookingDto);
+            log.info(BookingPageableService.class + " booking.getStatus() != WAITING " + bookingDto);
             throw new EntityValidationException("ошибка при смене статуса: бронирование не находится в ожидании");
         }
         if (bookingDto.getOwnerId().equals(booking.getBookerId())) {
-            log.info(BookingService.class + " bookingDto.getOwnerId().equals(booking.getBookerId() " + bookingDto);
+            log.info(BookingPageableService.class + " bookingDto.getOwnerId().equals(booking.getBookerId() " + bookingDto);
             throw new EntityNotFoundException("ошибка при смене статуса: пользователь не является владельцем");
         }
     }

@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.State;
+import ru.practicum.shareit.booking.service.BookingPageableService;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.EntityValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 public class CommentService {
 
     private final InDbCommentStorage inDbCommentStorage;
+    private final BookingPageableService bookingPageableService;
+
     private final BookingService bookingService;
     private final UserService userService;
 
