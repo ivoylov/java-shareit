@@ -73,4 +73,8 @@ public class InDbItemStorage implements ItemStorage {
         return itemRepository.findItemsByOwnerIdOrderById(ownerId);
     }
 
+    @Override
+    public List<Item> getItemsForRequest(Long requestId) {
+        return itemRepository.findItemsByRequestId(requestId);
+    }
 }

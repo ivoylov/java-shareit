@@ -150,4 +150,8 @@ public class ItemService implements CrudOperations<ItemDto> {
         }
     }
 
+    public List<Item> getItemsForRequest(Long requestId) {
+        return itemStorage.getItemsForRequest(requestId);
+    }
+
 }

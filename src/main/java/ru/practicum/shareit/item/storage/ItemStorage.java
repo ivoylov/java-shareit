@@ -9,4 +9,6 @@ public interface ItemStorage extends CrudOperations<Item> {
     List<Item> get(Long itemId, Long ownerId);
 
     List<Item> getOwnerItems(Long ownerId);
+
+    List<Item> getItemsForRequest(Long requestId);
 }

@@ -1,8 +1,8 @@
---DROP TABLE bookings;
---DROP TABLE comments;
---DROP TABLE requests;
---DROP TABLE items;
---DROP TABLE shareit_user;
+DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS requests CASCADE;
+DROP TABLE IF EXISTS items CASCADE;
+DROP TABLE IF EXISTS shareit_user CASCADE;
 
 CREATE TABLE IF NOT EXISTS shareit_user (
     id bigint not null generated always as identity primary key,
@@ -10,12 +10,20 @@ CREATE TABLE IF NOT EXISTS shareit_user (
     email varchar not null unique
 );
 
+CREATE TABLE IF NOT EXISTS requests (
+    id bigint not null generated always as identity primary key,
+    description varchar(255),
+    requestor_id bigint not null references shareit_user(id),
+    created_date timestamp without time zone not null
+);
+
 CREATE TABLE IF NOT EXISTS items (
      id bigint not null generated always as identity primary key,
      name varchar (255) not null,
      description varchar (512),
      available boolean not null,
-     owner_id bigint not null references shareit_user(id)
+     owner_id bigint not null references shareit_user(id),
+     request_id bigint references requests(id)
 );
 
 CREATE TABLE IF NOT EXISTS bookings (
@@ -26,12 +34,6 @@ CREATE TABLE IF NOT EXISTS bookings (
     owner_id bigint not null references shareit_user(id),
     booker_id bigint not null references shareit_user(id),
     status int
-);
-
-CREATE TABLE IF NOT EXISTS requests (
-    id bigint not null generated always as identity primary key,
-    description varchar(255),
-    requestor_id bigint not null references shareit_user(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
