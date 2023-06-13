@@ -215,7 +215,7 @@ public class BookingService implements CrudOperations<BookingDto> {
         return BookingDtoMapper.toBookingDtoList(bookingsList, itemService, userService);
     }
 
-    private void checkCreatingBookingDto(BookingDto bookingDto) {
+    public boolean checkCreatingBookingDto(BookingDto bookingDto) {
         Item item = ItemDtoMapper.toItem(itemService.get(bookingDto.getItemId()));
         log.info(BookingService.class + " check bookingDto " + bookingDto);
         if (!item.getAvailable()) {
@@ -238,6 +238,7 @@ public class BookingService implements CrudOperations<BookingDto> {
             log.info("бронировать владельцу запрещено");
             throw new EntityNotFoundException(bookingDto);
         }
+        return true;
     }
 
     private boolean isItemAvailableOnRequestDate(BookingDto bookingDto) {

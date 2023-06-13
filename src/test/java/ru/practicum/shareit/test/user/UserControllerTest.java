@@ -1,78 +1,76 @@
 package ru.practicum.shareit.test.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.practicum.shareit.user.UserController;
+import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
-    @Mock
-    private UserService userService;
 
     @InjectMocks
-    private UserController controller;
-
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    private MockMvc mvc;
-
+    UserController userController;
+    @Mock
+    UserService userService;
+    private Long id;
     private UserDto userDto;
     private User user;
 
     @BeforeEach
     void setUp() {
-        mvc = MockMvcBuilders
-                .standaloneSetup(controller)
+        id = 1L;
+        userDto = UserDto.builder()
+               .id(id)
+               .name("name")
+               .email("user@email.ru")
+               .build();
+        user = User.builder()
+                .id(id)
+                .name("name")
+                .email("user@email.ru")
                 .build();
-
-        userDto = new UserDto(
-                null,
-                "John",
-                "user@mail.ru");
-
-        user = new User(
-                1L,
-                "John",
-                "user@mail.ru");
-
     }
 
     @Test
-    void saveNewUser() throws Exception {
+    void create() {
+        Mockito.when(userService.create(user)).thenReturn(user);
+        assertEquals(userDto, userController.create(userDto));
+    }
 
-        when(userService.create(any()))
-                .thenReturn(user);
+    @Test
+    void update() {
+        Mockito.when(userService.update(user)).thenReturn(user);
+        assertEquals(userController.update(userDto, id), userDto);
+    }
 
-        mvc.perform(post("/users")
-                        .content(mapper.writeValueAsString(userDto))
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
-                .andExpect(jsonPath("$.name", is(user.getName())))
-                .andExpect(jsonPath("$.email", is(user.getEmail())));
+    @Test
+    void delete() {
+        Mockito.when(userService.delete(id)).thenReturn(user);
+        assertEquals(userController.delete(id), user);
+    }
 
+    @Test
+    void get() {
+        Mockito.when(userService.get(id)).thenReturn(user);
+        assertEquals(userController.get(id), user);
+    }
+
+    @Test
+    void getAll() {
+        Mockito.when(userService.getAll()).thenReturn(new ArrayList<>(List.of(user)));
+        assertEquals(userController.getAll(), new ArrayList<>(List.of(user)));
     }
 
 }
