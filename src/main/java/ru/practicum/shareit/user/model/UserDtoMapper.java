@@ -1,7 +1,8 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.user.model;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
 
 @UtilityClass
 public class UserDtoMapper {

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class InMemoryItemStorage extends ItemStorage {
+public class InMemoryItemStorage implements ItemStorage {
 
     private final Map<Long, Item> items = new HashMap<>();
     private Long counter = 0L;
@@ -57,19 +57,6 @@ public class InMemoryItemStorage extends ItemStorage {
         for (Item item : items.values()) {
             if ((item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) &&
                     item.getAvailable()) {
-                findItems.add(item);
-            }
-        }
-        return findItems;
-    }
-
-    @Override
-    public List<Item> search(String text, Long ownerId) {
-        List<Item> findItems = new ArrayList<>();
-        for (Item item : items.values()) {
-            if ((item.getName().toLowerCase().contains(text) ||
-                    item.getDescription().toLowerCase().contains(text)) &&
-                    item.getOwnerId().equals(ownerId)) {
                 findItems.add(item);
             }
         }
