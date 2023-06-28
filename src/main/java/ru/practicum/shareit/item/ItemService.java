@@ -56,8 +56,8 @@ public class ItemService implements CrudOperations<Item> {
         return itemStorage.getOwnerItems(ownerId);
     }
 
-    public void checkItemDtoOwner(ItemDto itemDto) {
-        if (!userService.isExist(itemDto.getOwnerId())) throw new EntityNotFoundException(itemDto);
+    public void checkItemOwner(Long ownerId) {
+        if (!userService.isExist(ownerId)) throw new EntityNotFoundException("не найден пользователь id=" + ownerId);
     }
 
 }

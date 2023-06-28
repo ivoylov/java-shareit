@@ -13,7 +13,6 @@ public class ItemDtoMapper {
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
-                .ownerId(item.getOwnerId())
                 .available(item.getAvailable())
                 .build();
     }
@@ -23,7 +22,6 @@ public class ItemDtoMapper {
                 .id(itemDto.getId())
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
-                .ownerId(itemDto.getOwnerId())
                 .available(itemDto.getAvailable())
                 .build();
     }
