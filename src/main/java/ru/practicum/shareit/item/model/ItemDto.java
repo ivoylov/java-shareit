@@ -20,4 +20,6 @@ public class ItemDto {
     private String description;
     @NotNull(groups = Create.class)
     private Boolean available;
+    @JsonIgnore
+    private Long ownerId;
 }
