@@ -20,7 +20,6 @@ public class ItemController {
 
     @PostMapping
     public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        itemService.checkItemOwner(ownerId);
         Item item = ItemDtoMapper.toItem(itemDto);
         item.setOwnerId(ownerId);
         return ItemDtoMapper.toItemDto(itemService.create(item));

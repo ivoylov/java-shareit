@@ -25,10 +25,8 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public Item update(Item item) {
-        checkOwner(item);
-        Item updateItem = updateItem(item, items.get(item.getId()));
         log.info("обновлён {}", item);
-        return items.put(updateItem.getId(),updateItem);
+        return items.put(item.getId(),item);
     }
 
     @Override
@@ -66,25 +64,6 @@ public class InMemoryItemStorage implements ItemStorage {
     @Override
     public List<Item> getOwnerItems(Long ownerId) {
         return items.values().stream().filter(item -> item.getOwnerId().equals(ownerId)).collect(Collectors.toList());
-    }
-
-    private Item updateItem(Item updatedItem, Item itemToUpdate) {
-        if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
-            itemToUpdate.setName(updatedItem.getName());
-        }
-        if (updatedItem.getDescription() != null && !updatedItem.getDescription().isBlank()) {
-            itemToUpdate.setDescription(updatedItem.getDescription());
-        }
-        if (updatedItem.getAvailable() != null) {
-            itemToUpdate.setAvailable(updatedItem.getAvailable());
-        }
-        return itemToUpdate;
-    }
-
-    private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwnerId(), items.get(item.getId()).getOwnerId())) {
-            throw new EntityNotFoundException(item);
-        }
     }
 
 }
