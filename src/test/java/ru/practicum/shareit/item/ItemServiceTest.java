@@ -6,11 +6,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.InMemoryItemStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -19,10 +21,10 @@ import static org.mockito.Mockito.when;
 class ItemServiceTest {
 
     @InjectMocks
-    ItemService itemService;
+    private ItemService itemService;
 
     @Mock
-    InMemoryItemStorage itemStorage;
+    private InMemoryItemStorage itemStorage;
 
     private Item item;
 
