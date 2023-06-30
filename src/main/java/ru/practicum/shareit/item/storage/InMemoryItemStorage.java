@@ -50,7 +50,7 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public List<Item> search(String text) {
+    public List<Item> searchByNameOrDescription(String text) {
         List<Item> findItems = new ArrayList<>();
         for (Item item : items.values()) {
             if ((item.getName().toLowerCase().contains(text) || item.getDescription().toLowerCase().contains(text)) &&

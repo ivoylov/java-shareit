@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemStorage extends CrudOperations<Item> {
-    List<Item> search(String text);
+    List<Item> searchByNameOrDescription(String text);
 
     List<Item> getOwnerItems(Long ownerId);
 }

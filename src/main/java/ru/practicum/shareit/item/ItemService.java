@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.storage.InMemoryItemStorage;
-import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.UserService;
 
 import java.util.List;
@@ -20,7 +18,6 @@ import java.util.Objects;
 public class ItemService implements CrudOperations<Item> {
 
     private final InMemoryItemStorage itemStorage;
-    private final UserService userService;
 
     @Override
     public Item create(Item item) {
@@ -59,7 +56,7 @@ public class ItemService implements CrudOperations<Item> {
 
 
     public List<Item> search(String text) {
-        return itemStorage.search(text);
+        return itemStorage.searchByNameOrDescription(text);
     }
 
     public List<Item> getOwnerItems(Long ownerId) {
@@ -67,7 +64,7 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     private void checkItemOwner(Long ownerId) {
-        if (!userService.isExist(ownerId)) throw new EntityNotFoundException("не найден пользователь id=" + ownerId);
+        if (!itemStorage.isExist(ownerId)) throw new EntityNotFoundException("не найден пользователь id=" + ownerId);
     }
 
     private void checkOwner(Item item) {
