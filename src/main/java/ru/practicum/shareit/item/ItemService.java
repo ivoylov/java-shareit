@@ -7,7 +7,6 @@ import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.InMemoryItemStorage;
-import ru.practicum.shareit.user.UserService;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +54,7 @@ public class ItemService implements CrudOperations<Item> {
     }
 
 
-    public List<Item> search(String text) {
+    public List<Item> searchByNameOrDescription(String text) {
         return itemStorage.searchByNameOrDescription(text);
     }
 

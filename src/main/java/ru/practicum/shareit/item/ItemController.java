@@ -51,7 +51,7 @@ public class ItemController {
     @GetMapping("/search")
     public List<Item> search(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
-        return itemService.search(text.toLowerCase());
+        return itemService.searchByNameOrDescription(text.toLowerCase());
     }
 
 }
