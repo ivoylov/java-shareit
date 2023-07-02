@@ -33,18 +33,18 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public User delete(@PathVariable @Min(1) Long id) {
-        return userService.delete(id);
+    public UserDto delete(@PathVariable @Min(1) Long id) {
+        return UserDtoMapper.toUserDto(userService.delete(id));
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable @Min(1) Long id) {
-        return userService.get(id);
+    public UserDto get(@PathVariable @Min(1) Long id) {
+        return UserDtoMapper.toUserDto(userService.get(id));
     }
 
     @GetMapping
-    public Collection<User> getAll() {
-        return userService.getAll();
+    public Collection<UserDto> getAll() {
+        return UserDtoMapper.toUserDtoList(userService.getAll());
     }
 
 }
