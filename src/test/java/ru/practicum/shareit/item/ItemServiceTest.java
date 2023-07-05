@@ -6,15 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.InMemoryItemStorage;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,7 +23,7 @@ class ItemServiceTest {
     @InjectMocks
     private ItemService itemService;
     @Mock
-    private InMemoryItemStorage itemStorage;
+    private ItemRepository itemRepository;
     @Mock
     private UserService userService;
     private Item item;
@@ -58,7 +55,7 @@ class ItemServiceTest {
                 .available(true)
                 .owner(user)
                 .build();
-        when(itemStorage.create(any())).thenReturn(createdItem);
+        when(itemRepository.save(any())).thenReturn(createdItem);
         when(userService.isExist(1L)).thenReturn(true);
         assertEquals(createdItem, itemService.create(itemToCreate));
     }
@@ -77,45 +74,44 @@ class ItemServiceTest {
                 .description("newDescription")
                 .available(true)
                 .build();
-        when(itemStorage.get(itemToUpdate.getId())).thenReturn(itemToUpdate);
-        when(itemStorage.update(itemToUpdate)).thenReturn(updatedItem);
+        when(itemRepository.getReferenceById(itemToUpdate.getId())).thenReturn(updatedItem);
         assertEquals(updatedItem, itemService.update(itemToUpdate));
     }
 
     @Test
     void get() {
-        when(itemStorage.get(item.getId())).thenReturn(item);
+        when(itemRepository.getReferenceById(item.getId())).thenReturn(item);
         assertEquals(item, itemService.get(item.getId()));
     }
 
     @Test
     void isExist() {
-        when(itemStorage.isExist(item.getId())).thenReturn(true);
+        when(itemRepository.existsById(item.getId())).thenReturn(true);
         assertEquals(true, itemService.isExist(item.getId()));
     }
 
     @Test
     void getAll() {
         ArrayList<Item> itemList = new ArrayList<>(List.of(item));
-        when(itemStorage.getAll()).thenReturn(itemList);
+        when(itemRepository.findAll()).thenReturn(itemList);
         assertEquals(itemList, itemService.getAll());
     }
 
     @Test
     void delete() {
-        when(itemStorage.delete(item.getId())).thenReturn(item);
+        when(itemRepository.getReferenceById(item.getId())).thenReturn(item);
         assertEquals(item, itemService.delete(item.getId()));
     }
 
     @Test
     void search() {
-        when(itemStorage.searchByNameOrDescription(item.getDescription())).thenReturn(new ArrayList<>(List.of(item)));
+        when(itemRepository.findAllByNameIgnoreCaseOrDescriptionIgnoreCase(any(), any())).thenReturn(new ArrayList<>(List.of(item)));
         assertEquals(new ArrayList<>(List.of(item)), itemService.searchByNameOrDescription(item.getDescription()));
     }
 
     @Test
     void getOwnerItems() {
-        when(itemStorage.getOwnerItems(item.getOwner().getId())).thenReturn(new ArrayList<>(List.of(item)));
+        when(itemRepository.findOwnerItems(item.getOwner().getId())).thenReturn(new ArrayList<>(List.of(item)));
         assertEquals(new ArrayList<>(List.of(item)), itemService.getOwnerItems(item.getOwner().getId()));
     }
 

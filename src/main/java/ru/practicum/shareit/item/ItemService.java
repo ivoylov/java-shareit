@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.InMemoryItemStorage;
 import ru.practicum.shareit.user.UserService;
 
 import java.util.List;
@@ -17,55 +16,58 @@ import java.util.Objects;
 @Slf4j
 public class ItemService implements CrudOperations<Item> {
 
-    private final InMemoryItemStorage itemStorage;
+    private final ItemRepository itemRepository;
     private final UserService userService;
 
     @Override
     public Item create(Item item) {
         log.info(this.getClass() + " запрос на создание item={}", item);
         if (!userService.isExist(item.getOwner().getId())) throw new EntityNotFoundException("не найден пользователь " + item.getOwner());
-        return itemStorage.create(item);
+        return itemRepository.save(item);
     }
 
     @Override
     public Item update(Item item) {
         log.info(this.getClass() + " запрос на обновление item={}", item);
         checkOwner(item);
-        Item updateItem = updateItem(item, itemStorage.get(item.getId()));
-        return itemStorage.update(updateItem);
+        Item updateItem = updateItem(item, itemRepository.getReferenceById(item.getId()));
+        itemRepository.update(updateItem.getName(), updateItem.getDescription(), updateItem.getAvailable(), updateItem.getId());
+        return updateItem;
     }
 
     @Override
     public Item get(Long id) {
-        return itemStorage.get(id);
+        return itemRepository.getReferenceById(id);
     }
 
     @Override
     public Boolean isExist(Long id) {
-        return itemStorage.isExist(id);
+        return itemRepository.existsById(id);
     }
 
     @Override
     public List<Item> getAll() {
-        return itemStorage.getAll();
+        return itemRepository.findAll();
     }
 
     @Override
     public Item delete(Long id) {
-        return itemStorage.delete(id);
+        Item item = itemRepository.getReferenceById(id);
+        itemRepository.deleteById(id);
+        return item;
     }
 
 
     public List<Item> searchByNameOrDescription(String text) {
-        return itemStorage.searchByNameOrDescription(text);
+        return itemRepository.findAllByNameIgnoreCaseOrDescriptionIgnoreCase(text, text);
     }
 
     public List<Item> getOwnerItems(Long ownerId) {
-        return itemStorage.getOwnerItems(ownerId);
+        return itemRepository.findOwnerItems(ownerId);
     }
 
     private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwner().getId(), itemStorage.get(item.getId()).getOwner().getId())) {
+        if (!Objects.equals(item.getOwner().getId(), itemRepository.getReferenceById(item.getId()).getOwner().getId())) {
             throw new EntityNotFoundException(item);
         }
     }
