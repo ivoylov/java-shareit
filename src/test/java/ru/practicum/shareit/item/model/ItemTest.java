@@ -2,6 +2,9 @@ package ru.practicum.shareit.item.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.user.model.User;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,8 +15,14 @@ class ItemTest {
 
     @BeforeEach
     void setUp() {
-        item1 = new Item(1L, "name", "description", true, 1L);
-        item2 = new Item(1L, "name", "description", true, 1L);
+        User user = User.builder()
+                .id(1L)
+                .name("name")
+                .email("userMail@mail.ru")
+                .items(new ArrayList<>())
+                .build();
+        item1 = new Item(1L, "name", "description", true, user, 1L);
+        item2 = new Item(1L, "name", "description", true, user, 1L);
     }
 
     @Test

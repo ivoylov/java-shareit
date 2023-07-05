@@ -3,6 +3,8 @@ package ru.practicum.shareit.user.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserTest {
@@ -12,8 +14,8 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "name", "user@email.ru");
-        testUser = new User(1L, "name", "user@email.ru");
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
+        testUser = new User(1L, "name", "user@email.ru", new ArrayList<>());
     }
 
     @Test

@@ -8,7 +8,6 @@ import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.InMemoryItemStorage;
 import ru.practicum.shareit.user.UserService;
-import ru.practicum.shareit.user.storage.InMemoryUserStorage;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class ItemService implements CrudOperations<Item> {
     @Override
     public Item create(Item item) {
         log.info(this.getClass() + " запрос на создание item={}", item);
-        checkItemOwner(item.getOwnerId());
+        checkItemOwner(item.getOwner().getId());
         return itemStorage.create(item);
     }
 
@@ -70,7 +69,7 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwnerId(), itemStorage.get(item.getId()).getOwnerId())) {
+        if (!Objects.equals(item.getOwner().getId(), itemStorage.get(item.getId()).getOwner().getId())) {
             throw new EntityNotFoundException(item);
         }
     }
