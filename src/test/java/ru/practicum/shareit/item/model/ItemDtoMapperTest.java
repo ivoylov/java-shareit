@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,22 +13,24 @@ class ItemDtoMapperTest {
 
     private Item item;
     private ItemDto itemDto;
+    private User user;
 
     @BeforeEach
     void setUp() {
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
         item = Item.builder()
                 .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
-                .ownerId(1L)
+                .owner(user)
                 .build();
         itemDto = ItemDto.builder()
                 .id(2L)
                 .name("dtoName")
                 .description("dtoDescription")
                 .available(true)
-                .ownerId(2L)
+                .owner(user)
                 .build();
     }
 
@@ -38,7 +41,7 @@ class ItemDtoMapperTest {
                 .name("dtoName")
                 .description("dtoDescription")
                 .available(true)
-                .ownerId(2L)
+                .owner(user)
                 .build();
         assertEquals(itemDto, ItemDtoMapper.toItemDto(testItem));
     }
@@ -50,7 +53,7 @@ class ItemDtoMapperTest {
                 .name("name")
                 .description("description")
                 .available(true)
-                .ownerId(1L)
+                .owner(user)
                 .build();
         assertEquals(item, ItemDtoMapper.toItem(testItemDto));
     }
@@ -62,7 +65,7 @@ class ItemDtoMapperTest {
                 .name("name")
                 .description("description")
                 .available(true)
-                .ownerId(1L)
+                .owner(user)
                 .build();
         ArrayList<ItemDto> itemDtoList = new ArrayList<>(List.of(testItemDto));
         ArrayList<Item> itemList = new ArrayList<>(List.of(item));

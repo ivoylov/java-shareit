@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,27 +27,30 @@ class ItemControllerTest {
     private ItemDto itemDtoToCreate;
     private ItemDto createdItemDto;
     private Item createdItem;
+    private User user;
 
     @BeforeEach
     void setUp() {
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
         itemDtoToCreate = ItemDto.builder()
                 .name("name")
                 .description("description")
                 .available(true)
+                .owner(user)
                 .build();
         createdItem = Item.builder()
                 .name("name")
                 .description("description")
                 .available(true)
                 .id(1L)
-                .ownerId(1L)
+                .owner(user)
                 .build();
         createdItemDto = ItemDto.builder()
                 .name("name")
                 .description("description")
                 .available(true)
                 .id(1L)
-                .ownerId(1L)
+                .owner(user)
                 .build();
     }
 

@@ -9,12 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.InMemoryItemStorage;
+import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,16 +25,18 @@ class ItemServiceTest {
 
     @InjectMocks
     private ItemService itemService;
-
     @Mock
     private InMemoryItemStorage itemStorage;
-
+    @Mock
+    private UserService userService;
     private Item item;
+    private User user;
 
     @BeforeEach
     void setUp() {
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
         item = Item.builder()
-                .ownerId(1L)
+                .owner(user)
                 .name("name")
                 .description("description")
                 .available(true)
@@ -41,33 +46,33 @@ class ItemServiceTest {
     @Test
     void create() {
         Item itemToCreate = Item.builder()
-                .ownerId(1L)
                 .name("name")
                 .description("description")
                 .available(true)
+                .owner(user)
                 .build();
         Item createdItem = Item.builder()
-                .ownerId(1L)
+                .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
-                .id(1L)
+                .owner(user)
                 .build();
-        when(itemStorage.create(itemToCreate)).thenReturn(createdItem);
-        when(itemStorage.isExist(1L)).thenReturn(true);
+        when(itemStorage.create(any())).thenReturn(createdItem);
+        when(userService.isExist(1L)).thenReturn(true);
         assertEquals(createdItem, itemService.create(itemToCreate));
     }
 
     @Test
     void update() {
         Item itemToUpdate = Item.builder()
-                .ownerId(1L)
+                .owner(user)
                 .name("name")
                 .description("description")
                 .available(true)
                 .build();
         Item updatedItem = Item.builder()
-                .ownerId(1L)
+                .owner(user)
                 .name("newName")
                 .description("newDescription")
                 .available(true)
@@ -110,8 +115,8 @@ class ItemServiceTest {
 
     @Test
     void getOwnerItems() {
-        when(itemStorage.getOwnerItems(item.getOwnerId())).thenReturn(new ArrayList<>(List.of(item)));
-        assertEquals(new ArrayList<>(List.of(item)), itemService.getOwnerItems(item.getOwnerId()));
+        when(itemStorage.getOwnerItems(item.getOwner().getId())).thenReturn(new ArrayList<>(List.of(item)));
+        assertEquals(new ArrayList<>(List.of(item)), itemService.getOwnerItems(item.getOwner().getId()));
     }
 
 }

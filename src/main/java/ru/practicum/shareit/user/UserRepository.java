@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query(value =
             "UPDATE shareit_user " +
-                    "SET name = :user.userName, email = :userEmail " +
+                    "SET name = :userName, email = :userEmail " +
                     "WHERE shareit_user_id = :userId",
             nativeQuery = true)
     void update(String userName, String userEmail, Long userId);

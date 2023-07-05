@@ -10,7 +10,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,7 +22,7 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
     @Mock
-    private UserRepository userStorage;
+    private UserRepository userRepository;
     private User userToCreate;
     private User createdUser;
 
@@ -42,39 +41,43 @@ class UserServiceTest {
 
     @Test
     void create() {
-        when(userStorage.save(userToCreate)).thenReturn(createdUser);
+        when(userRepository.save(userToCreate)).thenReturn(createdUser);
         assertEquals(createdUser, userService.create(userToCreate));
     }
 
     @Test
     void update() {
-        when(userStorage.findById(1L)).thenReturn(Optional.of(createdUser));
+        when(userRepository.existsById(1L)).thenReturn(true);
+        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
         createdUser.setName("newName");
         createdUser.setEmail("newUser@email.ru");
-        assertEquals(createdUser, userService.update(userToCreate));
+        assertEquals(createdUser, userService.update(createdUser));
     }
 
     @Test
     void isExist() {
-        when(userStorage.findById(1L).isPresent()).thenReturn(true);
+        when(userRepository.existsById(1L)).thenReturn(true);
         assertTrue(userService.isExist(1L));
     }
 
     @Test
     void get() {
-        when(userStorage.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.get(1L));
     }
 
     @Test
     void getAll() {
         ArrayList<User> userList = new ArrayList<>(List.of(createdUser));
-        when(userStorage.findAll()).thenReturn(userList);
+        when(userRepository.findAll()).thenReturn(userList);
         assertEquals(userService.getAll(), userList);
     }
 
     @Test
     void delete() {
+        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.delete(1L));
     }
 

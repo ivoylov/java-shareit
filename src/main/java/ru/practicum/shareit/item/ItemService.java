@@ -23,7 +23,7 @@ public class ItemService implements CrudOperations<Item> {
     @Override
     public Item create(Item item) {
         log.info(this.getClass() + " запрос на создание item={}", item);
-        checkItemOwner(item.getOwner().getId());
+        if (!userService.isExist(item.getOwner().getId())) throw new EntityNotFoundException("не найден пользователь " + item.getOwner());
         return itemStorage.create(item);
     }
 
@@ -62,10 +62,6 @@ public class ItemService implements CrudOperations<Item> {
 
     public List<Item> getOwnerItems(Long ownerId) {
         return itemStorage.getOwnerItems(ownerId);
-    }
-
-    private void checkItemOwner(Long ownerId) {
-        if (!userService.isExist(ownerId)) throw new EntityNotFoundException("не найден пользователь id=" + ownerId);
     }
 
     private void checkOwner(Item item) {

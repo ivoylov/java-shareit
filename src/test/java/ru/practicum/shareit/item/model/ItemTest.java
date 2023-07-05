@@ -12,17 +12,18 @@ class ItemTest {
 
     private Item item1;
     private Item item2;
+    private User user;
 
     @BeforeEach
     void setUp() {
-        User user = User.builder()
+        user = User.builder()
                 .id(1L)
                 .name("name")
                 .email("userMail@mail.ru")
                 .items(new ArrayList<>())
                 .build();
-        item1 = new Item(1L, "name", "description", true, user, 1L);
-        item2 = new Item(1L, "name", "description", true, user, 1L);
+        item1 = new Item(1L, "name", "description", true, user);
+        item2 = new Item(1L, "name", "description", true, user);
     }
 
     @Test
@@ -47,7 +48,7 @@ class ItemTest {
 
     @Test
     void getOwnerId() {
-        assertEquals(1L, item1.getOwnerId());
+        assertEquals(1L, item1.getOwner().getId());
     }
 
     @Test
@@ -76,8 +77,8 @@ class ItemTest {
 
     @Test
     void setOwnerId() {
-        item1.setOwnerId(2L);
-        assertEquals(2L, item1.getOwnerId());
+        item1.setOwner(user);
+        assertEquals(user, item1.getOwner());
     }
 
     @Test
@@ -92,7 +93,7 @@ class ItemTest {
 
     @Test
     void testToString() {
-        String string = "Item(id=1, name=name, description=description, available=true, ownerId=1)";
+        String string = "Item(id=1, name=name, description=description, available=true, owner=User(id=1, name=name, email=userMail@mail.ru, items=[]))";
         assertEquals(string, item1.toString());
     }
 
@@ -103,7 +104,7 @@ class ItemTest {
                 .name("name")
                 .description("description")
                 .available(true)
-                .ownerId(1L)
+                .owner(user)
                 .build();
         assertEquals(itemBuilder, item1);
     }

@@ -17,55 +17,55 @@ import java.util.Objects;
 @Slf4j
 public class UserService implements CrudOperations<User> {
 
-    private InDbUserStorage userStorage;
+    private final UserRepository userRepository;
 
     @Override
     public User create(User user) {
-        if (isExist(user.getId())) throw new UserAlreadyExistException();
-        return userStorage.create(user);
+        if (userRepository.existsById(user.getId())) throw new UserAlreadyExistException();
+        return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
-        if (!isExist(user.getId())) throw new EntityNotFoundException(user);
+        if (!userRepository.existsById(user.getId())) throw new EntityNotFoundException(user);
         if (user.getEmail() != null && !user.getEmail().isBlank()) {
             if (isHaveSameUser(user)) throw new UserAlreadyExistException();
         }
-        log.info(this.getClass() + "обновлён {}", user);
+        log.info(this.getClass() + "обновлён {} ", user);
         User updatedUser = updateUser(user, this.get(user.getId()));
-        log.info(this.getClass() + "новое состояние user={}", updatedUser);
-        userStorage.update(updatedUser);
+        log.info(this.getClass() + "новое состояние user={} ", updatedUser);
+        userRepository.update(updatedUser.getName(), updatedUser.getEmail(), updatedUser.getId());
         return updatedUser;
     }
 
     @Override
     public Boolean isExist(Long id) {
-        return userStorage.isExist(id);
+        return userRepository.existsById(id);
     }
 
     @Override
     public User get(Long id) {
-        if (!isExist(id)) {
+        if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
         }
         log.info(this.getClass() + "отдан пользователь с id {}", id);
-        return userStorage.get(id);
+        return userRepository.getReferenceById(id);
     }
 
     @Override
     public List<User> getAll() {
         log.info(this.getClass() + "Отдан список всех пользователей");
-        return userStorage.getAll();
+        return userRepository.findAll();
     }
 
     @Override
     public User delete(Long id) {
-        if (!isExist(id)) {
+        if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
         }
         log.info("Пользователь с id {} удалён", id);
-        User user = userStorage.get(id);
-        userStorage.delete(id);
+        User user = userRepository.getReferenceById(id);
+        userRepository.deleteById(id);
         return user;
     }
 

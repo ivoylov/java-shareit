@@ -18,19 +18,16 @@ import javax.persistence.*;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "items_id")
+    @Column(name = "item_id")
     private Long id;
-    @Column(name = "name")
+    @Column(name = "item_name")
     private String name;
-    @Column(name = "description")
+    @Column(name = "item_description")
     private String description;
-    @Column(name = "available")
+    @Column(name = "item_available")
     private Boolean available;
-    @Column(name = "owner_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="owner_id", nullable = false)
     @JsonIgnore
     private User owner;
-    @JsonIgnore
-    private Long ownerId;
 }

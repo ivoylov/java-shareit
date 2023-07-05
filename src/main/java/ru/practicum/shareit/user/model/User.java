@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +25,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "shareit_user_id")
+    @Column(name = "user_id")
     private Long id;
-    @Column(name = "name")
+    @Column(name = "user_name")
     private String name;
-    @Column(name = "email")
+    @Column(name = "user_email")
     private String email;
+    @JsonIgnore
     @OneToMany(mappedBy = "owner",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)

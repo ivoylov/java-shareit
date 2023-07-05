@@ -1,3 +1,4 @@
+
 package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import ru.practicum.shareit.Create;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemDtoMapper;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,14 +24,18 @@ public class ItemController {
     public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto,
                           @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         Item item = ItemDtoMapper.toItem(itemDto);
-        item.setOwnerId(ownerId);
+        User user = new User();
+        user.setId(ownerId);
+        item.setOwner(user);
         return ItemDtoMapper.toItemDto(itemService.create(item));
     }
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         Item item = ItemDtoMapper.toItem(itemDto);
-        item.setOwnerId(ownerId);
+        User user = new User();
+        user.setId(ownerId);
+        item.setOwner(user);
         item.setId(id);
         return ItemDtoMapper.toItemDto(itemService.update(item));
     }
