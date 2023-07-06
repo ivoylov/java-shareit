@@ -14,19 +14,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="items")
+@Table(name="items", schema = "public")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
-    @Column(name = "item_name")
+    @Column(name = "item_name", nullable = false)
     private String name;
     @Column(name = "item_description")
     private String description;
     @Column(name = "item_available")
     private Boolean available;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name="owner_id", nullable = false)
     @JsonIgnore
     private User owner;

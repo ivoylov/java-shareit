@@ -21,16 +21,20 @@ public class ItemService implements CrudOperations<Item> {
 
     @Override
     public Item create(Item item) {
-        log.info(this.getClass() + " запрос на создание item={}", item);
-        if (!userService.isExist(item.getOwner().getId())) throw new EntityNotFoundException("не найден пользователь " + item.getOwner());
+        log.info(this.getClass() + " запрос на создание {}", item);
+        if (!userService.isExist(item.getOwner().getId())) {
+            throw new EntityNotFoundException(" не найден пользователь " + item.getOwner());
+        }
         return itemRepository.save(item);
     }
 
     @Override
-    public Item update(Item item) {
-        log.info(this.getClass() + " запрос на обновление item={}", item);
-        checkOwner(item);
-        Item updateItem = updateItem(item, itemRepository.getReferenceById(item.getId()));
+    public Item update(Item updatedItem) {
+        if (!itemRepository.existsById(updatedItem.getId())) throw new EntityNotFoundException(updatedItem);
+        log.info(this.getClass() + " запрос на обновление {}", updatedItem);
+        checkOwner(updatedItem);
+        Item itemToUpdate = itemRepository.findById(updatedItem.getId()).get();
+        Item updateItem = updateItem(updatedItem, itemToUpdate);
         itemRepository.update(updateItem.getName(), updateItem.getDescription(), updateItem.getAvailable(), updateItem.getId());
         return updateItem;
     }
@@ -57,9 +61,9 @@ public class ItemService implements CrudOperations<Item> {
         return item;
     }
 
-
     public List<Item> searchByNameOrDescription(String text) {
-        return itemRepository.findAllByNameIgnoreCaseOrDescriptionIgnoreCase(text, text);
+        String formText = text.toLowerCase();
+        return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(formText, formText);
     }
 
     public List<Item> getOwnerItems(Long ownerId) {

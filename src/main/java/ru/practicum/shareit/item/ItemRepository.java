@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,12 +19,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                     "WHERE item_id = :itemId",
             nativeQuery = true)
     void update(String name, String description, Boolean available, Long itemId);
-    List<Item> findAllByNameIgnoreCaseOrDescriptionIgnoreCase(String name, String description);
-    @Transactional
-    @Query(value =
-            "SELECT * " +
-                    "FROM items " +
-                    "WHERE owner_id = :ownerId",
-            nativeQuery = true)
+
+    List<Item> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
+
+    @Query(value = "SELECT * FROM items WHERE owner_id = :ownerId", nativeQuery = true)
     List<Item> findOwnerItems(Long ownerId);
+
 }

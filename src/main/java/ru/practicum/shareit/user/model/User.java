@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "shareit_user")
+@Table(name = "shareit_user", schema = "public")
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;
@@ -27,14 +27,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String name;
-    @Column(name = "user_email")
+    @Column(name = "user_email", nullable = false)
     private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "owner",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
     List<Item> items;
 
 }

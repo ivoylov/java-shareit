@@ -21,7 +21,7 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User create(User user) {
-        if (userRepository.existsById(user.getId())) throw new UserAlreadyExistException();
+        if (isHaveSameUser(user)) throw new UserAlreadyExistException();
         return userRepository.save(user);
     }
 
@@ -32,7 +32,7 @@ public class UserService implements CrudOperations<User> {
             if (isHaveSameUser(user)) throw new UserAlreadyExistException();
         }
         log.info(this.getClass() + "обновлён {} ", user);
-        User updatedUser = updateUser(user, this.get(user.getId()));
+        User updatedUser = updateUser(user, userRepository.getReferenceById(user.getId()));
         log.info(this.getClass() + "новое состояние user={} ", updatedUser);
         userRepository.update(updatedUser.getName(), updatedUser.getEmail(), updatedUser.getId());
         return updatedUser;

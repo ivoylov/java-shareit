@@ -31,7 +31,9 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@RequestBody ItemDto itemDto, @PathVariable Long id, @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public ItemDto update(@RequestBody ItemDto itemDto,
+                          @PathVariable Long id,
+                          @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         Item item = ItemDtoMapper.toItem(itemDto);
         User user = new User();
         user.setId(ownerId);
@@ -58,7 +60,7 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemDto> searchByNameOrDescription(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
-        return ItemDtoMapper.toItemDtoList(itemService.searchByNameOrDescription(text.toLowerCase()));
+        return ItemDtoMapper.toItemDtoList(itemService.searchByNameOrDescription(text));
     }
 
 }
