@@ -30,4 +30,5 @@ public class Item {
     @JoinColumn(name="owner_id", nullable = false)
     @JsonIgnore
     private User owner;
+
 }

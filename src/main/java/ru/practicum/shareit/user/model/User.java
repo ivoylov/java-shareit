@@ -35,4 +35,8 @@ public class User {
     @OneToMany(mappedBy = "owner")
     List<Item> items;
 
+    public String toString() {
+        return String.format("id=%d name=%s, email = %s", id, name, email);
+    }
+
 }

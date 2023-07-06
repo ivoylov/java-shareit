@@ -63,7 +63,7 @@ public class ItemService implements CrudOperations<Item> {
 
     public List<Item> searchByNameOrDescription(String text) {
         String formText = text.toLowerCase();
-        return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(formText, formText);
+        return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable(formText, formText, true);
     }
 
     public List<Item> getOwnerItems(Long ownerId) {

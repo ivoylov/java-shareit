@@ -20,7 +20,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             nativeQuery = true)
     void update(String name, String description, Boolean available, Long itemId);
 
-    List<Item> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
+    List<Item> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable(String name, String description, Boolean state);
 
     @Query(value = "SELECT * FROM items WHERE owner_id = :ownerId", nativeQuery = true)
     List<Item> findOwnerItems(Long ownerId);
