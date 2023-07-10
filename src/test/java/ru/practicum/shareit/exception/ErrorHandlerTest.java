@@ -5,15 +5,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.practicum.shareit.user.UserController;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,6 +25,8 @@ class ErrorHandlerTest {
 
     @InjectMocks
     UserService userService;
+    @Mock
+    UserController userController;
     @Mock
     UserRepository userRepository;
 
@@ -38,15 +44,4 @@ class ErrorHandlerTest {
         assertThrows(EntityNotFoundException.class, () -> userService.get(1L));
     }
 
-    @Test
-    void handlerEntityValidationException() {
-    }
-
-    @Test
-    void handlerArgumentNotValidException() {
-    }
-
-    @Test
-    void handlerUnknownErrorException() {
-    }
 }

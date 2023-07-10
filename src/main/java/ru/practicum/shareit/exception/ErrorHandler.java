@@ -27,28 +27,4 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //400
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerEntityValidationException(final EntityValidationException e) {
-        log.info("Объект {} не прошёл валидацию", e.getEntity());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    //400
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.info("В запрос передан невалидный аргумент", e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    //500
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handlerUnknownErrorException(final Throwable e) {
-        log.info("Неизвестная ошибка", e);
-        return new ErrorResponse(e.getMessage());
-    }
-
 }

@@ -28,6 +28,5 @@ public class UserDto {
     @NotEmpty(groups = Create.class)
     @Email(groups = {Create.class, Update.class})
     private String email;
-    //private ArrayList<Item> items;
 
 }
