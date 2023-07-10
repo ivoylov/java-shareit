@@ -63,7 +63,7 @@ class UserTest {
 
     @Test
     void testToString() {
-        String string = "User(id=1, name=name, email=user@email.ru, items=[])";
+        String string = "id=1 name=name, email = user@email.ru";
         assertEquals(string, user.toString());
     }
 

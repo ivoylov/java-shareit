@@ -93,7 +93,7 @@ class ItemTest {
 
     @Test
     void testToString() {
-        String string = "Item(id=1, name=name, description=description, available=true, owner=User(id=1, name=name, email=userMail@mail.ru, items=[]))";
+        String string = "Item(id=1, name=name, description=description, available=true, owner=id=1 name=name, email = userMail@mail.ru)";
         assertEquals(string, item1.toString());
     }
 

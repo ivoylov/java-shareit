@@ -33,7 +33,7 @@ public class ItemService implements CrudOperations<Item> {
         if (!itemRepository.existsById(updatedItem.getId())) throw new EntityNotFoundException(updatedItem);
         log.info(this.getClass() + " запрос на обновление {}", updatedItem);
         checkOwner(updatedItem);
-        Item itemToUpdate = itemRepository.findById(updatedItem.getId()).get();
+        Item itemToUpdate = itemRepository.getReferenceById(updatedItem.getId());
         Item updateItem = updateItem(updatedItem, itemToUpdate);
         itemRepository.update(updateItem.getName(), updateItem.getDescription(), updateItem.getAvailable(), updateItem.getId());
         return updateItem;

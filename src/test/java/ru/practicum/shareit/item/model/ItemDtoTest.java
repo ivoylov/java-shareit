@@ -77,7 +77,7 @@ class ItemDtoTest {
 
     @Test
     void testToString() {
-        String string = "ItemDto(id=1, name=name, description=description, available=true, owner=User(id=1, name=name, email=user@mail.ru, items=[]))";
+        String string = "ItemDto(id=1, name=name, description=description, available=true, owner=id=1 name=name, email = user@mail.ru)";
         assertEquals(string, itemDto1.toString());
     }
 
