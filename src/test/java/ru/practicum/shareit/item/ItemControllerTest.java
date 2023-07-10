@@ -31,7 +31,7 @@ class ItemControllerTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
         itemDtoToCreate = ItemDto.builder()
                 .name("name")
                 .description("description")

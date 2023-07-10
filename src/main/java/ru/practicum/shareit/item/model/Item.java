@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.model;
 
+import booking.model.Booking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,9 +28,10 @@ public class Item {
     private String description;
     @Column(name = "item_available")
     private Boolean available;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="owner_id", nullable = false)
-    @JsonIgnore
     private User owner;
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    private List<Booking> bookings;
 
 }

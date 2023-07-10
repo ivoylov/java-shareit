@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.model;
 
+import booking.model.Booking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,10 +32,10 @@ public class User {
     private String name;
     @Column(name = "user_email", nullable = false)
     private String email;
-    @JsonIgnore
-    @OneToMany(mappedBy = "owner")
-    List<Item> items;
-
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Item> items;
+    @OneToMany(mappedBy = "booker", fetch = FetchType.LAZY)
+    private List<Booking> bookings;
     public String toString() {
         return String.format("id=%d name=%s, email = %s", id, name, email);
     }

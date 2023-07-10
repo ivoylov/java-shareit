@@ -11,7 +11,7 @@ class UserAlreadyExistExceptionTest {
 
     @Test
     void getEntity() {
-        User user = new User(1L, "name", "user@mail.ru", new ArrayList<>());
+        User user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>());
         UserAlreadyExistException userAlreadyExistException = new UserAlreadyExistException(user);
         assertEquals(user, userAlreadyExistException.getEntity());
     }

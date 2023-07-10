@@ -12,10 +12,17 @@ CREATE TABLE IF NOT EXISTS shareit_user (
 
 CREATE TABLE IF NOT EXISTS items (
     item_id bigint not null generated always as identity primary key,
-    owner_id bigint not null,
+    owner_id bigint not null REFERENCES shareit_user(user_id),
     item_name varchar (255) not null,
     item_description varchar (512),
     item_available boolean not null
 );
 
-ALTER TABLE items ADD FOREIGN KEY (owner_id) REFERENCES shareit_user(user_id);
+CREATE TABLE IF NOT EXISTS bookings (
+    booking_id bigint not null generated always as identity primary key,
+    booker_id bigint not null REFERENCES shareit_user(user_id),
+    item_id bigint not null REFERENCES items(item_id),
+    start_date TIMESTAMP WITHOUT TIME ZONE,
+    end_date TIMESTAMP WITHOUT TIME ZONE,
+    status int
+);

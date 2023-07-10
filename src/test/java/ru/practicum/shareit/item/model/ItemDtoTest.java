@@ -16,7 +16,7 @@ class ItemDtoTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "name", "user@mail.ru", new ArrayList<>());
+        user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>());
         itemDto1 = new ItemDto(1L, "name", "description", true, user);
         itemDto2 = new ItemDto(1L, "name", "description", true, user);
     }

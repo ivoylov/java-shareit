@@ -22,8 +22,8 @@ class ItemTest {
                 .email("userMail@mail.ru")
                 .items(new ArrayList<>())
                 .build();
-        item1 = new Item(1L, "name", "description", true, user);
-        item2 = new Item(1L, "name", "description", true, user);
+        item1 = new Item(1L, "name", "description", true, user, new ArrayList<>());
+        item2 = new Item(1L, "name", "description", true, user, new ArrayList<>());
     }
 
     @Test

@@ -17,7 +17,7 @@ class ItemDtoMapperTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L, "name", "user@email.ru", new ArrayList<>());
+        user = new User(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
         item = Item.builder()
                 .id(1L)
                 .name("name")
