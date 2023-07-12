@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import ch.qos.logback.classic.spi.IThrowableProxy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -8,12 +7,10 @@ import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor

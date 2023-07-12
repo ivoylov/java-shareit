@@ -17,8 +17,8 @@ class ItemDtoTest {
     @BeforeEach
     void setUp() {
         user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>());
-        itemDto1 = new ItemDto(1L, "name", "description", true, user);
-        itemDto2 = new ItemDto(1L, "name", "description", true, user);
+        itemDto1 = new ItemDto(1L, "name", "description", true, user, new ArrayList<>());
+        itemDto2 = new ItemDto(1L, "name", "description", true, user, new ArrayList<>());
     }
 
     @Test
@@ -77,7 +77,7 @@ class ItemDtoTest {
 
     @Test
     void testToString() {
-        String string = "ItemDto(id=1, name=name, description=description, available=true, owner=id=1 name=name, email = user@mail.ru)";
+        String string = "ItemDto(id=1, name=name, description=description, available=true, owner=User(id=1, name=name, email=user@mail.ru, items=[], bookings=[]), bookings=[])";
         assertEquals(string, itemDto1.toString());
     }
 
@@ -89,6 +89,7 @@ class ItemDtoTest {
                 .description("description")
                 .available(true)
                 .owner(user)
+                .bookings(new ArrayList<>())
                 .build();
         assertEquals(itemDto, itemDto1);
     }

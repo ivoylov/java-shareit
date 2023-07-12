@@ -10,12 +10,10 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +47,6 @@ class UserServiceTest {
 
     @Test
     void update() {
-        when(userRepository.existsById(1L)).thenReturn(true);
         when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
         createdUser.setName("newName");
         createdUser.setEmail("newUser@email.ru");
@@ -65,7 +62,6 @@ class UserServiceTest {
     @Test
     void get() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
-        when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.get(1L));
     }
 
@@ -79,7 +75,6 @@ class UserServiceTest {
     @Test
     void delete() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
-        when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.delete(1L));
     }
 

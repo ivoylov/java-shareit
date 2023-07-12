@@ -63,7 +63,7 @@ class UserTest {
 
     @Test
     void testToString() {
-        String string = "id=1 name=name, email = user@email.ru";
+        String string = "User(id=1, name=name, email=user@email.ru, items=[], bookings=[])";
         assertEquals(string, user.toString());
     }
 
@@ -74,6 +74,7 @@ class UserTest {
                 .name("name")
                 .email("user@email.ru")
                 .items(new ArrayList<>())
+                .bookings(new ArrayList<>())
                 .build();
         assertEquals(newUser, user);
     }

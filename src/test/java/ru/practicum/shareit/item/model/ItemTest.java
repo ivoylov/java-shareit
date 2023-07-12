@@ -93,7 +93,7 @@ class ItemTest {
 
     @Test
     void testToString() {
-        String string = "Item(id=1, name=name, description=description, available=true, owner=id=1 name=name, email = userMail@mail.ru)";
+        String string = "Item(id=1, name=name, description=description, available=true, owner=User(id=1, name=name, email=userMail@mail.ru, items=[], bookings=null), bookings=[])";
         assertEquals(string, item1.toString());
     }
 
@@ -105,6 +105,7 @@ class ItemTest {
                 .description("description")
                 .available(true)
                 .owner(user)
+                .bookings(new ArrayList<>())
                 .build();
         assertEquals(itemBuilder, item1);
     }

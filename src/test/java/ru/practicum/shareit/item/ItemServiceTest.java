@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
@@ -76,7 +75,6 @@ class ItemServiceTest {
                 .description("newDescription")
                 .available(true)
                 .build();
-        when(itemRepository.existsById(any())).thenReturn(true);
         when(itemRepository.findById(itemToUpdate.getId())).thenReturn(Optional.of(updatedItem));
         assertEquals(updatedItem, itemService.update(itemToUpdate));
     }

@@ -3,6 +3,8 @@ package ru.practicum.shareit.user.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserDtoTest {
@@ -12,8 +14,8 @@ class UserDtoTest {
 
     @BeforeEach
     void setUp() {
-        userDto = new UserDto(1L, "name", "user@email.ru");
-        testUserDto = new UserDto(1L, "name", "user@email.ru");
+        userDto = new UserDto(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
+        testUserDto = new UserDto(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
@@ -61,7 +63,7 @@ class UserDtoTest {
 
     @Test
     void testToString() {
-        String string = "UserDto(id=1, name=name, email=user@email.ru)";
+        String string = "UserDto(id=1, name=name, email=user@email.ru, items=[], bookings=[])";
         assertEquals(string, userDto.toString());
     }
 
@@ -71,6 +73,8 @@ class UserDtoTest {
                 .id(1L)
                 .name("name")
                 .email("user@email.ru")
+                .items(new ArrayList<>())
+                .bookings(new ArrayList<>())
                 .build();
         assertEquals(newUser, userDto);
     }

@@ -8,7 +8,10 @@ import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Formatter;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
