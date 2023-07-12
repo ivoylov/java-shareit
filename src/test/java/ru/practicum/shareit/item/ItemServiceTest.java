@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,13 +77,13 @@ class ItemServiceTest {
                 .available(true)
                 .build();
         when(itemRepository.existsById(any())).thenReturn(true);
-        when(itemRepository.getReferenceById(itemToUpdate.getId())).thenReturn(updatedItem);
+        when(itemRepository.findById(itemToUpdate.getId())).thenReturn(Optional.of(updatedItem));
         assertEquals(updatedItem, itemService.update(itemToUpdate));
     }
 
     @Test
     void get() {
-        when(itemRepository.getReferenceById(item.getId())).thenReturn(item);
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
         assertEquals(item, itemService.get(item.getId()));
     }
 
@@ -101,7 +102,7 @@ class ItemServiceTest {
 
     @Test
     void delete() {
-        when(itemRepository.getReferenceById(item.getId())).thenReturn(item);
+        when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
         assertEquals(item, itemService.delete(item.getId()));
     }
 

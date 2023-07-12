@@ -11,6 +11,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,7 +50,7 @@ class UserServiceTest {
     @Test
     void update() {
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
         createdUser.setName("newName");
         createdUser.setEmail("newUser@email.ru");
         assertEquals(createdUser, userService.update(createdUser));
@@ -63,7 +64,7 @@ class UserServiceTest {
 
     @Test
     void get() {
-        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
         when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.get(1L));
     }
@@ -77,7 +78,7 @@ class UserServiceTest {
 
     @Test
     void delete() {
-        when(userRepository.getReferenceById(1L)).thenReturn(createdUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(createdUser));
         when(userRepository.existsById(1L)).thenReturn(true);
         assertEquals(createdUser, userService.delete(1L));
     }

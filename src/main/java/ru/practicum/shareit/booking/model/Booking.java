@@ -1,4 +1,4 @@
-package booking.model;
+package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -22,17 +22,22 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="booker_id", nullable = false)
-    private User booker;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="item_id", nullable = false)
-    private Item item;
-    @Column(name="start_date")
+    @Column(name = "start_date")
     private LocalDateTime start;
-    @Column(name="end_date")
+    @Column(name = "end_date")
     private LocalDateTime end;
     @Enumerated
-    @Column(name="status")
+    @Column(name = "status")
     private Status status;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @JoinColumn(name="booker_id", nullable = false)
+    private User booker;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
+    @JoinColumn(name="item_id", nullable = false)
+    private Item item;
+    public String toString() {
+        return String.format("id=%d", id);
+    }
 }

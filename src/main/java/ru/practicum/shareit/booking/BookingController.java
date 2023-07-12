@@ -1,6 +1,6 @@
-package booking;
+package ru.practicum.shareit.booking;
 
-import booking.model.BookingDto;
+import ru.practicum.shareit.booking.model.BookingDto;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import ch.qos.logback.classic.spi.IThrowableProxy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,9 @@ import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.model.User;
 
+import java.util.Formatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,18 +33,17 @@ public class ItemService implements CrudOperations<Item> {
 
     @Override
     public Item update(Item updatedItem) {
-        if (!itemRepository.existsById(updatedItem.getId())) throw new EntityNotFoundException(updatedItem);
         log.info(this.getClass() + " запрос на обновление {}", updatedItem);
         checkOwner(updatedItem);
-        Item itemToUpdate = itemRepository.getReferenceById(updatedItem.getId());
-        Item updateItem = updateItem(updatedItem, itemToUpdate);
-        itemRepository.update(updateItem.getName(), updateItem.getDescription(), updateItem.getAvailable(), updateItem.getId());
-        return updateItem;
+        Item itemToUpdate = itemRepository.findById(updatedItem.getId()).orElseThrow(() -> new EntityNotFoundException(updatedItem));
+        itemToUpdate.updateItem(updatedItem);
+        itemRepository.update(itemToUpdate.getName(), itemToUpdate.getDescription(), itemToUpdate.getAvailable(), itemToUpdate.getId());
+        return itemRepository.findById(itemToUpdate.getId()).orElse(null);
     }
 
     @Override
     public Item get(Long id) {
-        return itemRepository.getReferenceById(id);
+        return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
     }
 
     @Override
@@ -56,7 +58,7 @@ public class ItemService implements CrudOperations<Item> {
 
     @Override
     public Item delete(Long id) {
-        Item item = itemRepository.getReferenceById(id);
+        Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Не найден Item с d"));
         itemRepository.deleteById(id);
         return item;
     }
@@ -71,22 +73,12 @@ public class ItemService implements CrudOperations<Item> {
     }
 
     private void checkOwner(Item item) {
-        if (!Objects.equals(item.getOwner().getId(), itemRepository.getReferenceById(item.getId()).getOwner().getId())) {
+        Item checkedItem = itemRepository.findById(item.getId()).orElseThrow(() -> new EntityNotFoundException(item));
+        Long itemOwnerId = item.getOwner().getId();
+        Long checkedOwnerId = checkedItem.getOwner().getId();
+        if (!itemOwnerId.equals(checkedOwnerId)) {
             throw new EntityNotFoundException(item);
         }
-    }
-
-    private Item updateItem(Item updatedItem, Item itemToUpdate) {
-        if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
-            itemToUpdate.setName(updatedItem.getName());
-        }
-        if (updatedItem.getDescription() != null && !updatedItem.getDescription().isBlank()) {
-            itemToUpdate.setDescription(updatedItem.getDescription());
-        }
-        if (updatedItem.getAvailable() != null) {
-            itemToUpdate.setAvailable(updatedItem.getAvailable());
-        }
-        return itemToUpdate;
     }
 
 }

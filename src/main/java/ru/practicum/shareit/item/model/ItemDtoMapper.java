@@ -9,13 +9,14 @@ import java.util.List;
 public class ItemDtoMapper {
 
     public ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
+        ItemDto returnedItem = ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .owner(item.getOwner())
                 .build();
+        return returnedItem;
     }
 
     public Item toItem(ItemDto itemDto) {

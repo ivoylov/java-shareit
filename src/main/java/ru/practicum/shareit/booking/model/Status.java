@@ -1,4 +1,4 @@
-package booking.model;
+package ru.practicum.shareit.booking.model;
 
 public enum Status {
     WAITING(1),
@@ -9,4 +9,5 @@ public enum Status {
     Status(int id) {
         this.id = id;
     }
+
 }

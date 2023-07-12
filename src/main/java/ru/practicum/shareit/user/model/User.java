@@ -1,12 +1,11 @@
 package ru.practicum.shareit.user.model;
 
-import booking.model.Booking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.persistence.*;
@@ -32,12 +31,23 @@ public class User {
     private String name;
     @Column(name = "user_email", nullable = false)
     private String email;
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private List<Item> items;
-    @OneToMany(mappedBy = "booker", fetch = FetchType.LAZY)
-    private List<Booking> bookings;
+    @JsonIgnore
+    @OneToMany(targetEntity = Item.class, mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Item> items = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(targetEntity = Booking.class, mappedBy = "booker", fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
+
+    public void updateUser(User updatedUser) {
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+            this.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
+            this.setName(updatedUser.getName());
+        }
+    }
     public String toString() {
-        return String.format("id=%d name=%s, email = %s", id, name, email);
+        return String.format("id=%d name=%s, email=%s", id, name, email);
     }
 
 }

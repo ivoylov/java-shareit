@@ -26,16 +26,16 @@ public class UserService implements CrudOperations<User> {
     }
 
     @Override
-    public User update(User user) {
-        if (!userRepository.existsById(user.getId())) throw new EntityNotFoundException(user);
-        if (user.getEmail() != null && !user.getEmail().isBlank()) {
-            if (isHaveSameUser(user)) throw new UserAlreadyExistException(user);
+    public User update(User updatedUser) {
+        log.info(this.getClass() + "запрос на обновление {}", updatedUser);
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+            if (isHaveSameUser(updatedUser)) throw new UserAlreadyExistException(updatedUser);
         }
-        log.info(this.getClass() + "обновлён {} ", user);
-        User updatedUser = updateUser(user, userRepository.getReferenceById(user.getId()));
-        log.info(this.getClass() + "новое состояние user={} ", updatedUser);
-        userRepository.update(updatedUser.getName(), updatedUser.getEmail(), updatedUser.getId());
-        return updatedUser;
+        User userToUpdate = userRepository.findById(updatedUser.getId()).orElseThrow(() -> new EntityNotFoundException(updatedUser));
+        userToUpdate.updateUser(updatedUser);
+        log.info(this.getClass() + "новое состояние user={}", userToUpdate);
+        userRepository.update(userToUpdate.getName(), userToUpdate.getEmail(), userToUpdate.getId());
+        return userRepository.findById(userToUpdate.getId()).orElse(null);
     }
 
     @Override
@@ -45,11 +45,8 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User get(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
-        }
-        log.info(this.getClass() + "отдан пользователь с id {}", id);
-        return userRepository.getReferenceById(id);
+        log.info(this.getClass() + "запрос на получение пользователя с id={}", id);
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
     }
 
     @Override
@@ -60,24 +57,13 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id));
-        }
-        log.info("Пользователь с id {} удалён", id);
-        User user = userRepository.getReferenceById(id);
+        log.info("Запрос на удаление пользователя с id={}", id);
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
         userRepository.deleteById(id);
         return user;
     }
 
-    private User updateUser(User updatedUser, User userToUpdate) {
-        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
-            userToUpdate.setEmail(updatedUser.getEmail());
-        }
-        if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
-            userToUpdate.setName(updatedUser.getName());
-        }
-        return userToUpdate;
-    }
+
 
     private boolean isHaveSameUser(User user) {
         for (User checkedUser : getAll()) {

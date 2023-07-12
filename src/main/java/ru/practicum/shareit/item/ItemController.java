@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
+import ru.practicum.shareit.Update;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemDtoMapper;
@@ -31,7 +32,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@RequestBody ItemDto itemDto,
+    public ItemDto update(@RequestBody @Validated(Update.class) ItemDto itemDto,
                           @PathVariable Long id,
                           @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         Item item = ItemDtoMapper.toItem(itemDto);
