@@ -11,11 +11,14 @@ import java.util.List;
 public class UserDtoMapper {
 
     public UserDto toUserDto(User user) {
-        return UserDto.builder()
+        UserDto userDto = UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .bookings(user.getBookings())
+                .items(user.getItems())
                 .build();
+        return userDto;
     }
 
     public User toUser(UserDto userDto) {
@@ -23,6 +26,8 @@ public class UserDtoMapper {
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail())
+                .bookings(userDto.getBookings())
+                .items(userDto.getItems())
                 .build();
     }
 

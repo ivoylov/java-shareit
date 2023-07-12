@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 @Table(name="items", schema = "public")
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
@@ -35,7 +36,8 @@ public class Item {
     private User owner;
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "item", fetch = FetchType.LAZY)
-    private List<Booking> bookings = new ArrayList<>();
+    private List<Booking> bookings;
+
     public void updateItem(Item updatedItem) {
         if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
             this.setName(updatedItem.getName());
@@ -46,9 +48,6 @@ public class Item {
         if (updatedItem.getAvailable() != null) {
             this.setAvailable(updatedItem.getAvailable());
         }
-    }
-    public String toString() {
-        return String.format("name=%s, description=%s", name, description);
     }
 
 }

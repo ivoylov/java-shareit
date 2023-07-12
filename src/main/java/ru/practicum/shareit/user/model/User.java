@@ -33,10 +33,10 @@ public class User {
     private String email;
     @JsonIgnore
     @OneToMany(targetEntity = Item.class, mappedBy = "owner", fetch = FetchType.LAZY)
-    private List<Item> items = new ArrayList<>();
+    private List<Item> items;
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "booker", fetch = FetchType.LAZY)
-    private List<Booking> bookings = new ArrayList<>();
+    private List<Booking> bookings;
 
     public void updateUser(User updatedUser) {
         if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
@@ -45,9 +45,6 @@ public class User {
         if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
             this.setName(updatedUser.getName());
         }
-    }
-    public String toString() {
-        return String.format("id=%d name=%s, email=%s", id, name, email);
     }
 
 }

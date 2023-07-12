@@ -15,6 +15,7 @@ public class ItemDtoMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .owner(item.getOwner())
+                .bookings(item.getBookings())
                 .build();
         return returnedItem;
     }
@@ -26,6 +27,7 @@ public class ItemDtoMapper {
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())
                 .owner(itemDto.getOwner())
+                .bookings(itemDto.getBookings())
                 .build();
     }
 

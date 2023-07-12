@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings", schema = "public")
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
@@ -37,7 +38,5 @@ public class Booking {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
     @JoinColumn(name="item_id", nullable = false)
     private Item item;
-    public String toString() {
-        return String.format("id=%d", id);
-    }
+
 }

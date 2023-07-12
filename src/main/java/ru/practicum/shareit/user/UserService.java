@@ -8,9 +8,7 @@ import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Formatter;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -60,6 +58,8 @@ public class UserService implements CrudOperations<User> {
         log.info("Запрос на удаление пользователя с id={}", id);
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
         userRepository.deleteById(id);
+        user.setBookings(Collections.emptyList());
+        user.setItems(Collections.emptyList());
         return user;
     }
 

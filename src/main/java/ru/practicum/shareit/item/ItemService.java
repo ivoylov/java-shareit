@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Objects;
@@ -60,6 +61,7 @@ public class ItemService implements CrudOperations<Item> {
     public Item delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Не найден Item с d"));
         itemRepository.deleteById(id);
+        item.setBookings(Collections.emptyList());
         return item;
     }
 
