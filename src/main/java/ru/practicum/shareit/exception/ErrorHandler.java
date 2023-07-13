@@ -29,7 +29,7 @@ public class ErrorHandler {
     //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerItemNotAvailableException(final ItemNotAvailableException e) {
+    public ErrorResponse handlerItemNotAvailableException(final ItemAvailableException e) {
         log.info("Объект {} недоступен", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }

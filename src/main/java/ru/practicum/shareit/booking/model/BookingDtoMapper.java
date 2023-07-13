@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BookingDtoMapper {
+
     public Booking toBooking(BookingDto bookingDto) {
         return Booking.builder()
                 .id(bookingDto.getId())

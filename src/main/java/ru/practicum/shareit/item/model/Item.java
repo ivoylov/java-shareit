@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -47,6 +48,16 @@ public class Item {
         if (updatedItem.getAvailable() != null) {
             this.setAvailable(updatedItem.getAvailable());
         }
+    }
+
+    public boolean isAvailableOnRequestDate(LocalDateTime start, LocalDateTime end) {
+        for (Booking booking : bookings) {
+            if ((start.isAfter(booking.getStart()) && start.isBefore(booking.getEnd())) ||
+                    (end.isAfter(booking.getStart()) && end.isBefore(booking.getEnd()))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -41,7 +41,7 @@ public class ItemService implements CrudOperations<Item> {
 
     @Override
     public Item get(Long id) {
-        return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
+        return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ItemService implements CrudOperations<Item> {
 
     @Override
     public Item delete(Long id) {
-        Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Не найден Item с d"));
+        Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
         itemRepository.deleteById(id);
         item.setBookings(Collections.emptyList());
         return item;

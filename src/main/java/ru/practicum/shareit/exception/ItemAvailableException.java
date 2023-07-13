@@ -1,8 +1,8 @@
 package ru.practicum.shareit.exception;
 
-public class ItemNotAvailableException extends EntityException {
+public class ItemAvailableException extends EntityException {
 
-    public ItemNotAvailableException(Object o) {
+    public ItemAvailableException(Object o) {
         super(o);
     }
 
