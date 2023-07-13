@@ -14,7 +14,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerUserAlreadyExistException(final UserAlreadyExistException e) {
-        log.info("Пользователь уже существует", e);
+        log.info("Пользователь {} уже существует", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -23,6 +23,14 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerEntityNotFoundException(final EntityNotFoundException e) {
         log.info("Объект {} не найден", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    //400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerItemNotAvailableException(final ItemNotAvailableException e) {
+        log.info("Объект {} недоступен", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }
 

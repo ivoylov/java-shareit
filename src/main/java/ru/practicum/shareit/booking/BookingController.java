@@ -23,8 +23,8 @@ public class BookingController {
 
     @PostMapping
     public BookingDto create(@Validated(Create.class) @RequestBody BookingDto bookingDto,
-                             @RequestHeader @Min(1) Long bookerId) {
-        log.info(this.getClass() + " /POST; create {}, {}", bookingDto, bookerId);
+                             @RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
+        log.info("{}; POST; /bookings; bookingDto={}, bookerId={}", this.getClass(), bookingDto, bookerId);
         Booking booking = BookingDtoMapper.toBooking(bookingDto);
         booking.setBooker(new User());
         booking.getBooker().setId(bookerId);
@@ -34,7 +34,7 @@ public class BookingController {
     ///{bookingId}?approved={approved}
     @PatchMapping("/{bookingId}")
     public BookingDto approved(@PathVariable @Min(1) Long bookingId, @RequestParam Boolean approved) {
-        log.info(this.getClass() + " /PATCH; approved {}, {}", bookingId, approved);
+        log.info("{}, PATCH; /bookings/{bookingId}; bookingId={}, approved={}", this.getClass(), bookingId, approved);
         Booking booking = new Booking();
         booking.setId(bookingId);
         booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
