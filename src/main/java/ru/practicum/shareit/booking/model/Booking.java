@@ -1,10 +1,7 @@
 package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -18,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings", schema = "public")
 public class Booking {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
@@ -38,5 +34,4 @@ public class Booking {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
     @JoinColumn(name="item_id", nullable = false)
     private Item item;
-
 }

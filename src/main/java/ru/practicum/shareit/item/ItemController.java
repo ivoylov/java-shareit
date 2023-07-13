@@ -24,6 +24,7 @@ public class ItemController {
     @PostMapping
     public ItemDto create(@Validated(Create.class) @RequestBody ItemDto itemDto,
                           @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        // TODO спихнуть всё в маппер
         Item item = ItemDtoMapper.toItem(itemDto);
         User user = new User();
         user.setId(ownerId);
@@ -35,6 +36,7 @@ public class ItemController {
     public ItemDto update(@RequestBody @Validated(Update.class) ItemDto itemDto,
                           @PathVariable Long id,
                           @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        // TODO спихнуть всё в маппер
         Item item = ItemDtoMapper.toItem(itemDto);
         User user = new User();
         user.setId(ownerId);

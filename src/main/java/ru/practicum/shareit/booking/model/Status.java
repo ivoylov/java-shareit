@@ -9,9 +9,7 @@ public enum Status {
     Status(int id) {
         this.id = id;
     }
-
     public int getId() {
         return this.id;
     }
-
 }

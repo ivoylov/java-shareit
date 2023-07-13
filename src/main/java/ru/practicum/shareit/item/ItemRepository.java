@@ -13,10 +13,9 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     @Modifying
     @Transactional
-    @Query(value =
-            "UPDATE items " +
-                    "SET item_name = :name, item_description = :description, item_available = :available " +
-                    "WHERE item_id = :itemId",
+    @Query(value = "UPDATE items " +
+            "SET item_name = :name, item_description = :description, item_available = :available " +
+            "WHERE item_id = :itemId",
             nativeQuery = true)
     void update(String name, String description, Boolean available, Long itemId);
 

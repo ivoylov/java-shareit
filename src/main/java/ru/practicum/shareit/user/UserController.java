@@ -27,6 +27,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public UserDto update(@Validated(Update.class) @RequestBody UserDto userDto, @PathVariable @Min(1) Long id) {
+        // TODO спихнуть всё в маппер
         User user = UserDtoMapper.toUser(userDto);
         user.setId(id);
         return UserDtoMapper.toUserDto(userService.update(user));

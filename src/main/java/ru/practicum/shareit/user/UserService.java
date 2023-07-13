@@ -22,20 +22,16 @@ public class UserService implements CrudOperations<User> {
 
     @Override
     public User create(User user) {
-        if (isHaveSameUser(user)) throw new UserAlreadyExistException(user);
         return userRepository.save(user);
     }
 
     @Override
     public User update(User updatedUser) {
-        log.info(this.getClass() + "запрос на обновление {}", updatedUser);
-        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
-            if (isHaveSameUser(updatedUser)) throw new UserAlreadyExistException(updatedUser);
-        }
         User userToUpdate = userRepository.findById(updatedUser.getId()).orElseThrow(() -> new EntityNotFoundException(updatedUser));
+        log.info(this.getClass() + " запрос на обновление {}", userToUpdate);
         userToUpdate.updateUser(updatedUser);
-        log.info(this.getClass() + "новое состояние user={}", userToUpdate);
         userRepository.update(userToUpdate.getName(), userToUpdate.getEmail(), userToUpdate.getId());
+        log.info(this.getClass() + " новое состояние {}", userToUpdate);
         return userRepository.findById(userToUpdate.getId()).orElse(null);
     }
 
@@ -64,21 +60,6 @@ public class UserService implements CrudOperations<User> {
         user.setBookings(Collections.emptyList());
         user.setItems(Collections.emptyList());
         return user;
-    }
-
-
-
-    private boolean isHaveSameUser(User user) {
-        for (User checkedUser : getAll()) {
-            if (isSameUsers(checkedUser, user)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isSameUsers(User user1, User user2) {
-        return user1.getEmail().equals(user2.getEmail()) && !Objects.equals(user1.getId(), user2.getId());
     }
 
 }
