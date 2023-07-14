@@ -51,7 +51,7 @@ public class BookingService implements CrudOperations<Booking> {
 
     @Override
     public Booking get(Long id) {
-        return null;
+        return bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с id=%d", id)));
     }
 
     @Override

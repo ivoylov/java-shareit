@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -28,12 +29,25 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDtoOut approved(@PathVariable @Min(1) Long bookingId, @RequestParam Boolean approved) {
-        log.info("{}, PATCH; /bookings/{bookingId}; bookingId={}, approved={}", this.getClass(), bookingId, approved);
+    public BookingDtoOut approved(@PathVariable @Min(1) Long bookingId,
+                                  @RequestParam Boolean approved) {
+        log.info("{}; PATCH; /bookings/{bookingId}; bookingId={}, approved={}", this.getClass(), bookingId, approved);
         Booking booking = new Booking();
         booking.setId(bookingId);
         booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
         return BookingMapper.toBookingDtoOut(bookingService.update(booking));
+    }
+
+    @GetMapping("/{bookingId}")
+    public BookingDtoOut get(@PathVariable @Min(1) Long bookingId) {
+        log.info("{}; GET; /bookings/{bookingId}; bookingId={}", this.getClass(), bookingId);
+        return BookingMapper.toBookingDtoOut(bookingService.get(bookingId));
+    }
+
+    @GetMapping()
+    public List<BookingDtoOut> getAllForBooker(@RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
+        log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), bookerId);
+        return BookingMapper.toBookingDtoOut(bookingService.getAll());
     }
 
 }
