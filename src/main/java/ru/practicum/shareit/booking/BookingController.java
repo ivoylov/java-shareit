@@ -27,7 +27,6 @@ public class BookingController {
         return BookingMapper.toBookingDtoOut(bookingService.create(booking));
     }
 
-    ///{bookingId}?approved={approved}
     @PatchMapping("/{bookingId}")
     public BookingDtoOut approved(@PathVariable @Min(1) Long bookingId, @RequestParam Boolean approved) {
         log.info("{}, PATCH; /bookings/{bookingId}; bookingId={}, approved={}", this.getClass(), bookingId, approved);

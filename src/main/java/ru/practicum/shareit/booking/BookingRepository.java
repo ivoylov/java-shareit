@@ -16,6 +16,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Transactional
     @Query(value = "UPDATE bookings SET status = :status WHERE booking_id = :bookingId",
             nativeQuery = true)
-    void update(Status status, Long bookingId);
+    void update(Integer status, Long bookingId);
 
 }

@@ -19,7 +19,7 @@ class StatusTest {
 
     @Test
     void values() {
-        Status[] statuses = {Status.WAITING, Status.APPROVED, Status.REJECTED, Status.CANCELED};
+        Status[] statuses = {Status.CANCELED, Status.WAITING, Status.APPROVED, Status.REJECTED};
         assertTrue(Arrays.equals(statuses, Status.values()));
     }
 

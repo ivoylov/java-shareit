@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingDtoOut {
     private Long id;
-    @NotNull(groups = Create.class, message = "Бронимарование должно содержать время начала")
     private LocalDateTime start;
-    @NotNull(groups = Create.class, message = "бронирование должно содердать время конца")
     private LocalDateTime end;
     private Status status;
     private User booker;

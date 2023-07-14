@@ -40,7 +40,7 @@ public class BookingService implements CrudOperations<Booking> {
         if (!bookingRepository.existsById(booking.getId())) {
             throw new EntityNotFoundException(booking);
         };
-        bookingRepository.update(booking.getStatus(), booking.getId());
+        bookingRepository.update(booking.getStatus().getId(), booking.getId());
         return bookingRepository.findById(booking.getId()).orElse(null);
     }
 
