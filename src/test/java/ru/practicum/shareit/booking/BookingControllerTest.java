@@ -7,13 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingDto;
-import ru.practicum.shareit.booking.model.BookingDtoMapper;
+import ru.practicum.shareit.booking.model.BookingDtoOut;
+import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,11 +43,11 @@ class BookingControllerTest {
 
     @Test
     void create() {
-        BookingDto bookingDtoToCreate = new BookingDto();
-        bookingDtoToCreate.setStart(start);
-        bookingDtoToCreate.setEnd(end);
-        bookingDtoToCreate.setBooker(user);
-        bookingDtoToCreate.setItem(item);
+        BookingDtoOut bookingDtoOutToCreate = new BookingDtoOut();
+        bookingDtoOutToCreate.setStart(start);
+        bookingDtoOutToCreate.setEnd(end);
+        bookingDtoOutToCreate.setBooker(user);
+        bookingDtoOutToCreate.setItem(item);
         Booking createdBooking = Booking.builder()
                 .id(1L)
                 .booker(user)
@@ -57,9 +56,9 @@ class BookingControllerTest {
                 .end(end)
                 .status(Status.WAITING)
                 .build();
-        BookingDto createdBookingDto = BookingDtoMapper.toBookingDto(createdBooking);
+        BookingDtoOut createdBookingDtoOut = BookingMapper.toBookingDtoOut(createdBooking);
         when(bookingService.create(any())).thenReturn(createdBooking);
-        assertEquals(bookingController.create(bookingDtoToCreate, 1L), createdBookingDto);
+        assertEquals(bookingController.create(bookingDtoOutToCreate, 1L), createdBookingDtoOut);
     }
 
     @Test

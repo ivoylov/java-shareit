@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.exception.BookingAvailableException;
+import ru.practicum.shareit.exception.BookingTimeException;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.ItemAvailableException;
 import ru.practicum.shareit.item.ItemService;
@@ -25,23 +27,11 @@ public class BookingService implements CrudOperations<Booking> {
     @Override
     public Booking create(Booking booking) {
         log.info("{}; create; {}", this.getClass(), booking);
-        if (!itemService.get(booking.getItem().getId()).getAvailable()) {
-            throw new ItemAvailableException(booking.getItem());
-        }
-        booking.setStatus(Status.WAITING);
-        return bookingRepository.save(booking);
-
-        ///
         booking.setItem(itemService.get(booking.getItem().getId()));
         booking.setBooker(userService.get(booking.getBooker().getId()));
         check(booking);
-
-
-        log.info(BookingService.class + " create " + booking);
-        Booking createdBooking = bookingStorage.create(booking);
-        return BookingDtoMapper.toBookingDto(createdBooking, item, user);
-        ///
-
+        booking.setStatus(Status.WAITING);
+        return bookingRepository.save(booking);
     }
 
     @Override
@@ -80,10 +70,10 @@ public class BookingService implements CrudOperations<Booking> {
             throw new ItemAvailableException(booking.getItem());
         }
         if (!booking.isBookingTimeValid()) {
-            throw new EntityValidationException(booking);
+            throw new BookingTimeException(booking);
         }
         if (!booking.getItem().isAvailableOnRequestDate(booking.getStart(), booking.getEnd())) {
-            throw new EntityValidationException(booking);
+            throw new BookingAvailableException(booking);
         }
         if (booking.getBooker().getId().equals(booking.getItem().getOwner().getId())) {
             throw new EntityNotFoundException(booking);

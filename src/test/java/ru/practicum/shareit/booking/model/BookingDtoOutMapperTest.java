@@ -9,14 +9,15 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BookingDtoMapperTest {
+class BookingDtoOutMapperTest {
 
     User user;
     Item item;
     LocalDateTime start;
     LocalDateTime end;
     Booking booking;
-    BookingDto bookingDto;
+    BookingDtoOut bookingDtoOut;
+    BookingDtoIn bookingDtoIn;
 
     @BeforeEach
     void setUp() {
@@ -25,16 +26,17 @@ class BookingDtoMapperTest {
         start = LocalDateTime.of(2000,1,1,12,0);
         end = LocalDateTime.of(2000,1,5,12,0);
         booking = new Booking(1L, start, end, Status.WAITING, user, item);
-        bookingDto = new BookingDto(1L, start, end, Status.WAITING, user, item);
+        bookingDtoOut = new BookingDtoOut(1L, start, end, Status.WAITING, user, item);
+        bookingDtoIn = new BookingDtoIn(1L, start, end);
     }
 
     @Test
     void toBooking() {
-        assertEquals(booking, BookingDtoMapper.toBooking(bookingDto));
+        assertEquals(booking, BookingMapper.toBooking(bookingDtoIn));
     }
 
     @Test
     void toBookingDto() {
-        assertEquals(bookingDto, BookingDtoMapper.toBookingDto(booking));
+        assertEquals(bookingDtoOut, BookingMapper.toBookingDtoOut(booking));
     }
 }

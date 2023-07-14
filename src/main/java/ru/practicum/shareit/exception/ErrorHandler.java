@@ -29,8 +29,24 @@ public class ErrorHandler {
     //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerItemNotAvailableException(final ItemAvailableException e) {
+    public ErrorResponse handlerItemAvailableException(final ItemAvailableException e) {
         log.info("Объект {} недоступен", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    //400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerBookingTimeException(final BookingTimeException e) {
+        log.info("Некорректное время бронирования {}", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    // 409
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handlerBookingAvailableException(final BookingAvailableException e) {
+        log.info("Недоступно на указанные даты бронирование {}", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }
 

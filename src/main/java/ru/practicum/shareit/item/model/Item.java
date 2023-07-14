@@ -60,4 +60,9 @@ public class Item {
         return true;
     }
 
+    public String toString() {
+        return String.format("id=%d, name=%s, description=%s, available=%s, owner=%s",
+                id, name, description, available, owner);
+    }
+
 }

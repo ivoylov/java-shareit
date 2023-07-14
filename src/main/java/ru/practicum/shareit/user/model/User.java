@@ -46,4 +46,9 @@ public class User {
         }
     }
 
+    public String toString() {
+        return String.format("id=%d, name=%s, email=%s",
+                id, name, email);
+    }
+
 }

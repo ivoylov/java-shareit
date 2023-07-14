@@ -34,4 +34,13 @@ public class Booking {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
     @JoinColumn(name="item_id", nullable = false)
     private Item item;
+    public boolean isBookingTimeValid() {
+        if (end.isBefore(start)) return false;
+        if (start.equals(end)) return false;
+        return true;
+    }
+    public String toString() {
+        return String.format("id=%d, start=%s, end=%s, status=%s, booker=%s, item=%s",
+                id, start, end, status, booker, item);
+    }
 }
