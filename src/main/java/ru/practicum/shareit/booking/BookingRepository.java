@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -17,5 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "UPDATE bookings SET status = :status WHERE booking_id = :bookingId",
             nativeQuery = true)
     void update(Integer status, Long bookingId);
+
+    List<Booking> findAllByBookerId(Long bookerId);
 
 }

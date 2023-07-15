@@ -2,7 +2,12 @@ package ru.practicum.shareit.booking.model;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.Role;
 import ru.practicum.shareit.user.model.User;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class BookingMapper {
@@ -28,6 +33,12 @@ public class BookingMapper {
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .build();
+    }
+
+    public List<BookingDtoOut> toBookingDtoOutList (List<Booking> bookingList) {
+        return bookingList.stream()
+                .map(BookingMapper::toBookingDtoOut)
+                .collect(Collectors.toList());
     }
 
 }

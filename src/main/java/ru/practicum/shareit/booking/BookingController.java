@@ -6,10 +6,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.user.model.Role;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -45,9 +47,17 @@ public class BookingController {
     }
 
     @GetMapping()
-    public List<BookingDtoOut> getAllForBooker(@RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
-        log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), bookerId);
-        return BookingMapper.toBookingDtoOut(bookingService.getAll());
+    public List<BookingDtoOut> getAllForBooker(@RequestParam(defaultValue = "ALL") String stateString,
+                                               @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+        log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), userId);
+        return BookingMapper.toBookingDtoOutList(bookingService.getAll(stateString, userId, Role.BOOKER));
+    }
+
+    @GetMapping("/owner")
+    public List<BookingDtoOut> getAllForOwner(@RequestParam(defaultValue = "ALL") String stateString,
+                                              @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+        log.info("{}; GET; /bookings/owner; ownerId={}", this.getClass(), userId);
+        return BookingMapper.toBookingDtoOutList(bookingService.getAll(stateString, userId, Role.OWNER));
     }
 
 }

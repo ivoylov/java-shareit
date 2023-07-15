@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "bookings", schema = "public")
-public class Booking {
+public class Booking  implements Comparable<Booking> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
@@ -38,6 +38,10 @@ public class Booking {
         if (end.isBefore(start)) return false;
         if (start.equals(end)) return false;
         return true;
+    }
+    @Override
+    public int compareTo(Booking booking) {
+        return booking.getId().compareTo(this.id);
     }
     public String toString() {
         return String.format("id=%d, start=%s, end=%s, status=%s, booker=%s, item=%s",
