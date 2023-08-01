@@ -26,3 +26,11 @@ CREATE TABLE IF NOT EXISTS bookings (
     end_date TIMESTAMP WITHOUT TIME ZONE,
     status int
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+    comment_id bigint not null generated always as identity primary key,
+    booker_id bigint not null REFERENCES shareit_user(user_id),
+    item_id bigint not null REFERENCES items(item_id),
+    created_date TIMESTAMP WITHOUT TIME ZONE,
+    comment_text VARCHAR(255) not null
+);

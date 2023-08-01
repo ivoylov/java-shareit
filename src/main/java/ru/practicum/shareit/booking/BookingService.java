@@ -1,31 +1,25 @@
 package ru.practicum.shareit.booking;
 
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.matcher.FilterableList;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.exception.BookingAvailableException;
-import ru.practicum.shareit.exception.BookingTimeException;
-import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.exception.ItemAvailableException;
+import ru.practicum.shareit.exception.*;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.Role;
-import ru.practicum.shareit.user.model.User;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.model.State.*;
-import static ru.practicum.shareit.booking.model.State.UNSUPPORTED_STATUS;
-import static ru.practicum.shareit.user.model.Role.BOOKER;
+import static ru.practicum.shareit.user.model.Role.*;
 
 @Service
 @AllArgsConstructor
@@ -46,25 +40,37 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Booking update(Booking booking) {
-        //TODO переделать сигнатуру функции
-        log.info("{}; update; {}", this.getClass(), booking);
-        if (!bookingRepository.existsById(booking.getId())) {
-            throw new EntityNotFoundException(booking);
+    @Transactional
+    public Booking update(Long ownerId, Long bookingId, Boolean approved) {
+        log.info("{}; update; ownerId={}, bookingId={}, approved={}", this.getClass(), ownerId, bookingId, approved);
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Не найдено бронировнаие  с номером " + bookingId));
+        if (!booking.getItem().getOwner().getId().equals(ownerId)) {
+            throw new RequestValidationException("Изменение статуса производит не владелец вещи");
         }
-        bookingRepository.update(booking.getStatus().getId(), booking.getId());
-        return bookingRepository.findById(booking.getId()).orElse(null);
+        Status newStatus = approved ? Status.APPROVED : Status.REJECTED;
+        if (approved && booking.getStatus() == Status.APPROVED) {
+            throw new RequestValidationException("Бронирование уже подтверждено");
+        }
+        booking.setStatus(newStatus);
+        return booking;
     }
 
-    public Booking get(Long id) {
-        log.info("{}; get; bookingId={}", this.getClass(), id);
-        return bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с id=%d", id)));
+    public Booking get(Long bookingId, Long userId) {
+        log.info("{}; get; bookingId={}, userId={}", this.getClass(), bookingId, userId);
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с bookingId=%d", bookingId)));
+        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {
+            throw new RequestValidationException("Статус по вещи запрашивает не владелец и не пользователь");
+        }
+        return booking;
     }
 
     public List<Booking> getAll(String stateString, Long userId, Role role) {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());
-        if (state == UNSUPPORTED_STATUS) throw new EntityNotFoundException(String.format("Не найден статус %s", state));
+        if (state == UNSUPPORTED_STATUS) {
+            throw new EntityNotFoundException("Unknown state: UNSUPPORTED_STATUS");
+        }
         userService.get(userId);
         List<Booking> bookings = new ArrayList<>();
         if (role == BOOKER) {

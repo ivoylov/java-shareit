@@ -50,4 +50,20 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    //404
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerRequestValidationException(final RequestValidationException e) {
+        log.info("Некорректный запрос {}", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    //400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerUnsupportedStatusException(final UnsupportedStatusException e) {
+        log.info("Некорректный статус {}", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
 }

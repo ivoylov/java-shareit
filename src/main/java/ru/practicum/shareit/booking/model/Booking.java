@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "bookings", schema = "public")
-public class Booking  implements Comparable<Booking> {
+public class Booking implements Comparable<Booking> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")

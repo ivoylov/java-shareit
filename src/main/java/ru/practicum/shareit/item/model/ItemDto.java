@@ -24,4 +24,6 @@ public class ItemDto {
     private Boolean available;
     private User owner;
     private List<Booking> bookings;
+    private Booking lastBooking;
+    private Booking nextBooking;
 }

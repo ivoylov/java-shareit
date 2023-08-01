@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingMapper;
+import ru.practicum.shareit.user.model.UserDtoMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +12,16 @@ import java.util.List;
 public class ItemDtoMapper {
 
     public ItemDto toItemDto(Item item) {
-        ItemDto returnedItem = ItemDto.builder()
+        return ItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .owner(item.getOwner())
                 .bookings(item.getBookings())
+                .lastBooking(item.getLastBooking())
+                .nextBooking(item.getNextBooking())
                 .build();
-        return returnedItem;
     }
 
     public Item toItem(ItemDto itemDto) {

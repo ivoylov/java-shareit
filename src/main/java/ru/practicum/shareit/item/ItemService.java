@@ -4,13 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.CrudOperations;
+import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.model.User;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +24,7 @@ import java.util.List;
 public class ItemService implements CrudOperations<Item> {
 
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
     private final UserService userService;
 
     @Override
@@ -78,6 +85,18 @@ public class ItemService implements CrudOperations<Item> {
         if (!itemOwnerId.equals(checkedOwnerId)) {
             throw new EntityNotFoundException(item);
         }
+    }
+
+    public Comment createComment(Comment comment) {
+        Item item = itemRepository.findById(comment.getItem().getId())
+                .orElseThrow(() -> new EntityNotFoundException(comment.getItem()));
+        List<Booking> bookings = item.getBookings().stream()
+                .filter(booking -> booking.getBooker().equals(comment.getBooker()))
+                .collect(Collectors.toList());
+        if (bookings.size() == 0) {
+            throw new EntityNotFoundException("Факт бронирования не подтверждён");
+        }
+        return commentRepository.save(comment);
     }
 
 }

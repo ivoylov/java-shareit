@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -18,6 +20,6 @@ public class BookingDtoOut {
     private LocalDateTime start;
     private LocalDateTime end;
     private Status status;
-    private User booker;
-    private Item item;
+    private UserDto booker;
+    private ItemDto item;
 }

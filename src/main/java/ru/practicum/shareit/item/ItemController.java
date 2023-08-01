@@ -6,9 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.Update;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemDtoMapper;
+import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collections;
@@ -64,6 +62,19 @@ public class ItemController {
     public List<ItemDto> searchByNameOrDescription(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
         return ItemDtoMapper.toItemDtoList(itemService.searchByNameOrDescription(text));
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment createComment (@RequestBody @Validated(Update.class)CommentDto commentDto,
+                                  @RequestHeader("X-Sharer-User-Id") Long bookerId,
+                                  @PathVariable Long itemId) {
+        Comment comment = CommentDtoMapper.toComment(commentDto);
+        // TODO спихнуть всё в маппер
+        comment.setBooker(new User());
+        comment.setItem(new Item());
+        comment.getBooker().setId(bookerId);
+        comment.getItem().setId(itemId);
+        return itemService.createComment(comment);
     }
 
 }

@@ -10,7 +10,10 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -51,13 +54,27 @@ public class Item {
     }
 
     public boolean isAvailableOnRequestDate(LocalDateTime start, LocalDateTime end) {
-        for (Booking booking : bookings) {
+        for (Booking booking : this.getBookings()) {
             if ((start.isAfter(booking.getStart()) && start.isBefore(booking.getEnd())) ||
                     (end.isAfter(booking.getStart()) && end.isBefore(booking.getEnd()))) {
                 return false;
             }
         }
         return true;
+    }
+
+    public Booking getLastBooking() {
+        if (bookings == null) return null;
+        return bookings.stream()
+                .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
+                .max(Comparator.comparing(Booking::getEnd)).orElse(null);
+    }
+
+    public Booking getNextBooking() {
+        if (bookings == null) return null;
+        return bookings.stream()
+                .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
+                .min(Comparator.comparing(Booking::getStart)).orElse(null);
     }
 
     public String toString() {
