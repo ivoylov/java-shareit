@@ -62,6 +62,14 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUnsupportedStatusException(final UnsupportedStatusException e) {
+        log.info("{}", e.getEntity());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    //400
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerBookingAlreadyApprovedException(final BookingAlreadyApprovedException e) {
         log.info("Некорректный статус {}", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }

@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.item.model.ItemDtoIn;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
@@ -24,15 +24,15 @@ class ItemControllerTest {
     private ItemService itemService;
     @InjectMocks
     private ItemController itemController;
-    private ItemDto itemDtoToCreate;
-    private ItemDto createdItemDto;
+    private ItemDtoIn itemDtoToCreate;
+    private ItemDtoIn createdItemDto;
     private Item createdItem;
     private User user;
 
     @BeforeEach
     void setUp() {
         user = new User(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
-        itemDtoToCreate = ItemDto.builder()
+        itemDtoToCreate = ItemDtoIn.builder()
                 .name("name")
                 .description("description")
                 .available(true)
@@ -45,7 +45,7 @@ class ItemControllerTest {
                 .id(1L)
                 .owner(user)
                 .build();
-        createdItemDto = ItemDto.builder()
+        createdItemDto = ItemDtoIn.builder()
                 .name("name")
                 .description("description")
                 .available(true)

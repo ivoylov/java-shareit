@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ItemDtoMapperTest {
 
     private Item item;
-    private ItemDto itemDto;
+    private ItemDtoIn itemDto;
     private User user;
 
     @BeforeEach
@@ -25,7 +25,7 @@ class ItemDtoMapperTest {
                 .available(true)
                 .owner(user)
                 .build();
-        itemDto = ItemDto.builder()
+        itemDto = ItemDtoIn.builder()
                 .id(2L)
                 .name("dtoName")
                 .description("dtoDescription")
@@ -43,33 +43,33 @@ class ItemDtoMapperTest {
                 .available(true)
                 .owner(user)
                 .build();
-        assertEquals(itemDto, ItemDtoMapper.toItemDto(testItem));
+        assertEquals(itemDto, ItemMapper.toItemDtoIn(testItem));
     }
 
     @Test
     void toItem() {
-        ItemDto testItemDto = ItemDto.builder()
+        ItemDtoIn testItemDto = ItemDtoIn.builder()
                 .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
                 .owner(user)
                 .build();
-        assertEquals(item, ItemDtoMapper.toItem(testItemDto));
+        assertEquals(item, ItemMapper.toItem(testItemDto));
     }
 
     @Test
     void toItemDtoList() {
-        ItemDto testItemDto = ItemDto.builder()
+        ItemDtoIn testItemDto = ItemDtoIn.builder()
                 .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
                 .owner(user)
                 .build();
-        ArrayList<ItemDto> itemDtoList = new ArrayList<>(List.of(testItemDto));
+        ArrayList<ItemDtoIn> itemDtoList = new ArrayList<>(List.of(testItemDto));
         ArrayList<Item> itemList = new ArrayList<>(List.of(item));
-        assertEquals(itemDtoList, ItemDtoMapper.toItemDtoList(itemList));
+        assertEquals(itemDtoList, ItemMapper.toItemDtoOutList(itemList));
     }
 
 }

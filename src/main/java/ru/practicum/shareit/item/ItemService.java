@@ -3,8 +3,6 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.CrudOperations;
-import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Comment;
@@ -12,7 +10,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
@@ -21,24 +18,29 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ItemService implements CrudOperations<Item> {
+public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
     private final UserService userService;
 
-    @Override
-    public Item create(Item item) {
+    public Item create(Item item, Long ownerId) {
         log.info(this.getClass() + " запрос на создание {}", item);
-        if (!userService.isExist(item.getOwner().getId())) {
+        if (!userService.isExist(ownerId)) {
             throw new EntityNotFoundException(" не найден пользователь " + item.getOwner());
         }
+        User user = new User();
+        user.setId(ownerId);
+        item.setOwner(user);
         return itemRepository.save(item);
     }
 
-    @Override
-    public Item update(Item updatedItem) {
+    public Item update(Item updatedItem, Long itemId, Long ownerId) {
         log.info(this.getClass() + " запрос на обновление {}", updatedItem);
+        User user = new User();
+        user.setId(ownerId);
+        updatedItem.setOwner(user);
+        updatedItem.setId(itemId);
         checkOwner(updatedItem);
         Item itemToUpdate = itemRepository.findById(updatedItem.getId()).orElseThrow(() -> new EntityNotFoundException(updatedItem));
         itemToUpdate.updateItem(updatedItem);
@@ -46,22 +48,18 @@ public class ItemService implements CrudOperations<Item> {
         return itemRepository.findById(itemToUpdate.getId()).orElse(null);
     }
 
-    @Override
     public Item get(Long id) {
         return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
     }
 
-    @Override
     public Boolean isExist(Long id) {
         return itemRepository.existsById(id);
     }
 
-    @Override
     public List<Item> getAll() {
         return itemRepository.findAll();
     }
 
-    @Override
     public Item delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
         itemRepository.deleteById(id);
@@ -87,11 +85,15 @@ public class ItemService implements CrudOperations<Item> {
         }
     }
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(Comment comment, Long bookerId, Long itemId) {
+        comment.setAuthor(new User());
+        comment.setItem(new Item());
+        comment.getAuthor().setId(bookerId);
+        comment.getItem().setId(itemId);
         Item item = itemRepository.findById(comment.getItem().getId())
                 .orElseThrow(() -> new EntityNotFoundException(comment.getItem()));
         List<Booking> bookings = item.getBookings().stream()
-                .filter(booking -> booking.getBooker().equals(comment.getBooker()))
+                .filter(booking -> booking.getBooker().equals(comment.getAuthor()))
                 .collect(Collectors.toList());
         if (bookings.size() == 0) {
             throw new EntityNotFoundException("Факт бронирования не подтверждён");

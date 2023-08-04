@@ -6,19 +6,19 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemDtoTest {
 
-    private ItemDto itemDto1;
-    private ItemDto itemDto2;
+    private ItemDtoIn itemDto1;
+    private ItemDtoIn itemDto2;
     private User user;
 
     @BeforeEach
     void setUp() {
         user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>());
-        itemDto1 = new ItemDto(1L, "name", "description", true, user, new ArrayList<>());
-        itemDto2 = new ItemDto(1L, "name", "description", true, user, new ArrayList<>());
+        itemDto1 = new ItemDtoIn(1L, "name", "description", true, user, new ArrayList<>());
+        itemDto2 = new ItemDtoIn(1L, "name", "description", true, user, new ArrayList<>());
     }
 
     @Test
@@ -83,7 +83,7 @@ class ItemDtoTest {
 
     @Test
     void builder() {
-        ItemDto itemDto = ItemDto.builder()
+        ItemDtoIn itemDto = ItemDtoIn.builder()
                 .id(1L)
                 .name("name")
                 .description("description")

@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.model.UserDtoIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ class UserControllerTest {
     @Mock
     private UserService userService;
     private User user;
-    private UserDto userDto;
+    private UserDtoIn userDto;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +33,7 @@ class UserControllerTest {
                 .name("name")
                 .email("user@email.ru")
                 .build();
-        userDto = UserDto.builder()
+        userDto = UserDtoIn.builder()
                 .id(1L)
                 .name("name")
                 .email("user@email.ru")
@@ -68,7 +68,7 @@ class UserControllerTest {
 
     @Test
     void getAll() {
-        ArrayList<UserDto> userDtoList = new ArrayList<>(List.of(userDto));
+        ArrayList<UserDtoIn> userDtoList = new ArrayList<>(List.of(userDto));
         when(userService.getAll()).thenReturn(new ArrayList<>(List.of(user)));
         assertEquals(userDtoList, userController.getAll());
     }

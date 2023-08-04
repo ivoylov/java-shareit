@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking;
 
-import org.hibernate.validator.internal.util.stereotypes.ThreadSafe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

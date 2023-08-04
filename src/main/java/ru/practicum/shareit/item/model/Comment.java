@@ -1,12 +1,9 @@
 package ru.practicum.shareit.item.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -25,7 +22,7 @@ public class Comment {
     private Long id;
     @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class)
     @JoinColumn(name="booker_id", nullable = false)
-    private User booker;
+    private User author;
     @OneToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
     @JoinColumn(name="item_id", nullable = false)
     private Item item;

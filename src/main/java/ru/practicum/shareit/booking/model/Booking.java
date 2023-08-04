@@ -1,11 +1,15 @@
 package ru.practicum.shareit.booking.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Data
@@ -38,6 +42,13 @@ public class Booking implements Comparable<Booking> {
         if (end.isBefore(start)) return false;
         if (start.equals(end)) return false;
         return true;
+    }
+    public State getState() {
+        Clock clock = Clock.systemDefaultZone();
+        LocalDateTime now = LocalDateTime.now(clock);
+        if (getEnd().isBefore(now)) return State.PAST;
+        if (getStart().isAfter(now)) return State.FUTURE;
+        return State.CURRENT;
     }
     @Override
     public int compareTo(Booking booking) {

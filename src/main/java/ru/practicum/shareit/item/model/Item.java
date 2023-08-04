@@ -10,10 +10,8 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -65,16 +63,18 @@ public class Item {
 
     public Booking getLastBooking() {
         if (bookings == null) return null;
-        return bookings.stream()
+        Booking booking = bookings.stream()
                 .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
                 .max(Comparator.comparing(Booking::getEnd)).orElse(null);
+        return booking;
     }
 
     public Booking getNextBooking() {
         if (bookings == null) return null;
-        return bookings.stream()
+        Booking booking =  bookings.stream()
                 .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
                 .min(Comparator.comparing(Booking::getStart)).orElse(null);
+        return booking;
     }
 
     public String toString() {

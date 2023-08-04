@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
-import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingDtoIn;
+import ru.practicum.shareit.booking.model.BookingDtoOut;
+import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.user.model.Role;
 
 import javax.validation.constraints.Min;
@@ -24,8 +27,8 @@ public class BookingController {
                                 @RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
         log.info("{}; POST; /bookings; bookingDtoIn={}, bookerId={}", this.getClass(), bookingDtoIn, bookerId);
         Booking booking = BookingMapper.toBooking(bookingDtoIn);
-        booking.getBooker().setId(bookerId);
-        return BookingMapper.toBookingDtoOut(bookingService.create(booking));
+        Long itemId = bookingDtoIn.getItemId();
+        return BookingMapper.toBookingDtoOut(bookingService.create(booking, bookerId, itemId));
     }
 
     @PatchMapping("/{bookingId}")
@@ -34,7 +37,7 @@ public class BookingController {
                                   @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
         log.info("{}; PATCH; /bookings/{bookingId}; userId= {}, bookingId={}, approved={}",
                 this.getClass(), userId, bookingId, approved);
-        return BookingMapper.toBookingDtoOut(bookingService.update(userId, bookingId, approved));
+        return BookingMapper.toBookingDtoOut(bookingService.approved(userId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")

@@ -13,13 +13,12 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.Role;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.model.State.*;
-import static ru.practicum.shareit.user.model.Role.*;
+import static ru.practicum.shareit.user.model.Role.BOOKER;
 
 @Service
 @AllArgsConstructor
@@ -30,18 +29,17 @@ public class BookingService {
     private final ItemService itemService;
     private final UserService userService;
 
-    public Booking create(Booking booking) {
-        //TODO переделать сигнатуру функции
+    public Booking create(Booking booking, Long bookerId, Long itemId) {
         log.info("{}; create; {}", this.getClass(), booking);
-        booking.setItem(itemService.get(booking.getItem().getId()));
-        booking.setBooker(userService.get(booking.getBooker().getId()));
+        booking.setItem(itemService.get(itemId));
+        booking.setBooker(userService.get(bookerId));
         check(booking);
         booking.setStatus(Status.WAITING);
         return bookingRepository.save(booking);
     }
 
     @Transactional
-    public Booking update(Long ownerId, Long bookingId, Boolean approved) {
+    public Booking approved(Long ownerId, Long bookingId, Boolean approved) {
         log.info("{}; update; ownerId={}, bookingId={}, approved={}", this.getClass(), ownerId, bookingId, approved);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new EntityNotFoundException("Не найдено бронировнаие  с номером " + bookingId));
@@ -50,7 +48,7 @@ public class BookingService {
         }
         Status newStatus = approved ? Status.APPROVED : Status.REJECTED;
         if (approved && booking.getStatus() == Status.APPROVED) {
-            throw new RequestValidationException("Бронирование уже подтверждено");
+            throw new BookingAlreadyApprovedException("Бронирование уже подтверждено");
         }
         booking.setStatus(newStatus);
         return booking;
@@ -69,7 +67,7 @@ public class BookingService {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());
         if (state == UNSUPPORTED_STATUS) {
-            throw new EntityNotFoundException("Unknown state: UNSUPPORTED_STATUS");
+            throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
         }
         userService.get(userId);
         List<Booking> bookings = new ArrayList<>();
@@ -86,15 +84,15 @@ public class BookingService {
         switch (state) {
             case CURRENT:
                 return bookings.stream()
-                        .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now()))
+                        .filter(booking -> booking.getState() == CURRENT)
                         .collect(Collectors.toList());
             case PAST:
                 return bookings.stream()
-                        .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                        .filter(booking -> booking.getState() == PAST)
                         .collect(Collectors.toList());
             case FUTURE:
                 return bookings.stream()
-                        .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                        .filter(booking -> booking.getState() == FUTURE)
                         .collect(Collectors.toList());
             case WAITING:
                 return bookings.stream()

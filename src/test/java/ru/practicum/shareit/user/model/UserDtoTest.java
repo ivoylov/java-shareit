@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserDtoTest {
 
-    private UserDto userDto;
-    private UserDto testUserDto;
+    private UserDtoIn userDto;
+    private UserDtoIn testUserDto;
 
     @BeforeEach
     void setUp() {
-        userDto = new UserDto(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
-        testUserDto = new UserDto(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
+        userDto = new UserDtoIn(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
+        testUserDto = new UserDtoIn(1L, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
@@ -69,7 +69,7 @@ class UserDtoTest {
 
     @Test
     void builder() {
-        UserDto newUser = UserDto.builder()
+        UserDtoIn newUser = UserDtoIn.builder()
                 .id(1L)
                 .name("name")
                 .email("user@email.ru")
