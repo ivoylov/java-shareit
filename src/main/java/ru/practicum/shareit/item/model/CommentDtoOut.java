@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
 public class CommentDtoOut {
-    @NotNull(groups = Create.class, message = "В комментарии должен быть текст")
-    @NotBlank(groups = Create.class, message = "Текст комментария не может быть пустым")
+    private Long id;
     private String text;
     private String authorName;
     private LocalDateTime created;

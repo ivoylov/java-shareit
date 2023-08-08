@@ -25,7 +25,7 @@ public class BookingController {
     @PostMapping
     public BookingDtoOut create(@Validated(Create.class) @RequestBody BookingDtoIn bookingDtoIn,
                                 @RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
-        log.info("{}; POST; /bookings; bookingDtoIn={}, bookerId={}", this.getClass(), bookingDtoIn, bookerId);
+        log.info("{}; POST; /bookings; {}, bookerId={}", this.getClass(), bookingDtoIn, bookerId);
         Booking booking = BookingMapper.toBooking(bookingDtoIn);
         Long itemId = bookingDtoIn.getItemId();
         return BookingMapper.toBookingDtoOut(bookingService.create(booking, bookerId, itemId));

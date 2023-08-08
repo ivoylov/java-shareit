@@ -5,6 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.booking.BookingAlreadyApprovedException;
+import ru.practicum.shareit.exception.booking.BookingAvailableException;
+import ru.practicum.shareit.exception.booking.BookingTimeException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
+import ru.practicum.shareit.exception.item.ItemAvailableException;
+import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 
 @RestControllerAdvice
 @Slf4j
@@ -50,9 +56,9 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //404
+    //400
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerRequestValidationException(final RequestValidationException e) {
         log.info("Некорректный запрос {}", e.getEntity());
         return new ErrorResponse(e.getMessage());
@@ -61,7 +67,7 @@ public class ErrorHandler {
     //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerUnsupportedStatusException(final UnsupportedStatusException e) {
+    public ErrorResponse handlerUnsupportedStatusException(final UnsupportedItemStatusException e) {
         log.info("{}", e.getEntity());
         return new ErrorResponse(e.getMessage());
     }

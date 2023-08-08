@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(name="items", schema = "public")
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
@@ -39,7 +38,7 @@ public class Item {
     @OneToMany(targetEntity = Booking.class, mappedBy = "item", fetch = FetchType.LAZY)
     private List<Booking> bookings;
 
-    public void updateItem(Item updatedItem) {
+    public void update(Item updatedItem) {
         if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
             this.setName(updatedItem.getName());
         }
@@ -52,7 +51,8 @@ public class Item {
     }
 
     public boolean isAvailableOnRequestDate(LocalDateTime start, LocalDateTime end) {
-        for (Booking booking : this.getBookings()) {
+        if (bookings == null) return true;
+        for (Booking booking : bookings) {
             if ((start.isAfter(booking.getStart()) && start.isBefore(booking.getEnd())) ||
                     (end.isAfter(booking.getStart()) && end.isBefore(booking.getEnd()))) {
                 return false;
@@ -63,18 +63,16 @@ public class Item {
 
     public Booking getLastBooking() {
         if (bookings == null) return null;
-        Booking booking = bookings.stream()
+        return bookings.stream()
                 .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
                 .max(Comparator.comparing(Booking::getEnd)).orElse(null);
-        return booking;
     }
 
     public Booking getNextBooking() {
         if (bookings == null) return null;
-        Booking booking =  bookings.stream()
+        return bookings.stream()
                 .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
                 .min(Comparator.comparing(Booking::getStart)).orElse(null);
-        return booking;
     }
 
     public String toString() {

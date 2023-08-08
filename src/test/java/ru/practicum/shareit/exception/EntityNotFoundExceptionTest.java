@@ -1,6 +1,7 @@
 package ru.practicum.shareit.exception;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

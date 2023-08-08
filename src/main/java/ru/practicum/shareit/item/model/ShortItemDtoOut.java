@@ -1,12 +1,11 @@
-package ru.practicum.shareit.user.model;
+package ru.practicum.shareit.item.model;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class UserDtoOut {
+public class ShortItemDtoOut {
     private Long id;
     private String name;
-    private String email;
 }

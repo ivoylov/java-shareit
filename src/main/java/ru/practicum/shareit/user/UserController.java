@@ -21,9 +21,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserDtoOut create(@Validated(Create.class) @RequestBody UserDtoIn userDto) {
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDtoOut(userService.create(user));
+    public UserDtoOut create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
+        User user = UserMapper.toUser(userDtoIn);
+        UserDtoOut userDtoOut = UserMapper.toUserDtoOut(userService.create(user));
+        return userDtoOut;
     }
 
     @PatchMapping("/{id}")

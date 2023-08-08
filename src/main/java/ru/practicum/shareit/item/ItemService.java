@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.RequestValidationException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
@@ -43,13 +45,18 @@ public class ItemService {
         updatedItem.setId(itemId);
         checkOwner(updatedItem);
         Item itemToUpdate = itemRepository.findById(updatedItem.getId()).orElseThrow(() -> new EntityNotFoundException(updatedItem));
-        itemToUpdate.updateItem(updatedItem);
+        itemToUpdate.update(updatedItem);
         itemRepository.update(itemToUpdate.getName(), itemToUpdate.getDescription(), itemToUpdate.getAvailable(), itemToUpdate.getId());
         return itemRepository.findById(itemToUpdate.getId()).orElse(null);
     }
 
-    public Item get(Long id) {
-        return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
+    public Item get(Long id, Long userId) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
+        if (!item.getOwner().getId().equals(userId)) {
+            item.setBookings(null);
+        }
+        return item;
     }
 
     public Boolean isExist(Long id) {
@@ -86,18 +93,17 @@ public class ItemService {
     }
 
     public Comment createComment(Comment comment, Long bookerId, Long itemId) {
-        comment.setAuthor(new User());
-        comment.setItem(new Item());
-        comment.getAuthor().setId(bookerId);
-        comment.getItem().setId(itemId);
-        Item item = itemRepository.findById(comment.getItem().getId())
-                .orElseThrow(() -> new EntityNotFoundException(comment.getItem()));
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException(itemId));
         List<Booking> bookings = item.getBookings().stream()
-                .filter(booking -> booking.getBooker().equals(comment.getAuthor()))
+                .filter(booking -> booking.getBooker().getId().equals(bookerId))
                 .collect(Collectors.toList());
         if (bookings.size() == 0) {
-            throw new EntityNotFoundException("Факт бронирования не подтверждён");
+            throw new RequestValidationException("Факт бронирования не подтверждён");
         }
+        comment.setAuthor(bookings.get(0).getBooker());
+        comment.setItem(item);
+        comment.setCreatedDate(LocalDateTime.now());
         return commentRepository.save(comment);
     }
 

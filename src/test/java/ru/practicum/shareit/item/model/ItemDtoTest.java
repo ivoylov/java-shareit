@@ -17,13 +17,8 @@ class ItemDtoTest {
     @BeforeEach
     void setUp() {
         user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>());
-        itemDto1 = new ItemDtoIn(1L, "name", "description", true, user, new ArrayList<>());
-        itemDto2 = new ItemDtoIn(1L, "name", "description", true, user, new ArrayList<>());
-    }
-
-    @Test
-    void getId() {
-        assertEquals(1l, itemDto1.getId());
+        itemDto1 = new ItemDtoIn("name", "description", true);
+        itemDto2 = new ItemDtoIn("name", "description", true);
     }
 
     @Test
@@ -37,17 +32,6 @@ class ItemDtoTest {
     }
 
     @Test
-    void getAvailable() {
-        assertTrue(itemDto1.getAvailable());
-    }
-
-    @Test
-    void setId() {
-        itemDto1.setId(2L);
-        assertEquals(2L,itemDto1.getId());
-    }
-
-    @Test
     void setName() {
         itemDto1.setName("newName");
         assertEquals("newName", itemDto1.getName());
@@ -57,12 +41,6 @@ class ItemDtoTest {
     void setDescription() {
         itemDto1.setDescription("newDescription");
         assertEquals("newDescription", itemDto1.getDescription());
-    }
-
-    @Test
-    void setAvailable() {
-        itemDto1.setAvailable(false);
-        assertFalse(itemDto1.getAvailable());
     }
 
     @Test
@@ -84,12 +62,9 @@ class ItemDtoTest {
     @Test
     void builder() {
         ItemDtoIn itemDto = ItemDtoIn.builder()
-                .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
-                .owner(user)
-                .bookings(new ArrayList<>())
                 .build();
         assertEquals(itemDto, itemDto1);
     }

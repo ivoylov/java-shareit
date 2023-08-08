@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.EntityNotFoundException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collections;

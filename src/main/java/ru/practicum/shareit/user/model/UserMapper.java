@@ -8,6 +8,12 @@ import java.util.List;
 @UtilityClass
 public class UserMapper {
 
+    public ShortUserDtoOut toShortUserDtoOut(User user) {
+        return ShortUserDtoOut.builder()
+                .id(user.getId())
+                .build();
+    }
+
     public UserDtoOut toUserDtoOut(User user) {
         return UserDtoOut.builder()
                 .id(user.getId())

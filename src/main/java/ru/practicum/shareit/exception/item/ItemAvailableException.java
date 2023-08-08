@@ -1,4 +1,6 @@
-package ru.practicum.shareit.exception;
+package ru.practicum.shareit.exception.item;
+
+import ru.practicum.shareit.exception.entity.EntityException;
 
 public class ItemAvailableException extends EntityException {
 

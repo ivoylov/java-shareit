@@ -6,7 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.exception.*;
+import ru.practicum.shareit.exception.RequestValidationException;
+import ru.practicum.shareit.exception.booking.BookingAlreadyApprovedException;
+import ru.practicum.shareit.exception.booking.BookingAvailableException;
+import ru.practicum.shareit.exception.booking.BookingTimeException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
+import ru.practicum.shareit.exception.item.ItemAvailableException;
+import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
@@ -31,7 +37,7 @@ public class BookingService {
 
     public Booking create(Booking booking, Long bookerId, Long itemId) {
         log.info("{}; create; {}", this.getClass(), booking);
-        booking.setItem(itemService.get(itemId));
+        booking.setItem(itemService.get(itemId, bookerId));
         booking.setBooker(userService.get(bookerId));
         check(booking);
         booking.setStatus(Status.WAITING);
@@ -67,7 +73,7 @@ public class BookingService {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());
         if (state == UNSUPPORTED_STATUS) {
-            throw new UnsupportedStatusException("Unknown state: UNSUPPORTED_STATUS");
+            throw new UnsupportedItemStatusException("Unknown state: UNSUPPORTED_STATUS");
         }
         userService.get(userId);
         List<Booking> bookings = new ArrayList<>();

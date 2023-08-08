@@ -1,5 +1,7 @@
 package ru.practicum.shareit.exception;
 
+import ru.practicum.shareit.exception.entity.EntityException;
+
 public class RequestValidationException extends EntityException {
 
     public RequestValidationException(Object o) {

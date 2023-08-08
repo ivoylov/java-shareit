@@ -26,11 +26,9 @@ class ItemDtoMapperTest {
                 .owner(user)
                 .build();
         itemDto = ItemDtoIn.builder()
-                .id(2L)
                 .name("dtoName")
                 .description("dtoDescription")
                 .available(true)
-                .owner(user)
                 .build();
     }
 
@@ -43,17 +41,15 @@ class ItemDtoMapperTest {
                 .available(true)
                 .owner(user)
                 .build();
-        assertEquals(itemDto, ItemMapper.toItemDtoIn(testItem));
+        assertEquals(itemDto, ItemMapper.toItemDtoOut(testItem));
     }
 
     @Test
     void toItem() {
         ItemDtoIn testItemDto = ItemDtoIn.builder()
-                .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
-                .owner(user)
                 .build();
         assertEquals(item, ItemMapper.toItem(testItemDto));
     }
@@ -61,11 +57,9 @@ class ItemDtoMapperTest {
     @Test
     void toItemDtoList() {
         ItemDtoIn testItemDto = ItemDtoIn.builder()
-                .id(1L)
                 .name("name")
                 .description("description")
                 .available(true)
-                .owner(user)
                 .build();
         ArrayList<ItemDtoIn> itemDtoList = new ArrayList<>(List.of(testItemDto));
         ArrayList<Item> itemList = new ArrayList<>(List.of(item));

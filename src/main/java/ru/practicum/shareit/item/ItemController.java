@@ -44,8 +44,9 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDtoOut get(@PathVariable Long id) {
-        return ItemMapper.toItemDtoOut(itemService.get(id));
+    public ItemDtoOut get(@PathVariable Long id,
+                          @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return ItemMapper.toItemDtoOut(itemService.get(id, userId));
     }
 
     @GetMapping("/search")
@@ -55,10 +56,10 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDtoOut createComment (@RequestBody @Validated(Update.class) CommentDtoOut commentDto,
+    public CommentDtoOut createComment (@RequestBody @Validated(Create.class) CommentDtoIn commentDtoIn,
                                   @RequestHeader("X-Sharer-User-Id") Long bookerId,
                                   @PathVariable Long itemId) {
-        Comment comment = CommentMapper.toComment(commentDto);
+        Comment comment = CommentMapper.toComment(commentDtoIn);
         return CommentMapper.toCommentDtoOut(itemService.createComment(comment, bookerId, itemId));
     }
 

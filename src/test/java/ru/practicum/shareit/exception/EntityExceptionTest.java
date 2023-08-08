@@ -1,6 +1,7 @@
 package ru.practicum.shareit.exception;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.exception.entity.EntityException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
