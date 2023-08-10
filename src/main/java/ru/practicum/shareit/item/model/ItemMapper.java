@@ -24,6 +24,7 @@ public class ItemMapper {
                 .available(item.getAvailable())
                 .lastBooking(BookingMapper.toShortBookingDtoOut(item.getLastBooking()))
                 .nextBooking(BookingMapper.toShortBookingDtoOut(item.getNextBooking()))
+                .comments(CommentMapper.toCommentDtoOutList(item.getComments()))
                 .build();
     }
 

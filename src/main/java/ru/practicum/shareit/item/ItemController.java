@@ -39,7 +39,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDtoOut> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public List<ItemDtoOut> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
         return ItemMapper.toItemDtoOutList(itemService.getOwnerItems(ownerId));
     }
 

@@ -20,10 +20,10 @@ import ru.practicum.shareit.user.model.Role;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.booking.model.State.*;
 import static ru.practicum.shareit.user.model.Role.BOOKER;
 
 @Service
@@ -72,7 +72,7 @@ public class BookingService {
     public List<Booking> getAll(String stateString, Long userId, Role role) {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());
-        if (state == UNSUPPORTED_STATUS) {
+        if (state == State.UNSUPPORTED_STATUS) {
             throw new UnsupportedItemStatusException("Unknown state: UNSUPPORTED_STATUS");
         }
         userService.get(userId);
@@ -86,19 +86,20 @@ public class BookingService {
             for (Item item : items) {
                 bookings.addAll(item.getBookings());
             }
+            Collections.sort(bookings);
         }
         switch (state) {
             case CURRENT:
                 return bookings.stream()
-                        .filter(booking -> booking.getState() == CURRENT)
+                        .filter(booking -> booking.getState() == State.CURRENT)
                         .collect(Collectors.toList());
             case PAST:
                 return bookings.stream()
-                        .filter(booking -> booking.getState() == PAST)
+                        .filter(booking -> booking.getState() == State.PAST)
                         .collect(Collectors.toList());
             case FUTURE:
                 return bookings.stream()
-                        .filter(booking -> booking.getState() == FUTURE)
+                        .filter(booking -> booking.getState() == State.FUTURE)
                         .collect(Collectors.toList());
             case WAITING:
                 return bookings.stream()
@@ -111,12 +112,6 @@ public class BookingService {
             default:
                 return bookings;
         }
-    }
-
-    public Booking delete(Long id) {
-        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с id=%d", id)));
-        bookingRepository.deleteById(id);
-        return booking;
     }
 
     private void check(Booking booking) {

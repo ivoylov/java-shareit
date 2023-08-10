@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name="items", schema = "public")
-public class Item {
+public class Item implements Comparable<Item> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
@@ -37,6 +37,8 @@ public class Item {
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "item", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+    @OneToMany(targetEntity = Comment.class, mappedBy = "item", fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     public void update(Item updatedItem) {
         if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {
@@ -73,6 +75,11 @@ public class Item {
         return bookings.stream()
                 .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
                 .min(Comparator.comparing(Booking::getStart)).orElse(null);
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        return this.id.compareTo(item.getId());
     }
 
     public String toString() {

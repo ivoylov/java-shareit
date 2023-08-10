@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.booking.model.ShortBookingDtoOut;
 
+import java.util.List;
+
 @Builder
 @Data
 public class ItemDtoOut {
@@ -13,4 +15,5 @@ public class ItemDtoOut {
     private Boolean available;
     private ShortBookingDtoOut lastBooking;
     private ShortBookingDtoOut nextBooking;
+    private List<CommentDtoOut> comments;
 }

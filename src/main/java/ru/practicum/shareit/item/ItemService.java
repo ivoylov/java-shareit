@@ -63,10 +63,6 @@ public class ItemService {
         return itemRepository.existsById(id);
     }
 
-    public List<Item> getAll() {
-        return itemRepository.findAll();
-    }
-
     public Item delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
         itemRepository.deleteById(id);
@@ -80,7 +76,9 @@ public class ItemService {
     }
 
     public List<Item> getOwnerItems(Long ownerId) {
-        return itemRepository.findOwnerItems(ownerId);
+        //List<Item> items = itemRepository.findOwnerItems(ownerId).stream().sorted().collect(Collectors.toList());
+        return itemRepository.findOwnerItems(ownerId).stream().sorted().collect(Collectors.toList());
+        //return items;
     }
 
     private void checkOwner(Item item) {

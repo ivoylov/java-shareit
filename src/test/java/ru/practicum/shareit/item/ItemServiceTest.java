@@ -58,7 +58,7 @@ class ItemServiceTest {
                 .build();
         when(itemRepository.save(any())).thenReturn(createdItem);
         when(userService.isExist(1L)).thenReturn(true);
-        assertEquals(createdItem, itemService.create(itemToCreate));
+        assertEquals(createdItem, itemService.create(itemToCreate, 1L));
     }
 
     @Test
@@ -76,26 +76,19 @@ class ItemServiceTest {
                 .available(true)
                 .build();
         when(itemRepository.findById(itemToUpdate.getId())).thenReturn(Optional.of(updatedItem));
-        assertEquals(updatedItem, itemService.update(itemToUpdate));
+        assertEquals(updatedItem, itemService.update(itemToUpdate, 1L, 1L));
     }
 
     @Test
     void get() {
         when(itemRepository.findById(item.getId())).thenReturn(Optional.of(item));
-        assertEquals(item, itemService.get(item.getId()));
+        assertEquals(item, itemService.get(item.getId(), 1L));
     }
 
     @Test
     void isExist() {
         when(itemRepository.existsById(item.getId())).thenReturn(true);
         assertEquals(true, itemService.isExist(item.getId()));
-    }
-
-    @Test
-    void getAll() {
-        ArrayList<Item> itemList = new ArrayList<>(List.of(item));
-        when(itemRepository.findAll()).thenReturn(itemList);
-        assertEquals(itemList, itemService.getAll());
     }
 
     @Test

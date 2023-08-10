@@ -77,7 +77,7 @@ class ItemControllerTest {
     @Test
     void getOwnerItems() {
         when(itemService.getOwnerItems(1L)).thenReturn(new ArrayList<>(List.of(createdItem)));
-        assertEquals(new ArrayList<>(List.of(createdItemDto)), itemController.getOwnerItems(1L));
+        assertEquals(new ArrayList<>(List.of(createdItemDto)), itemController.getItems(1L));
     }
 
     @Test

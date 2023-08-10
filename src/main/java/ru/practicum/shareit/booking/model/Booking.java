@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings", schema = "public")
 public class Booking implements Comparable<Booking> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
@@ -38,11 +39,13 @@ public class Booking implements Comparable<Booking> {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
     @JoinColumn(name="item_id", nullable = false)
     private Item item;
+
     public boolean isBookingTimeValid() {
         if (end.isBefore(start)) return false;
         if (start.equals(end)) return false;
         return true;
     }
+
     public State getState() {
         Clock clock = Clock.systemDefaultZone();
         LocalDateTime now = LocalDateTime.now(clock);
@@ -50,12 +53,15 @@ public class Booking implements Comparable<Booking> {
         if (getStart().isAfter(now)) return State.FUTURE;
         return State.CURRENT;
     }
+
     @Override
     public int compareTo(Booking booking) {
         return booking.getId().compareTo(this.id);
     }
+
     public String toString() {
         return String.format("id=%d, start=%s, end=%s, status=%s, booker=%s, item=%s",
                 id, start, end, status, booker, item);
     }
+
 }
