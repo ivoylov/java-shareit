@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.exception.RequestValidationException;
 import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Comment;
@@ -95,6 +96,7 @@ public class ItemService {
                 .orElseThrow(() -> new EntityNotFoundException(itemId));
         List<Booking> bookings = item.getBookings().stream()
                 .filter(booking -> booking.getBooker().getId().equals(bookerId))
+                .filter(booking -> booking.getState() != State.FUTURE)
                 .collect(Collectors.toList());
         if (bookings.size() == 0) {
             throw new RequestValidationException("Факт бронирования не подтверждён");

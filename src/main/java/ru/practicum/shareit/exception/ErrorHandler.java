@@ -69,7 +69,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUnsupportedStatusException(final UnsupportedItemStatusException e) {
         log.info("{}", e.getEntity());
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
     }
 
     //400

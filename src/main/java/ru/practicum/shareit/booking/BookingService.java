@@ -50,7 +50,7 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new EntityNotFoundException("Не найдено бронировнаие  с номером " + bookingId));
         if (!booking.getItem().getOwner().getId().equals(ownerId)) {
-            throw new RequestValidationException("Изменение статуса производит не владелец вещи");
+            throw new EntityNotFoundException("Изменение статуса производит не владелец вещи");
         }
         Status newStatus = approved ? Status.APPROVED : Status.REJECTED;
         if (approved && booking.getStatus() == Status.APPROVED) {
@@ -62,9 +62,11 @@ public class BookingService {
 
     public Booking get(Long bookingId, Long userId) {
         log.info("{}; get; bookingId={}, userId={}", this.getClass(), bookingId, userId);
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с bookingId=%d", bookingId)));
+        Booking booking = bookingRepository
+                .findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Не найдено бронирование с bookingId=%d", bookingId)));
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwner().getId().equals(userId)) {
-            throw new RequestValidationException("Статус по вещи запрашивает не владелец и не пользователь");
+            throw new EntityNotFoundException("Статус по вещи запрашивает не владелец и не пользователь");
         }
         return booking;
     }

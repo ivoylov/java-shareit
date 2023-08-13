@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -66,7 +67,8 @@ public class Item implements Comparable<Item> {
     public Booking getLastBooking() {
         if (bookings == null) return null;
         return bookings.stream()
-                .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
+                .filter(b -> b.getStart().isBefore(LocalDateTime.now()))
+                .filter(b -> b.getStatus() == Status.APPROVED || b.getStatus() == Status.WAITING)
                 .max(Comparator.comparing(Booking::getEnd)).orElse(null);
     }
 
@@ -74,6 +76,7 @@ public class Item implements Comparable<Item> {
         if (bookings == null) return null;
         return bookings.stream()
                 .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
+                .filter(b -> b.getStatus() == Status.APPROVED || b.getStatus() == Status.WAITING)
                 .min(Comparator.comparing(Booking::getStart)).orElse(null);
     }
 
