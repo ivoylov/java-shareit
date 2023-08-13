@@ -90,9 +90,11 @@ public class BookingService {
         }
         switch (state) {
             case CURRENT:
-                return bookings.stream()
-                        .filter(booking -> booking.getState() == State.CURRENT)
-                        .collect(Collectors.toList());
+                 List<Booking> newList = bookings.stream()
+                         .filter(booking -> booking.getState() == State.CURRENT)
+                         .collect(Collectors.toList());
+                 Collections.reverse(newList);
+                 return newList;
             case PAST:
                 return bookings.stream()
                         .filter(booking -> booking.getState() == State.PAST)
