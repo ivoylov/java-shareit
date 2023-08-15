@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.Create;
 
 import javax.validation.constraints.Future;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookingDtoIn {
     @NotNull(message = "Должен быть указан id вещи для бронирования")
     private Long itemId;

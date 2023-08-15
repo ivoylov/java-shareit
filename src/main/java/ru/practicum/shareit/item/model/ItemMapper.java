@@ -9,8 +9,8 @@ import java.util.List;
 @UtilityClass
 public class ItemMapper {
 
-    public ShortItemDtoOut toShortItemDtoMapper(Item item) {
-        return ShortItemDtoOut.builder()
+    public ItemDtoOutShort toShortItemDtoMapper(Item item) {
+        return ItemDtoOutShort.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .build();
@@ -22,8 +22,8 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
-                .lastBooking(BookingMapper.toShortBookingDtoOut(item.getLastBooking()))
-                .nextBooking(BookingMapper.toShortBookingDtoOut(item.getNextBooking()))
+                .lastBooking(BookingMapper.toBookingDtoOutShort(item.getLastBooking()))
+                .nextBooking(BookingMapper.toBookingDtoOutShort(item.getNextBooking()))
                 .comments(CommentMapper.toCommentDtoOutList(item.getComments()))
                 .build();
     }

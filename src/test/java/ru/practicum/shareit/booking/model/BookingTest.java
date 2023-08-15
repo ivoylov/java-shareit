@@ -2,29 +2,64 @@ package ru.practicum.shareit.booking.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemDtoOutShort;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDtoOutShort;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BookingTest {
 
     private Booking booking;
-    User user;
-    Item item;
-    LocalDateTime start;
-    LocalDateTime end;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private User booker;
+    private Item item;
+    private List<Item> items;
+    private List<Booking> bookings;
+    private List<Comment> comments;
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        item = new Item();
-        start = LocalDateTime.of(2000,1,1,12,00);
-        end = LocalDateTime.of(2000,1,5,12,00);
-        booking = new Booking(1L, start, end, Status.WAITING, user, item);
+        items = new ArrayList<>();
+        bookings = new ArrayList<>();
+        comments = new ArrayList<>();
+        start = LocalDateTime.now().plusHours(1);
+        end = LocalDateTime.now().plusHours(2);
+        booker = new User(1L, "name", "email@mail.ru", items, bookings);
+        item = new Item(1L, "itemName", "description", true, booker, bookings, comments);
+        booking = new Booking(1L, start, end, Status.APPROVED, booker, item);
+    }
+
+    @Test
+    void isBookingTimeValid() {
+        assertTrue(booking.isBookingTimeValid());
+    }
+
+    @Test
+    void getState() {
+        assertEquals(State.FUTURE, booking.getState());
+    }
+
+    @Test
+    void compareTo() {
+        Booking comparedBooking = new Booking(2L, start, end, Status.APPROVED, booker, item);
+        assertEquals(1, booking.compareTo(comparedBooking));
+    }
+
+    @Test
+    void testToString() {
+        String targetString = "id=1, start=" + start + ", end=" + end + ", status=APPROVED, " +
+                "booker=id=1, name=name, email=email@mail.ru, " +
+                "item=id=1, name=itemName, description=description, available=true, " +
+                "owner=id=1, name=name, email=email@mail.ru";
+        assertEquals(targetString, booking.toString());
     }
 
     @Test
@@ -44,12 +79,12 @@ class BookingTest {
 
     @Test
     void getStatus() {
-        assertEquals(Status.WAITING, booking.getStatus());
+        assertEquals(Status.APPROVED, booking.getStatus());
     }
 
     @Test
     void getBooker() {
-        assertEquals(user, booking.getBooker());
+        assertEquals(booker, booking.getBooker());
     }
 
     @Test
@@ -65,66 +100,59 @@ class BookingTest {
 
     @Test
     void setStart() {
-        booking.setStart(booking.getStart().minusHours(1));
-        assertEquals(start.minusHours(1), booking.getStart());
+        booking.setStart(start.plusHours(1));
+        assertEquals(start.plusHours(1), booking.getStart());
     }
 
     @Test
     void setEnd() {
-        booking.setEnd(booking.getEnd().plusHours(1));
-        assertEquals(end.plusHours(1), booking.getEnd());
+        booking.setEnd(end.plusHours(3));
+        assertEquals(end.plusHours(3), booking.getEnd());
     }
 
     @Test
     void setStatus() {
-        booking.setStatus(Status.APPROVED);
-        assertEquals(Status.APPROVED, booking.getStatus());
+        booking.setStatus(Status.REJECTED);
+        assertEquals(Status.REJECTED, booking.getStatus());
     }
 
     @Test
     void setBooker() {
-        User newUser = new User(2L, "name", "email", new ArrayList<>(), new ArrayList<>());
+        User newUser = new User();
         booking.setBooker(newUser);
         assertEquals(newUser, booking.getBooker());
     }
 
     @Test
     void setItem() {
-        Item newItem = new Item(2L, "name", "description", true, user, new ArrayList<>());
+        Item newItem = new Item();
         booking.setItem(newItem);
         assertEquals(newItem, booking.getItem());
     }
 
     @Test
     void testEquals() {
-        Booking newBooking = new Booking(1L, start, end, Status.WAITING, user, item);
+        Booking newBooking = new Booking(1L, start, end, Status.APPROVED, booker, item);
         assertEquals(booking, newBooking);
     }
 
     @Test
     void testHashCode() {
-        Booking newBooking = new Booking(1L, start, end, Status.WAITING, user, item);
-        assertEquals(booking.hashCode(), newBooking.hashCode());
-    }
-
-    @Test
-    void testToString() {
-        String string = "Booking(id=1, start=2000-01-01T12:00, end=2000-01-05T12:00, status=WAITING, booker=User(id=null, name=null, email=null, items=null, bookings=null), item=Item(id=null, name=null, description=null, available=null, owner=null, bookings=null))";
-        assertEquals(string, booking.toString());
+        Booking newBooking = new Booking(1L, start, end, Status.APPROVED, booker, item);
+        assertEquals(newBooking.hashCode(), booking.hashCode());
     }
 
     @Test
     void builder() {
-        Booking booking1 = new Booking(3L, start, end, Status.REJECTED, new User(), new Item());
-        Booking booking2 = Booking.builder()
-                .id(3L)
+        Booking newBooking = Booking.builder()
+                .id(1L)
+                .status(Status.APPROVED)
                 .start(start)
                 .end(end)
-                .status(Status.REJECTED)
-                .booker(new User())
-                .item(new Item())
+                .item(item)
+                .booker(booker)
                 .build();
-        assertEquals(booking1, booking2);
+        assertEquals(booking, newBooking);
     }
 
 }

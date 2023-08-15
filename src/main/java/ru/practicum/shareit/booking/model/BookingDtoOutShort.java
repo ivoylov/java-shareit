@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class ShortBookingDtoOut {
+public class BookingDtoOutShort {
     private Long id;
     private Long bookerId;
 }

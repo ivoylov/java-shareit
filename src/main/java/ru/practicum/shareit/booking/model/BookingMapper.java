@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class BookingMapper {
 
-    public ShortBookingDtoOut toShortBookingDtoOut(Booking booking) {
-        return booking != null ? ShortBookingDtoOut.builder()
+    public BookingDtoOutShort toBookingDtoOutShort(Booking booking) {
+        return booking != null ? BookingDtoOutShort.builder()
                 .id(booking.getId())
                 .bookerId(booking.getBooker().getId())
                 .build() : null;
