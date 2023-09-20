@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.Request;
 
 import javax.persistence.*;
 import java.util.List;
@@ -36,6 +37,9 @@ public class User {
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "booker", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+    @JsonIgnore
+    @OneToMany(targetEntity = Request.class, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Request> requests;
 
     public void updateUser(User updatedUser) {
         if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
@@ -46,6 +50,7 @@ public class User {
         }
     }
 
+    @Override
     public String toString() {
         return String.format("id=%d, name=%s, email=%s",
                 id, name, email);

@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.Create;
+import ru.practicum.shareit.Update;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Data
@@ -12,6 +15,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestDtoIn {
-    @NotEmpty(message = "описание не может быть пустым")
+    @NotBlank(groups = Create.class, message = "описание не может быть пустым")
     private String description;
 }

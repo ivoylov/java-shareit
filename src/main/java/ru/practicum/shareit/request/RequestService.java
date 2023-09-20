@@ -2,11 +2,14 @@ package ru.practicum.shareit.request;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.request.model.Request;
-import ru.practicum.shareit.request.model.RequestDtoOut;
 import ru.practicum.shareit.user.UserService;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +27,20 @@ public class RequestService {
     }
 
     public List<Request> getUserRequests(Long userId) {
-        return requestRepository.findAllByUser(userService.get(userId));
+        if (!userService.isExist(userId)) throw new EntityNotFoundException("userId=" + userId);
+        List<Request> requests = requestRepository.getRequestByUserId(userId);
+        return requests;
     }
 
-    public List<Request> getRequests(Long userId) {
-        return requestRepository.findAll().stream()
-                .filter(request -> !request.getId().equals(userId))
+    public List<Request> getRequests(Integer from, Integer size, Long userId) {
+        return requestRepository.findAll(PageRequest.of(from, size)).toList()
+                .stream()
+                .filter(r->!r.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
     }
+
+    public Request getRequest(Long requestId) {
+        return requestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("requestId="+requestId));
+    }
+
 }

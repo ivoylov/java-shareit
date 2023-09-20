@@ -24,7 +24,7 @@ public class Request {
     private Long id;
     private String description;
     @NotNull
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
     @JoinColumn(name="user_id", nullable = false)
     private User user;
     @NotNull
