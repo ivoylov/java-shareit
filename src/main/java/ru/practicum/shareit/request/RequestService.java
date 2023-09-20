@@ -10,6 +10,8 @@ import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.UserService;
 
 import java.awt.print.Pageable;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,9 @@ public class RequestService {
     private UserService userService;
 
     public Request create(Request request, Long userId) {
+        log.info("{}, create; {}, userId={}", this.getClass(), request, userId);
         request.getUser().setId(userId);
+        request.setCreatedDate(LocalDateTime.now());
         return requestRepository.save(request);
     }
 
@@ -33,8 +37,13 @@ public class RequestService {
     }
 
     public List<Request> getRequests(Integer from, Integer size, Long userId) {
-        return requestRepository.findAll(PageRequest.of(from, size)).toList()
-                .stream()
+        List<Request> requests;
+        try {
+            requests = requestRepository.findAll(PageRequest.of(from, size)).toList();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+        return requests.stream()
                 .filter(r->!r.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
     }

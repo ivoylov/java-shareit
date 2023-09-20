@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/requests")
 @Slf4j
+@Validated
 public class RequestController {
 
     private final RequestService requestService;

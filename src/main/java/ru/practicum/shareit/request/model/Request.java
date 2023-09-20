@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "requests", schema = "public")
 public class Request {
-    @NotNull
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="request_id")
@@ -28,5 +27,6 @@ public class Request {
     @JoinColumn(name="user_id", nullable = false)
     private User user;
     @NotNull
-    private LocalDateTime created;
+    @Column(name="created_date")
+    private LocalDateTime createdDate;
 }

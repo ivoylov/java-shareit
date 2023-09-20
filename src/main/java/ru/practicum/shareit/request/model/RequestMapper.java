@@ -22,7 +22,7 @@ public class RequestMapper {
         return RequestDtoOut.builder()
                 .id(request.getId())
                 .description(request.getDescription())
-                .created(request.getCreated())
+                .created(request.getCreatedDate())
                 .build();
     }
 
