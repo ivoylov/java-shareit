@@ -44,7 +44,7 @@ class RequestMapperTest {
     @Test
     void toRequestDtoOutList() {
         List<RequestDtoOut> requestList = new ArrayList<>();
-        assertEquals(requestList, RequestMapper.toRequestDtoOutList(new ArrayList<>()));
+        assertEquals(requestList, RequestMapper.toListRequestDtoOut(new ArrayList<>()));
     }
 
 }

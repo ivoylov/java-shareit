@@ -2,14 +2,12 @@ package ru.practicum.shareit.request;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.UserService;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -25,18 +23,17 @@ public class RequestService {
 
     public Request create(Request request, Long userId) {
         log.info("{}, create; {}, userId={}", this.getClass(), request, userId);
-        request.getUser().setId(userId);
+        request.setUser(userService.get(userId));
         request.setCreatedDate(LocalDateTime.now());
         return requestRepository.save(request);
     }
 
     public List<Request> getUserRequests(Long userId) {
-        if (!userService.isExist(userId)) throw new EntityNotFoundException("userId=" + userId);
-        List<Request> requests = requestRepository.getRequestByUserId(userId);
-        return requests;
+        userService.get(userId);
+        return requestRepository.getRequestByUserId(userId);
     }
 
-    public List<Request> getRequests(Integer from, Integer size, Long userId) {
+    public List<Request> getWithPagination(Integer from, Integer size, Long userId) {
         List<Request> requests;
         try {
             requests = requestRepository.findAll(PageRequest.of(from, size)).toList();
@@ -48,8 +45,9 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    public Request getRequest(Long requestId) {
-        return requestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("requestId="+requestId));
+    public Request get(Long requestId, Long userId) {
+        userService.get(userId);
+        return requestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("requestId=" + requestId));
     }
 
 }

@@ -31,10 +31,6 @@ public class UserService {
         return userRepository.findById(userToUpdate.getId()).orElse(null);
     }
 
-    public Boolean isExist(Long id) {
-        return userRepository.existsById(id);
-    }
-
     public User get(Long id) {
         log.info(this.getClass() + "запрос на получение пользователя с id={}", id);
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));

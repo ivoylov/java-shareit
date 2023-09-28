@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item.model;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ class ItemMapperTest {
     void toShortItemDtoMapper() {
         Item item = new Item(1L, "name", "description", true, null, null, null);
         ItemDtoOutShort itemDtoOutShort = new ItemDtoOutShort(1L, "name");
-        assertEquals(itemDtoOutShort, ItemMapper.toShortItemDtoMapper(item));
+        assertEquals(itemDtoOutShort, ItemMapper.toItemDtoOutShort(item));
     }
 
     @Test
@@ -36,7 +34,7 @@ class ItemMapperTest {
     void toItemDtoOutList() {
         Item item = new Item(null, "name", "description", true, null, null, new ArrayList<>());
         ItemDtoOut itemDtoOut = new ItemDtoOut(null, "name", "description", true, null, null, new ArrayList<>());
-        assertEquals(List.of(itemDtoOut), ItemMapper.toItemDtoOutList(List.of(item)));
+        assertEquals(List.of(itemDtoOut), ItemMapper.toListItemDtoOut(List.of(item)));
     }
 
 }

@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class ItemDtoOutShort {
     private Long id;
     private String name;
+    private Long requestId;
+    private String description;
+    private Boolean available;
 }

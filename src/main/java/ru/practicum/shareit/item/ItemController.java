@@ -19,10 +19,10 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDtoOut create(@Validated(Create.class) @RequestBody ItemDtoIn itemDto,
+    public ItemDtoOut create(@Validated(Create.class) @RequestBody ItemDtoIn itemDtoIn,
                             @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        Item item = ItemMapper.toItem(itemDto);
-        return ItemMapper.toItemDtoOut(itemService.create(item, ownerId));
+        Item item = ItemMapper.toItem(itemDtoIn);
+        return ItemMapper.toItemDtoOut(itemService.create(item, ownerId, itemDtoIn.getRequestId()));
     }
 
     @PatchMapping("/{id}")
@@ -40,7 +40,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDtoOut> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return ItemMapper.toItemDtoOutList(itemService.getOwnerItems(ownerId));
+        return ItemMapper.toListItemDtoOut(itemService.getOwnerItems(ownerId));
     }
 
     @GetMapping("/{id}")
@@ -52,7 +52,7 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemDtoOut> searchByNameOrDescription(@RequestParam String text) {
         if (text.isBlank()) return Collections.emptyList();
-        return ItemMapper.toItemDtoOutList(itemService.searchByNameOrDescription(text));
+        return ItemMapper.toListItemDtoOut(itemService.searchByNameOrDescription(text));
     }
 
     @PostMapping("/{itemId}/comment")

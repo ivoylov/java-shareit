@@ -5,14 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.springframework.lang.Nullable;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
 
 @Data
 @AllArgsConstructor
@@ -38,8 +43,14 @@ public class Item implements Comparable<Item> {
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "item", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+    @JsonIgnore
     @OneToMany(targetEntity = Comment.class, mappedBy = "item", fetch = FetchType.LAZY)
     private List<Comment> comments;
+    @JsonIgnore
+    @ManyToOne(targetEntity = Request.class, fetch = FetchType.EAGER)
+    @JoinColumn(name="request_id")
+    @Nullable
+    private Request request;
 
     public void update(Item updatedItem) {
         if (updatedItem.getName() != null && !updatedItem.getName().isBlank()) {

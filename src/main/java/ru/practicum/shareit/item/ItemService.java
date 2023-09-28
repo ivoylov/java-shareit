@@ -9,6 +9,7 @@ import ru.practicum.shareit.exception.RequestValidationException;
 import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.RequestService;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
@@ -26,15 +27,12 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
     private final UserService userService;
+    private final RequestService requestService;
 
-    public Item create(Item item, Long ownerId) {
-        log.info(this.getClass() + " запрос на создание {}", item);
-        if (!userService.isExist(ownerId)) {
-            throw new EntityNotFoundException(" не найден пользователь " + item.getOwner());
-        }
-        User user = new User();
-        user.setId(ownerId);
-        item.setOwner(user);
+    public Item create(Item item, Long ownerId, Long requestId) {
+        log.info(this.getClass() + "; запрос на создание {}", item);
+        item.setOwner(userService.get(ownerId));
+        item.setRequest(requestId == null ? null : requestService.get(requestId, ownerId));
         return itemRepository.save(item);
     }
 
@@ -77,9 +75,7 @@ public class ItemService {
     }
 
     public List<Item> getOwnerItems(Long ownerId) {
-        //List<Item> items = itemRepository.findOwnerItems(ownerId).stream().sorted().collect(Collectors.toList());
         return itemRepository.findOwnerItems(ownerId).stream().sorted().collect(Collectors.toList());
-        //return items;
     }
 
     private void checkOwner(Item item) {

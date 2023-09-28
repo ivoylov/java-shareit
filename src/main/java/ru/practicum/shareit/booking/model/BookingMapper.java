@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.UserMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,11 +32,12 @@ public class BookingMapper {
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .booker(UserMapper.toShortUserDtoOut(booking.getBooker()))
-                .item(ItemMapper.toShortItemDtoMapper(booking.getItem()))
+                .item(ItemMapper.toItemDtoOutShort(booking.getItem()))
                 .build();
     }
 
     public List<BookingDtoOut> toBookingDtoOutList (List<Booking> bookingList) {
+        if (bookingList == null || bookingList.size() == 0) return Collections.emptyList();
         return bookingList.stream()
                 .map(BookingMapper::toBookingDtoOut)
                 .collect(Collectors.toList());

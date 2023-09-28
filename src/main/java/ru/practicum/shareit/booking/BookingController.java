@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.BookingDtoOut;
 import ru.practicum.shareit.booking.model.BookingMapper;
 import ru.practicum.shareit.user.model.Role;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -49,7 +50,9 @@ public class BookingController {
 
     @GetMapping()
     public List<BookingDtoOut> getAllForBooker(@RequestParam(defaultValue = "ALL") String state,
-                                               @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+                                               @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId,
+                                               @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                               @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), userId);
         return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.BOOKER));
     }
