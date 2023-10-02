@@ -2,7 +2,10 @@ package ru.practicum.shareit.booking;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
@@ -29,6 +32,7 @@ import static ru.practicum.shareit.user.model.Role.BOOKER;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Validated
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -71,7 +75,7 @@ public class BookingService {
         return booking;
     }
 
-    public List<Booking> getAll(String stateString, Long userId, Role role) {
+    public List<Booking> getAll(String stateString, Long userId, Role role, Integer from, Integer size) {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());
         if (state == State.UNSUPPORTED_STATUS) {
@@ -80,13 +84,15 @@ public class BookingService {
         userService.get(userId);
         List<Booking> bookings = new ArrayList<>();
         if (role == BOOKER) {
-            bookings.addAll(bookingRepository.findAllByBookerId(userId).stream()
-                    .sorted()
-                    .collect(Collectors.toList()));
+            bookings.addAll(bookingRepository.findAllByBookerId(userId, PageRequest.of(from, size).withSort(Sort.Direction.DESC, "id")));
+            while (bookings.size() == 0 && from > -1) {
+                from--;
+                bookings.addAll(bookingRepository.findAllByBookerId(userId, PageRequest.of(from, size).withSort(Sort.Direction.DESC, "id")));
+            }
         } else {
-            List<Item> items = itemService.getOwnerItems(userId);
+            List<Item> items = itemService.getOwnerItems(userId, PageRequest.of(from, size));
             for (Item item : items) {
-                bookings.addAll(item.getBookings());
+                bookings.addAll(bookingRepository.findAllByItem(item, PageRequest.of(from,size).withSort(Sort.Direction.DESC, "id")));
             }
             Collections.sort(bookings);
         }

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +24,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable(String name, String description, Boolean state);
 
     @Query(value = "SELECT * FROM items WHERE owner_id = :ownerId", nativeQuery = true)
-    List<Item> findOwnerItems(Long ownerId);
+    List<Item> findOwnerItems(Long ownerId, PageRequest pageRequest);
 
 }

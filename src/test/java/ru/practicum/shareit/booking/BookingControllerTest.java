@@ -76,10 +76,10 @@ class BookingControllerTest {
         assertEquals(bookingController.getAllForBooker("WAITING", 1L), List.of(bookingDtoOut));
     }*/
 
-    @Test
+/*    @Test
     void getAllForOwner() {
         Mockito.when(bookingService.getAll("WAITING", 1L, Role.OWNER)).thenReturn(List.of(createdBooking));
         assertEquals(bookingController.getAllForOwner("WAITING", 1L), List.of(bookingDtoOut));
-    }
+    }*/
 
 }

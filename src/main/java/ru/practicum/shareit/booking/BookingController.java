@@ -54,14 +54,16 @@ public class BookingController {
                                                @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                                @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), userId);
-        return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.BOOKER));
+        return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.BOOKER, from, size));
     }
 
     @GetMapping("/owner")
     public List<BookingDtoOut> getAllForOwner(@RequestParam(defaultValue = "ALL") String state,
-                                              @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+                                              @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId,
+                                              @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                              @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         log.info("{}; GET; /bookings/owner; ownerId={}", this.getClass(), userId);
-        return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.OWNER));
+        return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.OWNER, from, size));
     }
 
 }

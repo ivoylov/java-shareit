@@ -2,6 +2,9 @@ package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
@@ -74,8 +77,13 @@ public class ItemService {
         return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable(formText, formText, true);
     }
 
-    public List<Item> getOwnerItems(Long ownerId) {
-        return itemRepository.findOwnerItems(ownerId).stream().sorted().collect(Collectors.toList());
+    public List<Item> getOwnerItems(Long ownerId, PageRequest pageRequest) {
+        List<Item> items = itemRepository.findOwnerItems(ownerId, pageRequest);
+        while (items.size() == 0 && pageRequest.getPageNumber() > -1) {
+            pageRequest = pageRequest.previous();
+            items.addAll(itemRepository.findOwnerItems(ownerId, pageRequest));
+        }
+        return items;
     }
 
     private void checkOwner(Item item) {

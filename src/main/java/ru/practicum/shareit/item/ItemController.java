@@ -2,12 +2,15 @@
 package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.Update;
 import ru.practicum.shareit.item.model.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,8 +42,10 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDtoOut> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return ItemMapper.toListItemDtoOut(itemService.getOwnerItems(ownerId));
+    public List<ItemDtoOut> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+                                     @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                     @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
+        return ItemMapper.toListItemDtoOut(itemService.getOwnerItems(ownerId, PageRequest.of(from, size)));
     }
 
     @GetMapping("/{id}")

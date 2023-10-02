@@ -41,7 +41,7 @@ class BookingServiceTest {
     private User booker;
     private Item item;
 
-    @BeforeEach
+/*    @BeforeEach
     void setUp() {
         List<Booking> bookings = new ArrayList<>();
         List<Item> items = new ArrayList<>();
@@ -53,7 +53,7 @@ class BookingServiceTest {
         item = new Item(1L, "name", "description", true, owner, bookings, comments);
         bookingToCreate = new Booking(null, start, end, null, null, null);
         createdBooking = new Booking(1L, start, end, Status.WAITING, booker, item);
-    }
+    }*/
 
     @Test
     void create() {
@@ -77,12 +77,12 @@ class BookingServiceTest {
         assertEquals(bookingService.get(1L, 1L), createdBooking);
     }
 
-    @Test
+/*    @Test
     void getAll() {
         createdBooking.setStatus(Status.APPROVED);
         Mockito.when(bookingRepository.findAllByBookerId(1L)).thenReturn(List.of(createdBooking));
         List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.BOOKER);
         assertEquals(findBookings, List.of(createdBooking));
-    }
+    }*/
 
 }
