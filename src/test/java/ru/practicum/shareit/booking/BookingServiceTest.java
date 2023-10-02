@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.ItemService;
@@ -41,19 +43,19 @@ class BookingServiceTest {
     private User booker;
     private Item item;
 
-/*    @BeforeEach
+    @BeforeEach
     void setUp() {
         List<Booking> bookings = new ArrayList<>();
         List<Item> items = new ArrayList<>();
         List<Comment> comments = new ArrayList<>();
         start = LocalDateTime.now().plusHours(1);
         end = start.plusHours(2);
-        booker = new User(1L, "name", "email@mail.ru", items, bookings);
-        User owner = new User(2L, "owner", "mailOwner@email.ru", items, bookings);
-        item = new Item(1L, "name", "description", true, owner, bookings, comments);
+        booker = new User(1L, "name", "email@mail.ru", items, bookings, null);
+        User owner = new User(2L, "owner", "mailOwner@email.ru", items, bookings, null);
+        item = new Item(1L, "name", "description", true, owner, bookings, comments, null);
         bookingToCreate = new Booking(null, start, end, null, null, null);
         createdBooking = new Booking(1L, start, end, Status.WAITING, booker, item);
-    }*/
+    }
 
     @Test
     void create() {
@@ -77,12 +79,12 @@ class BookingServiceTest {
         assertEquals(bookingService.get(1L, 1L), createdBooking);
     }
 
-/*    @Test
+    @Test
     void getAll() {
         createdBooking.setStatus(Status.APPROVED);
-        Mockito.when(bookingRepository.findAllByBookerId(1L)).thenReturn(List.of(createdBooking));
-        List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.BOOKER);
+        Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.BOOKER, 0, 1);
         assertEquals(findBookings, List.of(createdBooking));
-    }*/
+    }
 
 }

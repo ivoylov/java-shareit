@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.user.model.User;
 
@@ -31,31 +32,31 @@ class ItemControllerTest {
     private ItemDtoIn itemDtoIn;
     private ItemDtoOut itemDtoOut;
 
-/*    @BeforeEach
+    @BeforeEach
     void setUp() {
-        itemDtoIn = new ItemDtoIn("name", "description", null);
-        itemDtoOut = new ItemDtoOut(1L, "name", "description", true, null, null, new ArrayList<>());
-        owner = new User(1L, "name", "mail@email.ru", null, null);
-        itemToCreate = new Item(null, "name", "description", null, null, null, null);
-        createdItem = new Item(1L, "name", "description", true, owner, null, null);
-    }*/
+        itemDtoIn = new ItemDtoIn("name", "description", null, 1L);
+        itemDtoOut = new ItemDtoOut(1L, "name", "description", true, null, null, new ArrayList<>(), null);
+        owner = new User(1L, "name", "mail@email.ru", null, null, new ArrayList<>());
+        itemToCreate = new Item(null, "name", "description", null, null, null, null, null);
+        createdItem = new Item(1L, "name", "description", true, owner, null, null, null);
+    }
 
-/*    @Test
+    @Test
     void create() {
-        Mockito.when(itemService.create(itemToCreate, 1L)).thenReturn(createdItem);
+        Mockito.when(itemService.create(itemToCreate, 1L, 1L)).thenReturn(createdItem);
         assertEquals(itemController.create(itemDtoIn, 1L), itemDtoOut);
-    }*/
+    }
 
-/*    @Test
+    @Test
     void update() {
-        Item newItem = new Item(1L, "newName", "newDescription", true, owner, null, null);
+        Item newItem = new Item(1L, "newName", "newDescription", true, owner, null, null, null);
         itemDtoIn.setName("newName");
         itemDtoIn.setDescription("newDescription");
         itemDtoOut.setName("newName");
         itemDtoOut.setDescription("newDescription");
         Mockito.when(itemService.update(any(), anyLong(), anyLong())).thenReturn(newItem);
         assertEquals(itemController.update(itemDtoIn, 1L, 1L), itemDtoOut);
-    }*/
+    }
 
     @Test
     void delete() {
@@ -63,11 +64,11 @@ class ItemControllerTest {
         assertEquals(itemController.delete(1L), itemDtoOut);
     }
 
-/*    @Test
+    @Test
     void getItems() {
-        Mockito.when(itemService.getOwnerItems(1L)).thenReturn(List.of(createdItem));
-        assertEquals(itemController.getItems(1L), List.of(itemDtoOut));
-    }*/
+        Mockito.when(itemService.getOwnerItems(1L, PageRequest.of(0, 1))).thenReturn(List.of(createdItem));
+        assertEquals(itemController.getItems(1L, 0, 1), List.of(itemDtoOut));
+    }
 
     @Test
     void get() {
@@ -81,15 +82,15 @@ class ItemControllerTest {
         assertEquals(itemController.searchByNameOrDescription("description"), List.of(itemDtoOut));
     }
 
-/*    @Test
+    @Test
     void createComment() {
         LocalDateTime created = LocalDateTime.now();
         CommentDtoIn commentDtoIn = new CommentDtoIn("commentText");
         CommentDtoOut commentDtoOut = new CommentDtoOut(1L, "commentText", "bookerName", created);
-        User booker = new User(2L, "bookerName", "bookerMail@mail.ru", null, null);
+        User booker = new User(2L, "bookerName", "bookerMail@mail.ru", null, null, new ArrayList<>());
         Comment comment = new Comment(1L, booker, createdItem, created, "commentText");
         Mockito.when(itemService.createComment(any(), anyLong(), anyLong())).thenReturn(comment);
         assertEquals(itemController.createComment(commentDtoIn, 1L, 1L), commentDtoOut);
-    }*/
+    }
 
 }

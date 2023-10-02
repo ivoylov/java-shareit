@@ -13,6 +13,7 @@ import ru.practicum.shareit.request.model.RequestMapper;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +29,8 @@ class RequestControllerTest {
     void created() {
         LocalDateTime created = LocalDateTime.now();
         RequestDtoIn requestDtoIn = new RequestDtoIn("description");
-        RequestDtoOut requestDtoOut = new RequestDtoOut(1L, "description", created);
-        Request request = new Request(1L, "description", new User(), created);
+        RequestDtoOut requestDtoOut = new RequestDtoOut(1L, "description", created, new ArrayList<>());
+        Request request = new Request(1L, "description", new User(), created, new ArrayList<>());
         Mockito.when(requestService.create(RequestMapper.toRequest(requestDtoIn), 1L)).thenReturn(request);
         assertEquals(requestController.created(requestDtoIn, 1L), requestDtoOut);
     }

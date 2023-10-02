@@ -24,13 +24,13 @@ class ItemTest {
         bookings = new ArrayList<>();
         comments = new ArrayList<>();
         items = new ArrayList<>();
-        owner = new User(1L, "name", "mail@email.ru", items, bookings);
-        item = new Item(1L, "name", "description", true, owner, bookings, comments);
+        owner = new User(1L, "name", "mail@email.ru", items, bookings, new ArrayList<>());
+        item = new Item(1L, "name", "description", true, owner, bookings, comments, null);
     }
 
     @Test
     void update() {
-        Item newItem = item = new Item(1L, "newName", "newDescription", false, owner, bookings, comments);
+        Item newItem = item = new Item(1L, "newName", "newDescription", false, owner, bookings, comments, null);
         item.update(newItem);
         assertFalse(item.getAvailable());
         assertEquals("newName", item.getName());
@@ -56,7 +56,7 @@ class ItemTest {
 
     @Test
     void compareTo() {
-        Item newItem = new Item(2L, "name", "description", true, owner, bookings, comments);
+        Item newItem = new Item(2L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(-1, item.compareTo(newItem));
     }
 
@@ -127,7 +127,7 @@ class ItemTest {
 
     @Test
     void setOwner() {
-        User newOwner = new User(2L, "newName", "newMail@email.ru", items, bookings);
+        User newOwner = new User(2L, "newName", "newMail@email.ru", items, bookings, new ArrayList<>());
         item.setOwner(newOwner);
         assertEquals(newOwner, item.getOwner());
     }
@@ -146,13 +146,13 @@ class ItemTest {
 
     @Test
     void testEquals() {
-        Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments);
+        Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(item, newItem);
     }
 
     @Test
     void testHashCode() {
-        Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments);
+        Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(newItem.hashCode(), item.hashCode());
     }
 

@@ -25,7 +25,7 @@ class ErrorHandlerTest {
 
     @Test
     void handlerUserAlreadyExistException() {
-        User user2 = new User(2l, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>());
+        User user2 = new User(2l, "name", "user@email.ru", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         when(userRepository.save(user2)).thenThrow(UserAlreadyExistException.class);
         assertThrows(UserAlreadyExistException.class, () -> userService.create(user2));
     }

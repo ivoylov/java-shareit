@@ -22,7 +22,7 @@ class BookingDtoOutTest {
         start = LocalDateTime.now().plusHours(1);
         end = start.plusHours(2);
         userDtoOutShort = new UserDtoOutShort(1L);
-        itemDtoOutShort = new ItemDtoOutShort(1L, "itemName");
+        itemDtoOutShort = new ItemDtoOutShort(1L, "itemName", 1L, "description", true);
         bookingDtoOut = new BookingDtoOut(1L, start, end, Status.WAITING, userDtoOutShort, itemDtoOutShort);
     }
 
@@ -89,7 +89,7 @@ class BookingDtoOutTest {
 
     @Test
     void setItem() {
-        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(2L, "newItemName");
+        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(2L, "newItemName", 1L, "description", true);
         bookingDtoOut.setItem(newItemDtoOutShort);
         assertEquals(newItemDtoOutShort, bookingDtoOut.getItem());
     }
@@ -110,7 +110,7 @@ class BookingDtoOutTest {
     void testToString() {
         String targetString = "BookingDtoOut(id=1, start=" + start + ", end=" + end + ", status=WAITING, " +
                 "booker=UserDtoOutShort(id=1), " +
-                "item=ItemDtoOutShort(id=1, name=itemName))";
+                "item=ItemDtoOutShort(id=1, name=itemName, requestId=1, description=description, available=true))";
         assertEquals(targetString, bookingDtoOut.toString());
     }
 

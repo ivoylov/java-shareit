@@ -25,16 +25,16 @@ class BookingMapperTest {
     private BookingDtoOut bookingDtoOut;
     private Booking booking;
     UserDtoOutShort shortBooker = new UserDtoOutShort(1L);
-    ItemDtoOutShort shortItem = new ItemDtoOutShort(1L, "itemName");
+    ItemDtoOutShort shortItem = new ItemDtoOutShort(1L, "itemName", null, "description", true);
 
     @BeforeEach
     void setUp() {
-        booker = new User(1L, "name", "email@mail.ru", new ArrayList<>(), new ArrayList<>());
-        item = new Item(1L, "itemName", "description", true, booker, new ArrayList<>(), new ArrayList<>());
+        booker = new User(1L, "name", "email@mail.ru", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        item = new Item(1L, "itemName", "description", true, booker, new ArrayList<>(), new ArrayList<>(), null);
         start = LocalDateTime.now().plusHours(1);
         end = LocalDateTime.now().plusHours(2);
         shortBooker = new UserDtoOutShort(1L);
-        shortItem = new ItemDtoOutShort(1L, "itemName");
+        shortItem = new ItemDtoOutShort(1L, "itemName", null, "description", true);
         bookingDtoOut = new BookingDtoOut(1L, start, end, Status.APPROVED, shortBooker, shortItem);
         booking = Booking.builder()
                 .id(1L)

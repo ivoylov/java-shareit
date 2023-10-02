@@ -23,8 +23,8 @@ class RequestMapperTest {
         RequestDtoIn requestDtoIn = new RequestDtoIn("какое-то описание");
         Request request = RequestMapper.toRequest(requestDtoIn);
         assertNull(request.getId());
-        assertNull(request.getCreated());
-        assertNull(request.getUser());
+        assertNull(request.getCreatedDate());
+        assertEquals(new User(), request.getUser());
         assertEquals("какое-то описание", request.getDescription());
     }
 
@@ -33,12 +33,12 @@ class RequestMapperTest {
         List<Item> items = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime created = LocalDateTime.now();
-        User user = new User(1L, "name", "enail@email.ru", items, bookings);
-        Request request = new Request(1L, "description", user, created);
+        User user = new User(1L, "name", "enail@email.ru", items, bookings, new ArrayList<>());
+        Request request = new Request(1L, "description", user, created, new ArrayList<>());
         RequestDtoOut requestDtoOut = RequestMapper.toRequestDtoOut(request);
         assertEquals(requestDtoOut.getId(), request.getId());
         assertEquals(requestDtoOut.getDescription(), request.getDescription());
-        assertEquals(requestDtoOut.getCreated(), request.getCreated());
+        assertEquals(requestDtoOut.getCreated(), request.getCreatedDate());
     }
 
     @Test

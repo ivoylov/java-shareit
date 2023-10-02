@@ -29,8 +29,8 @@ class CommentTest {
         bookings = new ArrayList<>();
         comments = new ArrayList<>();
         createdDate = LocalDateTime.now();
-        author = new User(1L, "name", "email@mail.ru", items, bookings);
-        item = new Item(1L, "name", "description", true, author, bookings, comments);
+        author = new User(1L, "name", "email@mail.ru", items, bookings, new ArrayList<>());
+        item = new Item(1L, "name", "description", true, author, bookings, comments, null);
         comment = new Comment(1L, author, item, createdDate, text);
     }
 
@@ -67,14 +67,14 @@ class CommentTest {
 
     @Test
     void setAuthor() {
-        User newAuthor = new User(2L, "newName", "newEmail@mail.ru", items, bookings);
+        User newAuthor = new User(2L, "newName", "newEmail@mail.ru", items, bookings, new ArrayList<>());
         comment.setAuthor(newAuthor);
         assertEquals(newAuthor, comment.getAuthor());
     }
 
     @Test
     void setItem() {
-        Item newItem = new Item(2L, "newName", "newDescription", false, author, bookings, comments);
+        Item newItem = new Item(2L, "newName", "newDescription", false, author, bookings, comments, null);
         comment.setItem(newItem);
         assertEquals(newItem, comment.getItem());
     }

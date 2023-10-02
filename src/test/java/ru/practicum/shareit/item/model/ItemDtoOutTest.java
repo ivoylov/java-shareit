@@ -21,7 +21,7 @@ class ItemDtoOutTest {
         lastBooking = new BookingDtoOutShort(1L, 1L);
         nextBooking = new BookingDtoOutShort(2L, 2L);
         comments = new ArrayList<>();
-        itemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments);
+        itemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments, 1L);
     }
 
     @Test
@@ -103,13 +103,13 @@ class ItemDtoOutTest {
 
     @Test
     void testEquals() {
-        ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments);
+        ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments, 1L);
         assertEquals(newItemDtoOut, itemDtoOut);
     }
 
     @Test
     void testHashCode() {
-        ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments);
+        ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments, 1L);
         assertEquals(newItemDtoOut.hashCode(), itemDtoOut.hashCode());
     }
 
@@ -118,7 +118,8 @@ class ItemDtoOutTest {
         String targetString = "ItemDtoOut(id=1, name=name, description=description, available=true, " +
                 "lastBooking=BookingDtoOutShort(id=1, bookerId=1), " +
                 "nextBooking=BookingDtoOutShort(id=2, bookerId=2), " +
-                "comments=[])";
+                "comments=[], " +
+                "requestId=1)";
         assertEquals(targetString, itemDtoOut.toString());
     }
 
@@ -132,6 +133,7 @@ class ItemDtoOutTest {
                 .nextBooking(nextBooking)
                 .comments(comments)
                 .available(true)
+                .requestId(1L)
                 .build();
         assertEquals(newItemDtoOut, itemDtoOut);
     }

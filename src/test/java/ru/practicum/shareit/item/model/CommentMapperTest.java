@@ -24,8 +24,8 @@ class CommentMapperTest {
         text = "text";
         created = LocalDateTime.now();
         commentDtoOut = new CommentDtoOut(1L, text, "author", created);
-        author = new User(1L, "author", "author@mail.ru", new ArrayList<>(), new ArrayList<>());
-        item = new Item(1L, "itemName", "description", true, author, new ArrayList<>(), new ArrayList<>());
+        author = new User(1L, "author", "author@mail.ru", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        item = new Item(1L, "itemName", "description", true, author, new ArrayList<>(), new ArrayList<>(), null);
     }
 
     @Test

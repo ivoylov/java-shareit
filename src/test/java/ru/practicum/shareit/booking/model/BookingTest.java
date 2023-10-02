@@ -32,8 +32,8 @@ class BookingTest {
         comments = new ArrayList<>();
         start = LocalDateTime.now().plusHours(1);
         end = LocalDateTime.now().plusHours(2);
-        booker = new User(1L, "name", "email@mail.ru", items, bookings);
-        item = new Item(1L, "itemName", "description", true, booker, bookings, comments);
+        booker = new User(1L, "name", "email@mail.ru", items, bookings, null);
+        item = new Item(1L, "itemName", "description", true, booker, bookings, comments, null);
         booking = new Booking(1L, start, end, Status.APPROVED, booker, item);
     }
 

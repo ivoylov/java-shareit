@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.model.RequestDtoIn;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
 import javax.security.auth.message.callback.SecretKeyCallback;
@@ -27,6 +28,8 @@ class RequestServiceTest {
 
     @Mock
     private RequestRepository requestRepository;
+    @Mock
+    private UserService userService;
     @InjectMocks
     private RequestService requestService;
 
@@ -39,10 +42,11 @@ class RequestServiceTest {
         List<Item> items = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime created = LocalDateTime.now();
-        User user = new User(1L, "name", "mail@email.ru", items, bookings);
-        Request request = new Request(1L, "description", user, created);
-        Request requestToCreate = new Request(null, "description", new User(), null);
+        User user = new User(1L, "name", "mail@email.ru", items, bookings, new ArrayList<>());
+        Request request = new Request(1L, "description", user, created, new ArrayList<>());
+        Request requestToCreate = new Request(null, "description", new User(), null, new ArrayList<>());
         Mockito.when(requestRepository.save(any())).thenReturn(request);
+        Mockito.when(userService.get(any())).thenReturn(user);
         assertEquals(requestService.create(requestToCreate, 1L), request);
     }
 

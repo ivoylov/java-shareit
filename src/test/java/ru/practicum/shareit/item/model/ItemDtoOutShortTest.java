@@ -11,7 +11,7 @@ class ItemDtoOutShortTest {
 
     @BeforeEach
     void setUp() {
-        itemDtoOutShort = new ItemDtoOutShort(1L, "name");
+        itemDtoOutShort = new ItemDtoOutShort(1L, "name", 1L, "description", true);
     }
 
     @Test
@@ -38,19 +38,19 @@ class ItemDtoOutShortTest {
 
     @Test
     void testEquals() {
-        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name");
+        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name", 1L, "description", true);
         assertEquals(newItemDtoOutShort, itemDtoOutShort);
     }
 
     @Test
     void testHashCode() {
-        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name");
+        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name", 1L, "description", true);
         assertEquals(newItemDtoOutShort.hashCode(), itemDtoOutShort.hashCode());
     }
 
     @Test
     void testToString() {
-        String targetString = "ItemDtoOutShort(id=1, name=name)";
+        String targetString = "ItemDtoOutShort(id=1, name=name, requestId=1, description=description, available=true)";
         assertEquals(targetString, itemDtoOutShort.toString());
     }
 
@@ -59,6 +59,9 @@ class ItemDtoOutShortTest {
         ItemDtoOutShort newItemDtoOutShort = ItemDtoOutShort.builder()
                 .id(1L)
                 .name("name")
+                .description("description")
+                .requestId(1L)
+                .available(true)
                 .build();
         assertEquals(newItemDtoOutShort, itemDtoOutShort);
     }

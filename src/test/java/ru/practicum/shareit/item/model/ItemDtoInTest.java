@@ -11,7 +11,7 @@ class ItemDtoInTest {
 
     @BeforeEach
     void setUp() {
-        itemDtoIn = new ItemDtoIn("name", "description", true);
+        itemDtoIn = new ItemDtoIn("name", "description", true, 1L);
     }
 
     @Test
@@ -49,19 +49,19 @@ class ItemDtoInTest {
 
     @Test
     void testEquals() {
-        ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true);
+        ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true, 1L);
         assertEquals(itemDtoIn, newItemDtoIn);
     }
 
     @Test
     void testHashCode() {
-        ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true);
+        ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true, 1L);
         assertEquals(itemDtoIn.hashCode(), newItemDtoIn.hashCode());
     }
 
     @Test
     void testToString() {
-        String targetString = "ItemDtoIn(name=name, description=description, available=true)";
+        String targetString = "ItemDtoIn(name=name, description=description, available=true, requestId=1)";
         assertEquals(targetString, itemDtoIn.toString());
     }
 
@@ -71,6 +71,7 @@ class ItemDtoInTest {
                 .name("name")
                 .description("description")
                 .available(true)
+                .requestId(1L)
                 .build();
         assertEquals(itemDtoIn, newItemDtoIn);
     }

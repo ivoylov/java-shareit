@@ -36,19 +36,19 @@ class BookingControllerTest {
     private final List<Item> items = new ArrayList<>();
     private final List<Comment> comments = new ArrayList<>();
 
-/*    @BeforeEach
+    @BeforeEach
     void setUp() {
         LocalDateTime start = LocalDateTime.now().plusHours(1);
         LocalDateTime end = start.plusHours(2);
-        User booker = new User(1L, "name", "email@mail", items, bookings);
-        Item item = new Item(2L, "name", "description", true, booker, bookings, comments);
+        User booker = new User(1L, "name", "email@mail", items, bookings, null);
+        Item item = new Item(2L, "name", "description", true, booker, bookings, comments, null);
         bookingToCreate = new Booking(null, start, end, null, null, null);
         createdBooking = new Booking(1L, start, end, Status.WAITING, booker, item);
         bookingDtoIn = new BookingDtoIn(2L, start, end);
         UserDtoOutShort userDtoOutShort = new UserDtoOutShort(1L);
-        ItemDtoOutShort itemDtoOutShort = new ItemDtoOutShort(2L, "name");
+        ItemDtoOutShort itemDtoOutShort = new ItemDtoOutShort(2L, "name", null, "description", true);
         bookingDtoOut = new BookingDtoOut(1L, start, end, Status.WAITING, userDtoOutShort, itemDtoOutShort);
-    }*/
+    }
 
     @Test
     void create() {
@@ -70,16 +70,16 @@ class BookingControllerTest {
         assertEquals(bookingController.get(1L, 1L), bookingDtoOut);
     }
 
-/*    @Test
+    @Test
     void getAllForBooker() {
-        Mockito.when(bookingService.getAll("WAITING", 1L, Role.BOOKER)).thenReturn(List.of(createdBooking));
-        assertEquals(bookingController.getAllForBooker("WAITING", 1L), List.of(bookingDtoOut));
-    }*/
+        Mockito.when(bookingService.getAll("WAITING", 1L, Role.BOOKER, 0, 1)).thenReturn(List.of(createdBooking));
+        assertEquals(bookingController.getAllForBooker("WAITING", 1L, 0, 1), List.of(bookingDtoOut));
+    }
 
-/*    @Test
+    @Test
     void getAllForOwner() {
-        Mockito.when(bookingService.getAll("WAITING", 1L, Role.OWNER)).thenReturn(List.of(createdBooking));
-        assertEquals(bookingController.getAllForOwner("WAITING", 1L), List.of(bookingDtoOut));
-    }*/
+        Mockito.when(bookingService.getAll("WAITING", 1L, Role.OWNER, 0, 1)).thenReturn(List.of(createdBooking));
+        assertEquals(bookingController.getAllForOwner("WAITING", 1L, 0, 1), List.of(bookingDtoOut));
+    }
 
 }
