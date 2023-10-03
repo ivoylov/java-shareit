@@ -37,4 +37,11 @@ class ItemMapperTest {
         assertEquals(List.of(itemDtoOut), ItemMapper.toListItemDtoOut(List.of(item)));
     }
 
+    @Test
+    void toItemDtoOutShortList() {
+        Item item = new Item(1L, "name", "description", true, null, null, new ArrayList<>(), null);
+        ItemDtoOutShort itemDtoOutShort = new ItemDtoOutShort(1L, "name", null, "description", true);
+        assertEquals(List.of(itemDtoOutShort), ItemMapper.toListItemDtoOutShort(List.of(item)));
+    }
+
 }

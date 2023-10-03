@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -42,6 +43,16 @@ class ItemTest {
         LocalDateTime start = LocalDateTime.now().plusHours(1);
         LocalDateTime end = start.plusHours(2);
         assertTrue(item.isAvailableOnRequestDate(start, end));
+    }
+
+    @Test
+    void isAvailableOnRequestDate_thenFalse() {
+        LocalDateTime start = LocalDateTime.now().plusHours(1);
+        LocalDateTime end = start.plusHours(2);
+        User booker = new User(5L, "name", "newBooker@mail.ru", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Booking newBooking = new Booking(3L, LocalDateTime.now(), LocalDateTime.now().plusHours(5), Status.APPROVED, booker, item);
+        item.setBookings(List.of(newBooking));
+        assertFalse(item.isAvailableOnRequestDate(start, end));
     }
 
     @Test

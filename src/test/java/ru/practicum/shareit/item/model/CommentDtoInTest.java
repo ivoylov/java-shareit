@@ -53,4 +53,11 @@ class CommentDtoInTest {
                 .build();
         assertEquals(newCommentDtoIn, commentDtoIn);
     }
+
+    @Test
+    void noArgsConstructor() {
+        CommentDtoIn newCommentDtoIn = new CommentDtoIn();
+        assertNull(newCommentDtoIn.getText());
+    }
+
 }

@@ -5,16 +5,15 @@ import lombok.experimental.UtilityClass;
 import java.util.ArrayList;
 import java.util.List;
 
-@UtilityClass
 public class UserMapper {
 
-    public UserDtoOutShort toShortUserDtoOut(User user) {
+    public static UserDtoOutShort toShortUserDtoOut(User user) {
         return UserDtoOutShort.builder()
                 .id(user.getId())
                 .build();
     }
 
-    public UserDtoOut toUserDtoOut(User user) {
+    public static UserDtoOut toUserDtoOut(User user) {
         return UserDtoOut.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -22,14 +21,14 @@ public class UserMapper {
                 .build();
     }
 
-    public User toUser(UserDtoIn userDtoIn) {
+    public static User toUser(UserDtoIn userDtoIn) {
         return User.builder()
                 .name(userDtoIn.getName())
                 .email(userDtoIn.getEmail())
                 .build();
     }
 
-    public List<UserDtoOut> toUserDtoOutList(List<User> userList) {
+    public static List<UserDtoOut> toUserDtoOutList(List<User> userList) {
         List<UserDtoOut> usersDtoOutList = new ArrayList<>();
         for (User user : userList) {
             usersDtoOutList.add(toUserDtoOut(user));

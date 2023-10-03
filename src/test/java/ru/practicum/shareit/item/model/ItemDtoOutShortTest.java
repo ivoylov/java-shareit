@@ -66,4 +66,14 @@ class ItemDtoOutShortTest {
         assertEquals(newItemDtoOutShort, itemDtoOutShort);
     }
 
+    @Test
+    void noArgsConstructor() {
+        ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort();
+        assertNull(newItemDtoOutShort.getName());
+        assertNull(newItemDtoOutShort.getAvailable());
+        assertNull(newItemDtoOutShort.getDescription());
+        assertNull(newItemDtoOutShort.getId());
+        assertNull(newItemDtoOutShort.getRequestId());
+    }
+
 }

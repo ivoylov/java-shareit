@@ -92,4 +92,13 @@ class CommentDtoOutTest {
         assertEquals(newCommentDtoOut, commentDtoOut);
     }
 
+    @Test
+    void noArgsConstructor() {
+        CommentDtoOut newCommentDtoOut = new CommentDtoOut();
+        assertNull(newCommentDtoOut.getCreated());
+        assertNull(newCommentDtoOut.getText());
+        assertNull(newCommentDtoOut.getId());
+        assertNull(newCommentDtoOut.getAuthorName());
+    }
+
 }

@@ -8,15 +8,12 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestMapperTest {
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void toRequest() {
@@ -43,8 +40,11 @@ class RequestMapperTest {
 
     @Test
     void toRequestDtoOutList() {
-        List<RequestDtoOut> requestList = new ArrayList<>();
-        assertEquals(requestList, RequestMapper.toListRequestDtoOut(new ArrayList<>()));
+        LocalDateTime created = LocalDateTime.now();
+        User user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>(), null);
+        Request request = new Request(1L, "description", user, created, new ArrayList<>());
+        RequestDtoOut requestDtoOut = new RequestDtoOut(1L, "description", created, Collections.emptyList());
+        assertEquals(List.of(requestDtoOut), RequestMapper.toListRequestDtoOut(List.of(request)));
     }
 
 }

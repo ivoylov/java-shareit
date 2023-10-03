@@ -9,10 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@UtilityClass
 public class ItemMapper {
 
-    public ItemDtoOutShort toItemDtoOutShort(Item item) {
+    public static ItemDtoOutShort toItemDtoOutShort(Item item) {
         return ItemDtoOutShort.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -22,7 +21,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public ItemDtoOut toItemDtoOut(Item item) {
+    public static ItemDtoOut toItemDtoOut(Item item) {
         return ItemDtoOut.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -35,7 +34,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public Item toItem(ItemDtoIn itemDtoIn) {
+    public static Item toItem(ItemDtoIn itemDtoIn) {
         return Item.builder()
                 .name(itemDtoIn.getName())
                 .description(itemDtoIn.getDescription())
@@ -43,14 +42,14 @@ public class ItemMapper {
                 .build();
     }
 
-    public List<ItemDtoOut> toListItemDtoOut(List<Item> items) {
+    public static List<ItemDtoOut> toListItemDtoOut(List<Item> items) {
         if (items == null || items.size() == 0) return Collections.emptyList();
         return items.stream()
                 .map(ItemMapper::toItemDtoOut)
                 .collect(Collectors.toList());
     }
 
-    public List<ItemDtoOutShort> toListItemDtoOutShort(List<Item> items) {
+    public static List<ItemDtoOutShort> toListItemDtoOutShort(List<Item> items) {
         if (items == null || items.size() == 0) return Collections.emptyList();
         return items.stream()
                 .map(ItemMapper::toItemDtoOutShort)

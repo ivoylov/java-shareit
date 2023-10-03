@@ -138,4 +138,17 @@ class ItemDtoOutTest {
         assertEquals(newItemDtoOut, itemDtoOut);
     }
 
+    @Test
+    void noArgsConstructor() {
+        ItemDtoOut newItemDtoOut = new ItemDtoOut();
+        assertNull(newItemDtoOut.getComments());
+        assertNull(newItemDtoOut.getAvailable());
+        assertNull(newItemDtoOut.getId());
+        assertNull(newItemDtoOut.getLastBooking());
+        assertNull(newItemDtoOut.getNextBooking());
+        assertNull(newItemDtoOut.getName());
+        assertNull(newItemDtoOut.getRequestId());
+        assertNull(newItemDtoOut.getDescription());
+    }
+
 }
