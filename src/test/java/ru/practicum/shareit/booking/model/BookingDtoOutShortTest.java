@@ -63,4 +63,11 @@ class BookingDtoOutShortTest {
         assertEquals(newBooking, bookingDtoOutShort);
     }
 
+    @Test
+    void noArgsConstructor() {
+        BookingDtoOutShort newBookingDtoOutShort = new BookingDtoOutShort();
+        assertNull(newBookingDtoOutShort.getBookerId());
+        assertNull(newBookingDtoOutShort.getId());
+    }
+
 }

@@ -81,4 +81,12 @@ class BookingDtoInTest {
         assertEquals(newBookingDtoIn, bookingDtoIn);
     }
 
+    @Test
+    void noArgsConstructor() {
+        BookingDtoIn newBookingDtoIn = new BookingDtoIn();
+        assertNull(newBookingDtoIn.getItemId());
+        assertNull(newBookingDtoIn.getStart());
+        assertNull(newBookingDtoIn.getEnd());
+    }
+
 }

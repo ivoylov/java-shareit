@@ -48,6 +48,12 @@ class BookingTest {
     }
 
     @Test
+    void getCurrentState() {
+        booking.setStart(LocalDateTime.now().minusHours(3));
+        assertEquals(State.CURRENT, booking.getState());
+    }
+
+    @Test
     void compareTo() {
         Booking comparedBooking = new Booking(2L, start, end, Status.APPROVED, booker, item);
         assertEquals(1, booking.compareTo(comparedBooking));

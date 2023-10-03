@@ -11,6 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.exception.booking.BookingAlreadyApprovedException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
+import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
@@ -20,6 +23,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,16 +78,78 @@ class BookingServiceTest {
     }
 
     @Test
+    void approved_thenThrowEntityNotFoundException() {
+        createdBooking.setStatus(Status.APPROVED);
+        Booking findBooking = new Booking(1L, start, end, Status.WAITING, booker, item);
+        Mockito.when(bookingRepository.findById(1L)).thenReturn(Optional.of(findBooking));
+        assertThrows(EntityNotFoundException.class, () -> bookingService.approved(1L, 1L, true));
+    }
+
+    @Test
+    void approved_thenThrowBookingAlreadyApprovedException() {
+        createdBooking.setStatus(Status.APPROVED);
+        Booking findBooking = new Booking(1L, start, end, Status.APPROVED, booker, item);
+        Mockito.when(bookingRepository.findById(1L)).thenReturn(Optional.of(findBooking));
+        assertThrows(BookingAlreadyApprovedException.class, () -> bookingService.approved(2L, 1L, true));
+    }
+
+    @Test
     void get() {
         Mockito.when(bookingRepository.findById(1L)).thenReturn(Optional.of(createdBooking));
         assertEquals(bookingService.get(1L, 1L), createdBooking);
     }
 
     @Test
-    void getAll() {
+    void getAllOwnerItems() {
+        createdBooking.setStatus(Status.APPROVED);
+        Mockito.when(bookingRepository.findAllByItem(item, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        Mockito.when(itemService.getOwnerItems(1L, PageRequest.of(0,1))).thenReturn(List.of(item));
+        List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.OWNER, 0, 1);
+        assertEquals(findBookings, List.of(createdBooking));
+    }
+
+
+    @Test
+    void getAll_thenFuture() {
         createdBooking.setStatus(Status.APPROVED);
         Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
         List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.BOOKER, 0, 1);
+        assertEquals(findBookings, List.of(createdBooking));
+    }
+
+    @Test
+    void getAll_thenCurrent() {
+        createdBooking.setStatus(Status.APPROVED);
+        createdBooking.setEnd(LocalDateTime.now().plusHours(2));
+        createdBooking.setStart(LocalDateTime.now().minusHours(1));
+        Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        List<Booking> findBookings = bookingService.getAll("CURRENT", 1L, Role.BOOKER, 0, 1);
+        assertEquals(findBookings, List.of(createdBooking));
+    }
+
+    @Test
+    void getAll_thenPast() {
+        createdBooking.setStatus(Status.APPROVED);
+        createdBooking.setStart(LocalDateTime.now().minusHours(2));
+        createdBooking.setEnd(LocalDateTime.now().minusHours(1));
+        Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        List<Booking> findBookings = bookingService.getAll("PAST", 1L, Role.BOOKER, 0, 1);
+        assertEquals(findBookings, List.of(createdBooking));
+    }
+
+    @Test
+    void getAll_thenRejected() {
+        createdBooking.setStatus(Status.REJECTED);
+        Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        List<Booking> findBookings = bookingService.getAll("REJECTED", 1L, Role.BOOKER, 0, 1);
+        assertEquals(findBookings, List.of(createdBooking));
+    }
+
+    @Test
+    void getAll_thenWaiting() {
+        createdBooking.setStatus(Status.WAITING);
+        Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
+        List<Booking> findBookings = bookingService.getAll("WAITING", 1L, Role.BOOKER, 0, 1);
         assertEquals(findBookings, List.of(createdBooking));
     }
 

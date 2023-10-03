@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.exception.RequestValidationException;
 import ru.practicum.shareit.exception.booking.BookingAlreadyApprovedException;
 import ru.practicum.shareit.exception.booking.BookingAvailableException;
 import ru.practicum.shareit.exception.booking.BookingTimeException;
