@@ -23,8 +23,7 @@ public class UserController {
     @PostMapping
     public UserDtoOut create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
         User user = UserMapper.toUser(userDtoIn);
-        UserDtoOut userDtoOut = UserMapper.toUserDtoOut(userService.create(user));
-        return userDtoOut;
+        return UserMapper.toUserDtoOut(userService.create(user));
     }
 
     @PatchMapping("/{id}")

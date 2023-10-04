@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,8 +15,10 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class RequestControllerTest {
@@ -24,16 +27,40 @@ class RequestControllerTest {
     private RequestController requestController;
     @Mock
     private RequestService requestService;
+    private Request request;
+    private RequestDtoIn requestDtoIn;
+    private RequestDtoOut requestDtoOut;
+
+    @BeforeEach
+    void setUp() {
+        LocalDateTime created = LocalDateTime.now();
+        requestDtoIn = new RequestDtoIn("description");
+        requestDtoOut = new RequestDtoOut(1L, "description", created, new ArrayList<>());
+        request = new Request(1L, "description", new User(), created, new ArrayList<>());
+    }
 
     @Test
     void created() {
-        LocalDateTime created = LocalDateTime.now();
-        RequestDtoIn requestDtoIn = new RequestDtoIn("description");
-        RequestDtoOut requestDtoOut = new RequestDtoOut(1L, "description", created, new ArrayList<>());
-        Request request = new Request(1L, "description", new User(), created, new ArrayList<>());
         Mockito.when(requestService.create(RequestMapper.toRequest(requestDtoIn), 1L)).thenReturn(request);
         assertEquals(requestController.created(requestDtoIn, 1L), requestDtoOut);
     }
 
+    @Test
+    void getAllUserRequests() {
+        Mockito.when(requestService.getUserRequests(any())).thenReturn(List.of(request));
+        assertEquals(requestController.getAllUserRequests(1L), List.of(requestDtoOut));
+    }
+
+    @Test
+    void getAllByAnotherUsers() {
+        Mockito.when(requestService.getWithPagination(any(), any(), any())).thenReturn(List.of(request));
+        assertEquals(requestController.getAllByAnotherUsers(0,1,1L), List.of(requestDtoOut));
+    }
+
+    @Test
+    void get() {
+        Mockito.when(requestService.get(any(), any())).thenReturn(request);
+        assertEquals(requestController.get(1L, 1L), requestDtoOut);
+    }
 
 }
