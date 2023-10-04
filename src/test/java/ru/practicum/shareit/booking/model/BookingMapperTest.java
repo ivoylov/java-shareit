@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.model;
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.item.model.Item;
@@ -9,12 +8,10 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDtoOutShort;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BookingMapperTest {
 

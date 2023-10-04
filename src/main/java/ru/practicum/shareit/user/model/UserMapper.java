@@ -1,7 +1,5 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.experimental.UtilityClass;
-
 import java.util.ArrayList;
 import java.util.List;
 

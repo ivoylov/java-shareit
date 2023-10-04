@@ -23,11 +23,11 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
@@ -108,13 +108,17 @@ class BookingServiceTest {
         assertEquals(findBookings, List.of(createdBooking));
     }
 
-
     @Test
     void getAll_thenFuture() {
         createdBooking.setStatus(Status.APPROVED);
         Mockito.when(bookingRepository.findAllByBookerId(1L, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
         List<Booking> findBookings = bookingService.getAll("FUTURE", 1L, Role.BOOKER, 0, 1);
         assertEquals(findBookings, List.of(createdBooking));
+    }
+
+    @Test
+    void getAll_thenThrowUnsupportedItemStatusException() {
+        assertThrows(UnsupportedItemStatusException.class, ()-> bookingService.getAll("UNSUPPORTED_STATUS", 1L, Role.BOOKER, 0, 1));
     }
 
     @Test

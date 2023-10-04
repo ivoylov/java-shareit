@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
-import ru.practicum.shareit.exception.entity.EntityNotFoundException;
-import ru.practicum.shareit.request.model.RequestDtoIn;
 import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.request.model.RequestDtoIn;
 import ru.practicum.shareit.request.model.RequestDtoOut;
 import ru.practicum.shareit.request.model.RequestMapper;
 

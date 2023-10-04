@@ -7,7 +7,8 @@ import ru.practicum.shareit.user.model.UserDtoOutShort;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class BookingDtoOutTest {
 

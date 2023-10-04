@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.exception.booking.BookingAvailableException;
+import ru.practicum.shareit.exception.booking.BookingTimeException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
+import ru.practicum.shareit.exception.item.ItemAvailableException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -52,6 +56,21 @@ public class Booking implements Comparable<Booking> {
         if (getEnd().isBefore(now)) return State.PAST;
         if (getStart().isAfter(now)) return State.FUTURE;
         return State.CURRENT;
+    }
+
+    public void check() {
+        if (!item.getAvailable()) {
+            throw new ItemAvailableException(getItem());
+        }
+        if (!isBookingTimeValid()) {
+            throw new BookingTimeException(this);
+        }
+        if (!item.isAvailableOnRequestDate(getStart(), getEnd())) {
+            throw new BookingAvailableException(this);
+        }
+        if (booker.getId().equals(item.getOwner().getId())) {
+            throw new EntityNotFoundException(this);
+        }
     }
 
     @Override

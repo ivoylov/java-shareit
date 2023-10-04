@@ -10,17 +10,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.Request;
-import ru.practicum.shareit.request.model.RequestDtoIn;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
-
-import javax.security.auth.message.callback.SecretKeyCallback;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)

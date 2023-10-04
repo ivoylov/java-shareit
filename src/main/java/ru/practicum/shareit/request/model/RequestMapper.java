@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request.model;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.model.User;
 

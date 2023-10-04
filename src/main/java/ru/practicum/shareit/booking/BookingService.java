@@ -10,10 +10,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.booking.BookingAlreadyApprovedException;
-import ru.practicum.shareit.exception.booking.BookingAvailableException;
-import ru.practicum.shareit.exception.booking.BookingTimeException;
 import ru.practicum.shareit.exception.entity.EntityNotFoundException;
-import ru.practicum.shareit.exception.item.ItemAvailableException;
 import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
@@ -42,7 +39,7 @@ public class BookingService {
         log.info("{}; create; {}", this.getClass(), booking);
         booking.setItem(itemService.get(itemId, bookerId));
         booking.setBooker(userService.get(bookerId));
-        check(booking);
+        booking.check();
         booking.setStatus(Status.WAITING);
         return bookingRepository.save(booking);
     }
@@ -120,22 +117,6 @@ public class BookingService {
                         .collect(Collectors.toList());
             default:
                 return bookings;
-        }
-    }
-
-    private void check(Booking booking) {
-        log.info("{}; check; {}", this.getClass(), booking);
-        if (!booking.getItem().getAvailable()) {
-            throw new ItemAvailableException(booking.getItem());
-        }
-        if (!booking.isBookingTimeValid()) {
-            throw new BookingTimeException(booking);
-        }
-        if (!booking.getItem().isAvailableOnRequestDate(booking.getStart(), booking.getEnd())) {
-            throw new BookingAvailableException(booking);
-        }
-        if (booking.getBooker().getId().equals(booking.getItem().getOwner().getId())) {
-            throw new EntityNotFoundException(booking);
         }
     }
 

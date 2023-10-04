@@ -2,9 +2,8 @@ package ru.practicum.shareit.user.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.request.model.RequestDtoIn;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserDtoInTest {
 
