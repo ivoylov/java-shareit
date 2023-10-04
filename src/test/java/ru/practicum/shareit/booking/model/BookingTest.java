@@ -2,6 +2,10 @@ package ru.practicum.shareit.booking.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.exception.booking.BookingAvailableException;
+import ru.practicum.shareit.exception.booking.BookingTimeException;
+import ru.practicum.shareit.exception.entity.EntityNotFoundException;
+import ru.practicum.shareit.exception.item.ItemAvailableException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
@@ -10,8 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BookingTest {
 
@@ -158,6 +161,34 @@ class BookingTest {
                 .booker(booker)
                 .build();
         assertEquals(booking, newBooking);
+    }
+
+    @Test
+    void check_thenThrowItemAvailableException() {
+        booking.getItem().setAvailable(false);
+        assertThrows(ItemAvailableException.class, () -> booking.check());
+    }
+
+    @Test
+    void check_thenThrowTimeException() {
+        booking.setStart(booking.getEnd().plusHours(1));
+        assertThrows(BookingTimeException.class, () -> booking.check());
+    }
+
+    @Test
+    void check_thenThrowBookingAvailableException() {
+        booking.setStart(LocalDateTime.now());
+        booking.setEnd(LocalDateTime.now().plusHours(1));
+        bookings.add(booking);
+        Booking newBooking = new Booking(2L, LocalDateTime.now(), LocalDateTime.now().plusHours(1), Status.WAITING, booker, item);
+        booking.setStart(LocalDateTime.now());
+        booking.setEnd(LocalDateTime.now().plusHours(1));
+        assertThrows(BookingAvailableException.class, newBooking::check);
+    }
+
+    @Test
+    void check_thenThrowEntityNotFoundException() {
+        assertThrows(EntityNotFoundException.class, () -> booking.check());
     }
 
 }
