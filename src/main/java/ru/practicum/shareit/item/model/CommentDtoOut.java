@@ -9,9 +9,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+<<<<<<<< HEAD:src/main/java/ru/practicum/shareit/item/model/CommentDtoOut.java
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDtoOut {
+========
+public class RequestDto {
+>>>>>>>> main:src/main/java/ru/practicum/shareit/item/model/RequestDto.java
     private Long id;
     private String text;
     private String authorName;

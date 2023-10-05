@@ -11,9 +11,13 @@ import java.util.List;
 
 @Data
 @Builder
+<<<<<<<< HEAD:src/main/java/ru/practicum/shareit/request/model/RequestDtoOut.java
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestDtoOut {
+========
+public class Request {
+>>>>>>>> main:src/main/java/ru/practicum/shareit/request/model/Request.java
     private Long id;
     private String description;
     private LocalDateTime created;
