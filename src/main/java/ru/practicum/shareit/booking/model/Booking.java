@@ -26,7 +26,7 @@ public class Booking implements Comparable<Booking> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="booking_id")
+    @Column(name = "booking_id")
     private Long id;
     @Column(name = "start_date")
     private LocalDateTime start;
@@ -37,11 +37,11 @@ public class Booking implements Comparable<Booking> {
     private Status status;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
-    @JoinColumn(name="booker_id", nullable = false)
+    @JoinColumn(name = "booker_id", nullable = false)
     private User booker;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
-    @JoinColumn(name="item_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     public boolean isBookingTimeValid() {

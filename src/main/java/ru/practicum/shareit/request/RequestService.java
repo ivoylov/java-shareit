@@ -41,7 +41,7 @@ public class RequestService {
             return Collections.emptyList();
         }
         return requests.stream()
-                .filter(r->!r.getUser().getId().equals(userId))
+                .filter(r -> !r.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
     }
 

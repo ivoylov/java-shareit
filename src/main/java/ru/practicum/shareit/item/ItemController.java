@@ -61,7 +61,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDtoOut createComment (@RequestBody @Validated(Create.class) CommentDtoIn commentDtoIn,
+    public CommentDtoOut createComment(@RequestBody @Validated(Create.class) CommentDtoIn commentDtoIn,
                                   @RequestHeader("X-Sharer-User-Id") Long bookerId,
                                   @PathVariable Long itemId) {
         Comment comment = CommentMapper.toComment(commentDtoIn);

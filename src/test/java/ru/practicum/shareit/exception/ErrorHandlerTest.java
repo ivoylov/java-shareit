@@ -10,7 +10,8 @@ import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.exception.item.ItemAvailableException;
 import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class ErrorHandlerTest {

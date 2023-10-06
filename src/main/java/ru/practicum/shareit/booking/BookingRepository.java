@@ -21,6 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     void update(Integer statusId, Long bookingId);
 
     List<Booking> findAllByBookerId(Long bookerId, PageRequest page);
+
     List<Booking> findAllByItem(Item item, PageRequest page);
 
 }

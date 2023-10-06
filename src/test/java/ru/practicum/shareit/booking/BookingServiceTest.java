@@ -118,7 +118,7 @@ class BookingServiceTest {
 
     @Test
     void getAll_thenThrowUnsupportedItemStatusException() {
-        assertThrows(UnsupportedItemStatusException.class, ()-> bookingService.getAll("UNSUPPORTED_STATUS", 1L, Role.BOOKER, 0, 1));
+        assertThrows(UnsupportedItemStatusException.class, () -> bookingService.getAll("UNSUPPORTED_STATUS", 1L, Role.BOOKER, 0, 1));
     }
 
     @Test

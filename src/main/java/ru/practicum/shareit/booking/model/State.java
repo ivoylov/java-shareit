@@ -9,10 +9,13 @@ public enum State {
     REJECTED(5),
     UNSUPPORTED_STATUS(6);
     final int id;
+
     State(int id) {
         this.id = id;
     }
+
     public int getId() {
         return this.id;
     }
+
 }

@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="items", schema = "public")
+@Table(name = "items", schema = "public")
 public class Item implements Comparable<Item> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +35,7 @@ public class Item implements Comparable<Item> {
     private Boolean available;
     @JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="owner_id", nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     @JsonIgnore
     @OneToMany(targetEntity = Booking.class, mappedBy = "item", fetch = FetchType.LAZY)
@@ -45,7 +45,7 @@ public class Item implements Comparable<Item> {
     private List<Comment> comments;
     @JsonIgnore
     @ManyToOne(targetEntity = Request.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="request_id")
+    @JoinColumn(name = "request_id")
     @Nullable
     private Request request;
 

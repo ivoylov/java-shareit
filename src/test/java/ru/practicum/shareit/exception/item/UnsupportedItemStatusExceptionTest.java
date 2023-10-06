@@ -3,7 +3,7 @@ package ru.practicum.shareit.exception.item;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.item.model.Item;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UnsupportedItemStatusExceptionTest {
 

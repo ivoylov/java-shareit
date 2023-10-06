@@ -34,7 +34,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static List<BookingDtoOut> toBookingDtoOutList (List<Booking> bookingList) {
+    public static List<BookingDtoOut> toBookingDtoOutList(List<Booking> bookingList) {
         if (bookingList == null || bookingList.size() == 0) return Collections.emptyList();
         return bookingList.stream()
                 .map(BookingMapper::toBookingDtoOut)

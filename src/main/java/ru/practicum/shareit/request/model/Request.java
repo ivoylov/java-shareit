@@ -22,15 +22,15 @@ import java.util.List;
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="request_id")
+    @Column(name = "request_id")
     private Long id;
     private String description;
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @NotNull
-    @Column(name="created_date")
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
     @JsonIgnore
     @OneToMany(targetEntity = Item.class, mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

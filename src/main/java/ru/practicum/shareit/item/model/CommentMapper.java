@@ -21,7 +21,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public static List<CommentDtoOut> toCommentDtoOutList (List<Comment> commentList) {
+    public static List<CommentDtoOut> toCommentDtoOutList(List<Comment> commentList) {
         if (commentList == null || commentList.isEmpty()) return Collections.emptyList();
         return commentList.stream().map(CommentMapper::toCommentDtoOut).collect(Collectors.toList());
     }

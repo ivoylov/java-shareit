@@ -18,16 +18,16 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="comment_id")
+    @Column(name = "comment_id")
     private Long id;
     @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class)
-    @JoinColumn(name="booker_id", nullable = false)
+    @JoinColumn(name = "booker_id", nullable = false)
     private User author;
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Item.class)
-    @JoinColumn(name="item_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
-    @Column(name="created_date")
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
-    @Column(name="comment_text")
+    @Column(name = "comment_text")
     private String text;
 }
