@@ -1,6 +1,8 @@
 package ru.practicum.shareit.exception.entity;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.exception.booking.BookingTimeException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 

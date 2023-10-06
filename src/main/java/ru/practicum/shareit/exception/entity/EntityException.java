@@ -9,11 +9,6 @@ public class EntityException extends RuntimeException {
         this.o = o;
     }
 
-    public EntityException(Object o, String message) {
-        this.o = o;
-        this.message = message;
-    }
-
     public Object getEntity() {
         return o;
     }

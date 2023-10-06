@@ -59,10 +59,6 @@ public class ItemService {
         return item;
     }
 
-    public Boolean isExist(Long id) {
-        return itemRepository.existsById(id);
-    }
-
     public Item delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
         itemRepository.deleteById(id);
