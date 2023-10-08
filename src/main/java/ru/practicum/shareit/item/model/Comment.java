@@ -30,4 +30,9 @@ public class Comment {
     private LocalDateTime createdDate;
     @Column(name = "comment_text")
     private String text;
+    @Override
+    public String toString() {
+        return String.format("id=%d, author=%s, item=%s, createdDate=%s, text=%s",
+                id, author, item, createdDate, text);
+    }
 }

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ItemAvailableExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewItem() {
         Item item = new Item();
         ItemAvailableException exception = new ItemAvailableException(item);
         assertEquals(item, exception.getEntity());

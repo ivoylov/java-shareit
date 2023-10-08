@@ -59,14 +59,14 @@ class ItemServiceTest {
     }
 
     @Test
-    void create() {
+    void create_thenExpectedEqualsWithCreatedItem() {
         Mockito.when(itemRepository.save(any())).thenReturn(createdItem);
         Mockito.when(requestService.get(any(), any())).thenReturn(null);
         assertEquals(itemService.create(itemToCreate, 1L, 1L), createdItem);
     }
 
     @Test
-    void update() {
+    void update_thenExpectedEqualsWithCreatedITem() {
         itemToCreate.setDescription("newDescription");
         itemToCreate.setName("newName");
         Mockito.when(itemRepository.findById(1L)).thenReturn(Optional.of(createdItem));
@@ -74,7 +74,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void get() {
+    void get_thenExpectedEqualsWithCreatedItem() {
         Mockito.when(itemRepository.findById(1L)).thenReturn(Optional.of(createdItem));
         assertEquals(itemService.get(1L, 1L), createdItem);
     }
@@ -86,13 +86,13 @@ class ItemServiceTest {
     }
 
     @Test
-    void delete() {
+    void delete_thenExpectedEqualsWithCreatedItemVariable() {
         Mockito.when(itemRepository.findById(1L)).thenReturn(Optional.of(createdItem));
         assertEquals(itemService.delete(1L), createdItem);
     }
 
     @Test
-    void searchByNameOrDescription() {
+    void searchByNameOrDescription_whenExpectedEqualsWithListOfCreatedItem() {
         Mockito
                 .when(itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable("name", "name", true))
                 .thenReturn(List.of(createdItem));
@@ -100,7 +100,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void getOwnerItems() {
+    void getOwnerItems_whenExpectedEqualsWithListOfCreatedItem() {
         Mockito
                 .when(itemRepository.findOwnerItems(1L, PageRequest.of(0,1)))
                 .thenReturn(List.of(createdItem));
@@ -108,7 +108,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void createComment() {
+    void createComment_thenExpectedEqualsWithComment() {
         User booker = new User(2L, "name", "mail", new ArrayList<>(), new ArrayList<>(), null);
         Booking booking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(1), Status.WAITING, booker, createdItem);
         Comment comment = new Comment(1L, booker, createdItem, LocalDateTime.now(), "comment");

@@ -16,41 +16,41 @@ class RequestDtoInTest {
     }
 
     @Test
-    void getDescription() {
+    void getDescription_whenExpectedDescriptionAsString() {
         assertEquals("description", requestDtoIn.getDescription());
     }
 
     @Test
-    void setDescription() {
+    void setDescription_whenExpectedNewDescriptionAsString() {
         requestDtoIn.setDescription("newDescription");
         assertEquals("newDescription", requestDtoIn.getDescription());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsWithNewRequestDtoIn() {
         RequestDtoIn newRequestDtoIn = new RequestDtoIn("description");
         assertEquals(newRequestDtoIn,  requestDtoIn);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedEqualsWithNewRequestDtoIn() {
         RequestDtoIn newRequestDtoIn = new RequestDtoIn("description");
         assertEquals(newRequestDtoIn.hashCode(), requestDtoIn.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedEqualsWithTargetString() {
         assertEquals("RequestDtoIn(description=description)", requestDtoIn.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_thenExpectedEqualsWithNewRequestDtoIn() {
         RequestDtoIn newRequestDtoIn = RequestDtoIn.builder().description("description").build();
         assertEquals(newRequestDtoIn, requestDtoIn);
     }
 
     @Test
-    void noArgsConstructor() {
+    void noArgsConstructor_thenExpectedEqualsWithNewRequestDtoIn() {
         RequestDtoIn newRequestDtoIn = new RequestDtoIn();
         assertNull(newRequestDtoIn.getDescription());
     }

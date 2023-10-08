@@ -62,7 +62,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void create() {
+    void create_whenExpectedCreatedBookingVariable() {
         Mockito.when(userService.get(1L)).thenReturn(booker);
         Mockito.when(itemService.get(1L, 1L)).thenReturn(item);
         Mockito.when(bookingRepository.save(Mockito.any())).thenReturn(createdBooking);
@@ -70,7 +70,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void approved() {
+    void approved_whenExpectedCreatedBookingWithApprovedTrue() {
         createdBooking.setStatus(Status.APPROVED);
         Booking findBooking = new Booking(1L, start, end, Status.WAITING, booker, item);
         Mockito.when(bookingRepository.findById(1L)).thenReturn(Optional.of(findBooking));
@@ -94,13 +94,13 @@ class BookingServiceTest {
     }
 
     @Test
-    void get() {
+    void get_whenExpectedCreatedBookingVariable() {
         Mockito.when(bookingRepository.findById(1L)).thenReturn(Optional.of(createdBooking));
         assertEquals(bookingService.get(1L, 1L), createdBooking);
     }
 
     @Test
-    void getAllOwnerItems() {
+    void getAllOwnerItems_whenExpectedListOfCreatedBooking() {
         createdBooking.setStatus(Status.APPROVED);
         Mockito.when(bookingRepository.findAllByItem(item, PageRequest.of(0,1).withSort(Sort.Direction.DESC, "id"))).thenReturn(List.of(createdBooking));
         Mockito.when(itemService.getOwnerItems(1L, PageRequest.of(0,1))).thenReturn(List.of(item));

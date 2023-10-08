@@ -42,13 +42,13 @@ class ItemControllerTest {
     }
 
     @Test
-    void create() {
+    void create_whenExpectedEqualsWithItemDtoOut() {
         Mockito.when(itemService.create(itemToCreate, 1L, 1L)).thenReturn(createdItem);
         assertEquals(itemController.create(itemDtoIn, 1L), itemDtoOut);
     }
 
     @Test
-    void update() {
+    void update_whenExpectedEqualsWithItemDtoOut() {
         Item newItem = new Item(1L, "newName", "newDescription", true, owner, null, null, null);
         itemDtoIn.setName("newName");
         itemDtoIn.setDescription("newDescription");
@@ -59,31 +59,31 @@ class ItemControllerTest {
     }
 
     @Test
-    void delete() {
+    void delete_thenExpectedEqualsWithItemDtoOut() {
         Mockito.when(itemService.delete(1L)).thenReturn(createdItem);
         assertEquals(itemController.delete(1L), itemDtoOut);
     }
 
     @Test
-    void getItems() {
+    void getItems_whenExpectedEqualsWithItemDtoOutList() {
         Mockito.when(itemService.getOwnerItems(1L, PageRequest.of(0, 1))).thenReturn(List.of(createdItem));
         assertEquals(itemController.getItems(1L, 0, 1), List.of(itemDtoOut));
     }
 
     @Test
-    void get() {
+    void get_whenExpectedEqualsWithItemDtoOut() {
         Mockito.when(itemService.get(1L, 1L)).thenReturn(createdItem);
         assertEquals(itemController.get(1L, 1L), itemDtoOut);
     }
 
     @Test
-    void searchByNameOrDescription() {
+    void searchByNameOrDescription_thenExpectedListOdItemDtoOut() {
         Mockito.when(itemService.searchByNameOrDescription("description")).thenReturn(List.of(createdItem));
         assertEquals(itemController.searchByNameOrDescription("description"), List.of(itemDtoOut));
     }
 
     @Test
-    void createComment() {
+    void createComment_whenExpectedEqualsWithCommentDtoOut() {
         LocalDateTime created = LocalDateTime.now();
         CommentDtoIn commentDtoIn = new CommentDtoIn("commentText");
         CommentDtoOut commentDtoOut = new CommentDtoOut(1L, "commentText", "bookerName", created);

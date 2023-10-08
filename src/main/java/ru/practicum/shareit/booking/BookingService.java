@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ import static ru.practicum.shareit.user.model.Role.BOOKER;
 @Service
 @AllArgsConstructor
 @Slf4j
-@Validated
 public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final ItemService itemService;
     private final UserService userService;
 
+    @Transactional
     public Booking create(Booking booking, Long bookerId, Long itemId) {
         log.info("{}; create; {}", this.getClass(), booking);
         booking.setItem(itemService.get(itemId, bookerId));
@@ -60,6 +61,7 @@ public class BookingService {
         return booking;
     }
 
+    @Transactional
     public Booking get(Long bookingId, Long userId) {
         log.info("{}; get; bookingId={}, userId={}", this.getClass(), bookingId, userId);
         Booking booking = bookingRepository
@@ -71,6 +73,7 @@ public class BookingService {
         return booking;
     }
 
+    @Transactional
     public List<Booking> getAll(String stateString, Long userId, Role role, Integer from, Integer size) {
         log.info("{}; getAll; state={}, userId={}, role={}", this.getClass(), stateString, userId, role);
         State state = State.valueOf(stateString.toUpperCase());

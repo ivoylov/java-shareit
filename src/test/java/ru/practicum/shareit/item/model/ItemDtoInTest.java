@@ -15,58 +15,58 @@ class ItemDtoInTest {
     }
 
     @Test
-    void getName() {
+    void getName_whenExpectedNameAsString() {
         assertEquals("name", itemDtoIn.getName());
     }
 
     @Test
-    void getDescription() {
+    void getDescription_whenExpectedDescriptionAsString() {
         assertEquals("description", itemDtoIn.getDescription());
     }
 
     @Test
-    void getAvailable() {
+    void getAvailable_thenExpectedTrue() {
         assertEquals(true, itemDtoIn.getAvailable());
     }
 
     @Test
-    void setName() {
+    void setName_whenExpectedNewNameAsString() {
         itemDtoIn.setName("newName");
         assertEquals("newName", itemDtoIn.getName());
     }
 
     @Test
-    void setDescription() {
+    void setDescription_whenExpectedNewDescriptionAsString() {
         itemDtoIn.setDescription("newDescription");
         assertEquals("newDescription", itemDtoIn.getDescription());
     }
 
     @Test
-    void setAvailable() {
+    void setAvailable_whenExpectedFalse() {
         itemDtoIn.setAvailable(false);
         assertEquals(false, itemDtoIn.getAvailable());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsWithNewItemDtoIn() {
         ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true, 1L);
         assertEquals(itemDtoIn, newItemDtoIn);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedEqualsWithNEwItemDtoIn() {
         ItemDtoIn newItemDtoIn = new ItemDtoIn("name", "description", true, 1L);
         assertEquals(itemDtoIn.hashCode(), newItemDtoIn.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "ItemDtoIn(name=name, description=description, available=true, requestId=1)";
         assertEquals(targetString, itemDtoIn.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedEqualsFieldsWithNewItemDtoIn() {
         ItemDtoIn newItemDtoIn = ItemDtoIn.builder()
                 .name("name")
                 .description("description")

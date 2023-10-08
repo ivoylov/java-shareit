@@ -37,31 +37,31 @@ class UserServiceTest {
     }
 
     @Test
-    void create() {
+    void create_thenExpectedEqualsWithUserVariable() {
         Mockito.when(userRepository.save(any())).thenReturn(user);
         assertEquals(userService.create(user), user);
     }
 
     @Test
-    void update() {
+    void update_thenExpectedEqualsWithUserVariable() {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
         assertEquals(userService.update(user, 1L), user);
     }
 
     @Test
-    void get() {
+    void get_thenExpectedEqualsWithUserVariable() {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
         assertEquals(userService.get(1L), user);
     }
 
     @Test
-    void getAll() {
+    void getAll_thenExpectedEqualsWithUserVariable() {
         Mockito.when(userRepository.findAll()).thenReturn(List.of(user));
         assertEquals(List.of(user), userService.getAll());
     }
 
     @Test
-    void delete() {
+    void delete_thenExpectedEqualsWithUserVariable() {
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(user));
         assertEquals(userService.delete(1L), user);
     }

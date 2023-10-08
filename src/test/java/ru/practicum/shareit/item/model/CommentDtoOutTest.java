@@ -20,70 +20,70 @@ class CommentDtoOutTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, commentDtoOut.getId());
     }
 
     @Test
-    void getText() {
+    void getText_whenExpectedTextAsString() {
         assertEquals("text", commentDtoOut.getText());
     }
 
     @Test
-    void getAuthorName() {
+    void getAuthorName_whenExpectedAuthorAsString() {
         assertEquals("author", commentDtoOut.getAuthorName());
     }
 
     @Test
-    void getCreated() {
+    void getCreated_whenExpectedCreatedDateVariable() {
         assertEquals(createdDate, commentDtoOut.getCreated());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         commentDtoOut.setId(2L);
         assertEquals(2L, commentDtoOut.getId());
     }
 
     @Test
-    void setText() {
+    void setText_whenExpectedNewTextAsString() {
         commentDtoOut.setText("newText");
         assertEquals("newText", commentDtoOut.getText());
     }
 
     @Test
-    void setAuthorName() {
+    void setAuthorName_whenExpectedNewAuthorAsString() {
         commentDtoOut.setAuthorName("newAuthor");
         assertEquals("newAuthor", commentDtoOut.getAuthorName());
     }
 
     @Test
-    void setCreated() {
+    void setCreated_whenExpectedCreatedDateVariablePlus2Hours() {
         LocalDateTime newDate = LocalDateTime.now().plusHours(1);
         commentDtoOut.setCreated(newDate);
         assertEquals(newDate, commentDtoOut.getCreated());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualNewCommentDtoOut() {
         CommentDtoOut  newCommentDtoOut = new CommentDtoOut(1L, "text", "author", createdDate);
         assertEquals(newCommentDtoOut, commentDtoOut);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameHashCodeWithNewCommentDtoOut() {
         CommentDtoOut  newCommentDtoOut = new CommentDtoOut(1L, "text", "author", createdDate);
         assertEquals(newCommentDtoOut.hashCode(), commentDtoOut.hashCode());
     }
 
     @Test
-    void testToString() {
-        CommentDtoOut  newCommentDtoOut = new CommentDtoOut(1L, "text", "author", createdDate);
-        assertEquals(newCommentDtoOut.toString(), commentDtoOut.toString());
+    void testToString_whenExpected() {
+        String targetString = "CommentDtoOut(id=1, text=text, authorName=author, created=" + commentDtoOut.getCreated() + ")";
+        assertEquals(targetString, commentDtoOut.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedEqualsWithNewCommentDtoOut() {
         CommentDtoOut newCommentDtoOut = CommentDtoOut.builder()
                 .id(1L)
                 .text("text")
@@ -94,7 +94,7 @@ class CommentDtoOutTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void noArgsConstructor_whenExpectedNullFields() {
         CommentDtoOut newCommentDtoOut = new CommentDtoOut();
         assertNull(newCommentDtoOut.getCreated());
         assertNull(newCommentDtoOut.getText());

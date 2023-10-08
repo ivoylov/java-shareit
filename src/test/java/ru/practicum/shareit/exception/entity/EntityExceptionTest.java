@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EntityExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewItemAndNewUser() {
         Item item = new Item();
         User user = new User();
         EntityException itemEntityException = new EntityException(item);

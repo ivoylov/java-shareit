@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserTest {
 
     @Test
-    void updateUser() {
+    void updateUser_thenExpectedNewNameAndNewEmailAsString() {
         User user = new User(1L, "name", "email@mail.ru", null, null, null);
         User newUser = new User(1L, "newName", "newEmail@mail.ru", null, null, null);
         user.updateUser(newUser);
@@ -16,7 +16,7 @@ class UserTest {
     }
 
     @Test
-    void builder() {
+    void testBuilder_thenExpectedEqualsFieldsWithUser() {
         User user = User.builder()
                 .id(1L)
                 .email("email@mail.ru")

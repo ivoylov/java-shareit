@@ -54,13 +54,13 @@ class BookingControllerTest {
     }
 
     @Test
-    void create() {
+    void create_whenExpectedBookingDtoInVariable() {
         Mockito.when(bookingService.create(bookingToCreate, 1L, 2L)).thenReturn(createdBooking);
         assertEquals(bookingController.create(bookingDtoIn, 1L), bookingDtoOut);
     }
 
     @Test
-    void approved() {
+    void approved_whenExpectedBookingDtoOutWithTrueApproved() {
         bookingDtoOut.setStatus(Status.APPROVED);
         createdBooking.setStatus(Status.APPROVED);
         Mockito.when(bookingService.approved(1L, 1L, true)).thenReturn(createdBooking);
@@ -68,19 +68,19 @@ class BookingControllerTest {
     }
 
     @Test
-    void get() {
+    void get_whenExpectedBookingDtoOut() {
         Mockito.when(bookingService.get(1L, 1L)).thenReturn(createdBooking);
         assertEquals(bookingController.get(1L, 1L), bookingDtoOut);
     }
 
     @Test
-    void getAllForBooker() {
+    void getAllForBooker_whenExpectedListOdBookingDtoOut() {
         Mockito.when(bookingService.getAll("WAITING", 1L, Role.BOOKER, 0, 1)).thenReturn(List.of(createdBooking));
         assertEquals(bookingController.getAllForBooker("WAITING", 1L, 0, 1), List.of(bookingDtoOut));
     }
 
     @Test
-    void getAllForOwner() {
+    void getAllForOwner_whenExpectedListOfBookingDtoOut() {
         Mockito.when(bookingService.getAll("WAITING", 1L, Role.OWNER, 0, 1)).thenReturn(List.of(createdBooking));
         assertEquals(bookingController.getAllForOwner("WAITING", 1L, 0, 1), List.of(bookingDtoOut));
     }

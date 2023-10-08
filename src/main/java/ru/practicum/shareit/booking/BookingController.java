@@ -48,7 +48,7 @@ public class BookingController {
         return BookingMapper.toBookingDtoOut(bookingService.get(bookingId, userId));
     }
 
-    @GetMapping()
+    @GetMapping
     public List<BookingDtoOut> getAllForBooker(@RequestParam(defaultValue = "ALL") String state,
                                                @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId,
                                                @RequestParam(defaultValue = "0") @Min(0) Integer from,

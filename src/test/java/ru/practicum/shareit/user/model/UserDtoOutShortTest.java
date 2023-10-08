@@ -9,7 +9,7 @@ class UserDtoOutShortTest {
     private UserDtoOutShort userDtoOutShort;
 
     @Test
-    void noArgsConstructor() {
+    void noArgsConstructor_thenExpectedNull() {
         userDtoOutShort = new UserDtoOutShort();
         assertNull(userDtoOutShort.getId());
     }

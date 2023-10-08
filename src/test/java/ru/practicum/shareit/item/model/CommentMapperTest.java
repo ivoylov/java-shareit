@@ -29,21 +29,22 @@ class CommentMapperTest {
     }
 
     @Test
-    void toComment() {
+    void toComment_whenExpectedEqualsWithNewCommentDtoIn() {
         CommentDtoIn commentDtoIn = new CommentDtoIn(text);
         comment = new Comment(null, null, null, null, text);
         assertEquals(comment, CommentMapper.toComment(commentDtoIn));
     }
 
     @Test
-    void toCommentDtoOut() {
+    void toCommentDtoOut_whenExpectedEqualsWithNewComment() {
         comment = new Comment(1L, author, item, created, text);
         assertEquals(commentDtoOut, CommentMapper.toCommentDtoOut(comment));
     }
 
     @Test
-    void toCommentDtoOutList() {
+    void toCommentDtoOutList_whenExpectedEqualsWithNewComment() {
         comment = new Comment(1L, author, item, created, text);
         assertEquals(List.of(commentDtoOut), CommentMapper.toCommentDtoOutList(List.of(comment)));
     }
+
 }

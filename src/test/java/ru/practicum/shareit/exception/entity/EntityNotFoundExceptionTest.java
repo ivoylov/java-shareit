@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EntityNotFoundExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewItem() {
         Item item = new Item();
         EntityNotFoundException ex = new EntityNotFoundException(item);
         assertEquals(item, ex.getEntity());

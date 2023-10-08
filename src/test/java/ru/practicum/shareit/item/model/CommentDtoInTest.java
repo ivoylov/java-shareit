@@ -18,37 +18,36 @@ class CommentDtoInTest {
     }
 
     @Test
-    void getText() {
+    void getText_whenExpectedTextVariable() {
         assertEquals(text, commentDtoIn.getText());
     }
 
     @Test
-    void setText() {
+    void setText_whenExpectedNewTextAsString() {
         String newText = "newText";
         commentDtoIn.setText(newText);
         assertEquals(newText, commentDtoIn.getText());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedObjectsEquals() {
         CommentDtoIn newCommentDtoIn = new CommentDtoIn("text");
         assertEquals(newCommentDtoIn, commentDtoIn);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameHashCode() {
         CommentDtoIn newCommentDtoIn = new CommentDtoIn("text");
         assertEquals(newCommentDtoIn.hashCode(), commentDtoIn.hashCode());
     }
 
     @Test
-    void testToString() {
-        CommentDtoIn newCommentDtoIn = new CommentDtoIn("text");
-        assertEquals(newCommentDtoIn.toString(), commentDtoIn.toString());
+    void testToString_whenExpectedCommentDtoInTextText () {
+        assertEquals("CommentDtoIn(text=text)", commentDtoIn.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedCorrectFields() {
         CommentDtoIn newCommentDtoIn = CommentDtoIn.builder()
                 .text(text)
                 .build();
@@ -56,7 +55,7 @@ class CommentDtoInTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void testNoArgsConstructor_whenExpectedAllNullFields() {
         CommentDtoIn newCommentDtoIn = new CommentDtoIn();
         assertNull(newCommentDtoIn.getText());
     }

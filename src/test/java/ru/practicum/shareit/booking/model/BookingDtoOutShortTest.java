@@ -16,47 +16,47 @@ class BookingDtoOutShortTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, bookingDtoOutShort.getId());
     }
 
     @Test
-    void getBookerId() {
+    void getBookerId_whenExpected2() {
         assertEquals(2L, bookingDtoOutShort.getBookerId());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected3() {
         bookingDtoOutShort.setId(3L);
         assertEquals(3L, bookingDtoOutShort.getId());
     }
 
     @Test
-    void setBookerId() {
+    void setBookerId_whenExpected4() {
         bookingDtoOutShort.setBookerId(4L);
         assertEquals(4L, bookingDtoOutShort.getBookerId());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedObjectsToBeEquals() {
         BookingDtoOutShort newBooking = new BookingDtoOutShort(1L, 2L);
         assertEquals(newBooking, bookingDtoOutShort);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameHashCode() {
         BookingDtoOutShort newBooking = new BookingDtoOutShort(1L, 2L);
         assertEquals(newBooking.hashCode(), bookingDtoOutShort.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "BookingDtoOutShort(id=1, bookerId=2)";
         assertEquals(targetString, bookingDtoOutShort.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedCorrectFields() {
         BookingDtoOutShort newBooking = BookingDtoOutShort.builder()
                 .id(1L)
                 .bookerId(2L)
@@ -65,7 +65,7 @@ class BookingDtoOutShortTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void testNoArgsConstructor_whenExpectedNullFields() {
         BookingDtoOutShort newBookingDtoOutShort = new BookingDtoOutShort();
         assertNull(newBookingDtoOutShort.getBookerId());
         assertNull(newBookingDtoOutShort.getId());

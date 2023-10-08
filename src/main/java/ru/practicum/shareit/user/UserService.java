@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Formatter;
 import java.util.List;
@@ -17,10 +18,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public User create(User user) {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User update(User updatedUser, Long userId) {
         User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(updatedUser));
         updatedUser.setId(userId);
@@ -31,16 +34,19 @@ public class UserService {
         return userRepository.findById(userToUpdate.getId()).orElse(null);
     }
 
+    @Transactional
     public User get(Long id) {
         log.info(this.getClass() + "запрос на получение пользователя с id={}", id);
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));
     }
 
+    @Transactional
     public List<User> getAll() {
         log.info(this.getClass() + "Отдан список всех пользователей");
         return userRepository.findAll();
     }
 
+    @Transactional
     public User delete(Long id) {
         log.info("Запрос на удаление пользователя с id={}", id);
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Пользователь с id %d не найден", id)));

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BookingTimeExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewBooking() {
         Booking booking = new Booking();
         BookingTimeException exception = new BookingTimeException(booking);
         assertEquals(booking, exception.getEntity());

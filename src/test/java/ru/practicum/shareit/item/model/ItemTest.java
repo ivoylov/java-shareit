@@ -30,7 +30,7 @@ class ItemTest {
     }
 
     @Test
-    void update() {
+    void update_whenExpectedAsStringNewNameAndNewDescription() {
         Item newItem = item = new Item(1L, "newName", "newDescription", false, owner, bookings, comments, null);
         item.update(newItem);
         assertFalse(item.getAvailable());
@@ -39,7 +39,7 @@ class ItemTest {
     }
 
     @Test
-    void isAvailableOnRequestDate() {
+    void isAvailableOnRequestDate_whenExpectedTrue() {
         LocalDateTime start = LocalDateTime.now().plusHours(1);
         LocalDateTime end = start.plusHours(2);
         assertTrue(item.isAvailableOnRequestDate(start, end));
@@ -56,119 +56,119 @@ class ItemTest {
     }
 
     @Test
-    void getLastBooking() {
+    void getLastBooking_thenExpectedNull() {
         assertNull(item.getLastBooking());
     }
 
     @Test
-    void getNextBooking() {
+    void getNextBooking_thenExpectedNull() {
         assertNull(item.getNextBooking());
     }
 
     @Test
-    void compareTo() {
+    void compareTo_thenExpectedLessThenZero() {
         Item newItem = new Item(2L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(-1, item.compareTo(newItem));
     }
 
     @Test
-    void testToString() {
+    void testToString_thenExpectedTargetString() {
         String targetString = "id=1, name=name, description=description, available=true, owner=id=1, name=name, email=mail@email.ru";
         assertEquals(targetString, item.toString());
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, item.getId());
     }
 
     @Test
-    void getName() {
+    void getName_whenExpectedNameAsString() {
         assertEquals("name", item.getName());
     }
 
     @Test
-    void getDescription() {
+    void getDescription_whenExpectedDescriptionAsString() {
         assertEquals("description", item.getDescription());
     }
 
     @Test
-    void getAvailable() {
+    void getAvailable_thenTrue() {
         assertTrue(item.getAvailable());
     }
 
     @Test
-    void getOwner() {
+    void getOwner_thenExpectedEqualsWithOwnerVariable() {
         assertEquals(owner, item.getOwner());
     }
 
     @Test
-    void getBookings() {
+    void getBookings_whenExpectedEmptyList() {
         assertEquals(new ArrayList<>(), item.getBookings());
     }
 
     @Test
-    void getComments() {
+    void getComments_whenExpectedEmptyList() {
         assertEquals(new ArrayList<>(), item.getComments());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         item.setId(2L);
         assertEquals(2L, item.getId());
     }
 
     @Test
-    void setName() {
+    void setName_whenExpectedNewNameAsString() {
         item.setName("newName");
         assertEquals("newName", item.getName());
     }
 
     @Test
-    void setDescription() {
+    void setDescription_whenExpectedNewDescriptionAsString() {
         item.setDescription("newDescription");
         assertEquals("newDescription", item.getDescription());
     }
 
     @Test
-    void setAvailable() {
+    void setAvailable_whenFalse() {
         item.setAvailable(false);
         assertFalse(item.getAvailable());
     }
 
     @Test
-    void setOwner() {
+    void setOwner_whenExpectedEqualsWithNewOwner() {
         User newOwner = new User(2L, "newName", "newMail@email.ru", items, bookings, new ArrayList<>());
         item.setOwner(newOwner);
         assertEquals(newOwner, item.getOwner());
     }
 
     @Test
-    void setBookings() {
+    void setBookings_whenExpectedNull() {
         item.setBookings(null);
         assertNull(item.getBookings());
     }
 
     @Test
-    void setComments() {
+    void setComments_whenExpectedNull() {
         item.setComments(null);
         assertNull(item.getComments());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedNull() {
         Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(item, newItem);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_thenExpectedEqualsWithNewItem() {
         Item newItem = new Item(1L, "name", "description", true, owner, bookings, comments, null);
         assertEquals(newItem.hashCode(), item.hashCode());
     }
 
     @Test
-    void builder() {
+    void testBuilder_thenExpectedEqualsFieldsWithNewItem() {
         Item newItem = Item.builder()
                 .id(1L)
                 .name("name")

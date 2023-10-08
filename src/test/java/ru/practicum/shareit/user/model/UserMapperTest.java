@@ -18,19 +18,19 @@ class UserMapperTest {
     }
 
     @Test
-    void toShortUserDtoOut() {
+    void toShortUserDtoOut_thenExpectedEqualsUserWithShortUserDtoOut() {
         UserDtoOutShort shortUserDtoOut = new UserDtoOutShort(1L);
         assertEquals(shortUserDtoOut, UserMapper.toShortUserDtoOut(user));
     }
 
     @Test
-    void toUserDtoOut() {
+    void toUserDtoOut_thenExpectedEqualsUserWithUserDtoOut() {
         UserDtoOut userDtoOut = new UserDtoOut(1L, "name", "email");
         assertEquals(userDtoOut, UserMapper.toUserDtoOut(user));
     }
 
     @Test
-    void toUser() {
+    void toUser_thenExpectedEqualsFieldsWithUserFieldsAndUserDtoInFields() {
         user.setId(null);
         UserDtoIn userDtoIn = new UserDtoIn("name", "email");
         assertEquals(user.getId(), UserMapper.toUser(userDtoIn).getId());
@@ -39,7 +39,7 @@ class UserMapperTest {
     }
 
     @Test
-    void toUserDtoOutList() {
+    void toUserDtoOutList_thenExpectedEqualsWithListOfUserDtoOut() {
         UserDtoOut userDtoOut = new UserDtoOut(1L, "name", "email");
         assertEquals(List.of(userDtoOut), UserMapper.toUserDtoOutList(List.of(user)));
     }

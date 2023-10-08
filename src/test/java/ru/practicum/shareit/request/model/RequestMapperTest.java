@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class RequestMapperTest {
 
     @Test
-    void toRequest() {
+    void toRequest_thenExpectedEqualsWithRequestFields() {
         RequestDtoIn requestDtoIn = new RequestDtoIn("какое-то описание");
         Request request = RequestMapper.toRequest(requestDtoIn);
         assertNull(request.getId());
@@ -26,7 +26,7 @@ class RequestMapperTest {
     }
 
     @Test
-    void toRequestDtoOut() {
+    void toRequestDtoOut_thenExpectedEqualsWithRequestFields() {
         List<Item> items = new ArrayList<>();
         List<Booking> bookings = new ArrayList<>();
         LocalDateTime created = LocalDateTime.now();
@@ -39,7 +39,7 @@ class RequestMapperTest {
     }
 
     @Test
-    void toRequestDtoOutList() {
+    void toRequestDtoOutList_thenExpectedEqualsWithRequestFields() {
         LocalDateTime created = LocalDateTime.now();
         User user = new User(1L, "name", "user@mail.ru", new ArrayList<>(), new ArrayList<>(), null);
         Request request = new Request(1L, "description", user, created, new ArrayList<>());

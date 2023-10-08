@@ -56,13 +56,13 @@ class UserControllerTest {
     }
 
     @Test
-    void create() {
+    void create_thenExpectedEqualsWithUserDtoOutVariable() {
         Mockito.when(userService.create(any())).thenReturn(user);
         assertEquals(userDtoOut, userController.create(userDtoIn));
     }
 
     @Test
-    void update() {
+    void update_thenExpectedEqualsWithUserDtoOutVariable() {
         user.setName("newName");
         user.setEmail("newEmail");
         Mockito.when(userService.update(any(), any())).thenReturn(user);
@@ -72,19 +72,19 @@ class UserControllerTest {
     }
 
     @Test
-    void delete() {
+    void delete_thenExpectedEqualsWithUserDtoOutVariable() {
         Mockito.when(userService.delete(1L)).thenReturn(user);
         assertEquals(userDtoOut, userController.delete(1L));
     }
 
     @Test
-    void get() {
+    void get_thenExpectedEqualsWithUserDtoOutVariable() {
         Mockito.when(userService.get(1L)).thenReturn(user);
         assertEquals(userDtoOut, userController.get(1L));
     }
 
     @Test
-    void getAll() {
+    void getAll_thenExpectedEqualsWithUserDtoOutVariable() {
         Mockito.when(userService.getAll()).thenReturn(List.of(user));
         assertEquals(List.of(userDtoOut), userController.getAll());
     }

@@ -8,6 +8,7 @@ import ru.practicum.shareit.exception.entity.EntityNotFoundException;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.UserService;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +22,7 @@ public class RequestService {
     private RequestRepository requestRepository;
     private UserService userService;
 
+    @Transactional
     public Request create(Request request, Long userId) {
         log.info("{}, create; {}, userId={}", this.getClass(), request, userId);
         request.setUser(userService.get(userId));
@@ -28,11 +30,13 @@ public class RequestService {
         return requestRepository.save(request);
     }
 
+    @Transactional
     public List<Request> getUserRequests(Long userId) {
         userService.get(userId);
         return requestRepository.getRequestByUserId(userId);
     }
 
+    @Transactional
     public List<Request> getWithPagination(Integer from, Integer size, Long userId) {
         List<Request> requests;
         try {
@@ -45,6 +49,7 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Request get(Long requestId, Long userId) {
         userService.get(userId);
         return requestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("requestId=" + requestId));

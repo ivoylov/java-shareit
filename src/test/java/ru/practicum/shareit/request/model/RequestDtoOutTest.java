@@ -21,68 +21,32 @@ class RequestDtoOutTest {
     }
 
     @Test
-    void getId() {
+    void getId_thenExpected1() {
         assertEquals(1L, requestDtoOut.getId());
     }
 
     @Test
-    void getDescription() {
+    void getDescription_thenExpectedDescriptionAsString() {
         assertEquals("description", requestDtoOut.getDescription());
     }
 
     @Test
-    void getCreated() {
+    void getCreated_thenExpectedEqualsWithCreatedVariable() {
         assertEquals(created, requestDtoOut.getCreated());
     }
 
     @Test
-    void getItems() {
+    void getItems_thenExpectedEmptyList() {
         assertEquals(Collections.emptyList(), requestDtoOut.getItems());
     }
 
     @Test
-    void noArgsConstructor() {
+    void noArgsConstructor_thenExpectedNullFields() {
         RequestDtoOut newRequestDtoOut = new RequestDtoOut();
         assertNull(newRequestDtoOut.getId());
         assertNull(newRequestDtoOut.getItems());
         assertNull(newRequestDtoOut.getDescription());
         assertNull(newRequestDtoOut.getCreated());
     }
-
-/*    @Test
-    void setId() {
-    }
-
-    @Test
-    void setDescription() {
-    }
-
-    @Test
-    void setCreated() {
-    }
-
-    @Test
-    void setItems() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
-    }
-
-    @Test
-    void builder() {
-    }*/
 
 }

@@ -40,25 +40,25 @@ class RequestControllerTest {
     }
 
     @Test
-    void created() {
+    void created_whenExpectedEqualsWithRequestDtoOut() {
         Mockito.when(requestService.create(RequestMapper.toRequest(requestDtoIn), 1L)).thenReturn(request);
         assertEquals(requestController.created(requestDtoIn, 1L), requestDtoOut);
     }
 
     @Test
-    void getAllUserRequests() {
+    void getAllUserRequests_whenExpectedEqualsWithListOfRequestDtoOut() {
         Mockito.when(requestService.getUserRequests(any())).thenReturn(List.of(request));
         assertEquals(requestController.getAllUserRequests(1L), List.of(requestDtoOut));
     }
 
     @Test
-    void getAllByAnotherUsers() {
+    void getAllByAnotherUsers_whenExpectedEqualsWithListOfRequestDtoOut() {
         Mockito.when(requestService.getWithPagination(any(), any(), any())).thenReturn(List.of(request));
         assertEquals(requestController.getAllByAnotherUsers(0,1,1L), List.of(requestDtoOut));
     }
 
     @Test
-    void get() {
+    void get_whenExpectedRequestDtoOut() {
         Mockito.when(requestService.get(any(), any())).thenReturn(request);
         assertEquals(requestController.get(1L, 1L), requestDtoOut);
     }

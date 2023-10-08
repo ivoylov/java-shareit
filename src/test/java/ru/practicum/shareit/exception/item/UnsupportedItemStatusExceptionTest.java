@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UnsupportedItemStatusExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewItem() {
         Item item = new Item();
         UnsupportedItemStatusException exception = new UnsupportedItemStatusException(item);
         assertEquals(item, exception.getEntity());

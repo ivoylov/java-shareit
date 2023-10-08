@@ -40,29 +40,29 @@ class BookingTest {
     }
 
     @Test
-    void isBookingTimeValid() {
+    void isBookingTimeValid_whenExpectedTrue() {
         assertTrue(booking.isBookingTimeValid());
     }
 
     @Test
-    void getState() {
+    void getState_whenExpectedState() {
         assertEquals(State.FUTURE, booking.getState());
     }
 
     @Test
-    void getCurrentState() {
+    void getCurrentState_whenExpectedCurrent() {
         booking.setStart(LocalDateTime.now().minusHours(3));
         assertEquals(State.CURRENT, booking.getState());
     }
 
     @Test
-    void compareTo() {
+    void compareTo_whenExpected1() {
         Booking comparedBooking = new Booking(2L, start, end, Status.APPROVED, booker, item);
         assertEquals(1, booking.compareTo(comparedBooking));
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "id=1, start=" + start + ", end=" + end + ", status=APPROVED, " +
                 "booker=id=1, name=name, email=email@mail.ru, " +
                 "item=id=1, name=itemName, description=description, available=true, " +
@@ -71,87 +71,87 @@ class BookingTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, booking.getId());
     }
 
     @Test
-    void getStart() {
+    void getStart_whenExpectedStartVariable() {
         assertEquals(start, booking.getStart());
     }
 
     @Test
-    void getEnd() {
+    void getEnd_whenExpectedEndVariable() {
         assertEquals(end, booking.getEnd());
     }
 
     @Test
-    void getStatus() {
+    void getStatus_whenExpectedApproved() {
         assertEquals(Status.APPROVED, booking.getStatus());
     }
 
     @Test
-    void getBooker() {
+    void getBooker_whenExpectedBookerVariable() {
         assertEquals(booker, booking.getBooker());
     }
 
     @Test
-    void getItem() {
+    void getItem_whenExpectedItemVariable() {
         assertEquals(item, booking.getItem());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         booking.setId(2L);
         assertEquals(2L, booking.getId());
     }
 
     @Test
-    void setStart() {
+    void setStart_whenExpectedStartVariablePlus1Hour() {
         booking.setStart(start.plusHours(1));
         assertEquals(start.plusHours(1), booking.getStart());
     }
 
     @Test
-    void setEnd() {
+    void setEnd_whenExpectedEndVariablePlus3Hours() {
         booking.setEnd(end.plusHours(3));
         assertEquals(end.plusHours(3), booking.getEnd());
     }
 
     @Test
-    void setStatus() {
+    void setStatus_whenExpectedRejected() {
         booking.setStatus(Status.REJECTED);
         assertEquals(Status.REJECTED, booking.getStatus());
     }
 
     @Test
-    void setBooker() {
+    void setBooker_whenExpectedNewUser() {
         User newUser = new User();
         booking.setBooker(newUser);
         assertEquals(newUser, booking.getBooker());
     }
 
     @Test
-    void setItem() {
+    void setItem_whenExpectedNewItem() {
         Item newItem = new Item();
         booking.setItem(newItem);
         assertEquals(newItem, booking.getItem());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsBookings() {
         Booking newBooking = new Booking(1L, start, end, Status.APPROVED, booker, item);
         assertEquals(booking, newBooking);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameHashCode() {
         Booking newBooking = new Booking(1L, start, end, Status.APPROVED, booker, item);
         assertEquals(newBooking.hashCode(), booking.hashCode());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedCorrectFields() {
         Booking newBooking = Booking.builder()
                 .id(1L)
                 .status(Status.APPROVED)

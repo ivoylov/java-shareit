@@ -28,87 +28,87 @@ class BookingDtoOutTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, bookingDtoOut.getId());
     }
 
     @Test
-    void getStart() {
+    void getStart_whenExpectedStartVariable() {
         assertEquals(start, bookingDtoOut.getStart());
     }
 
     @Test
-    void getEnd() {
+    void getEnd_whenExpectedEndVariable() {
         assertEquals(end, bookingDtoOut.getEnd());
     }
 
     @Test
-    void getStatus() {
+    void getStatus_whenExpectedWaitingStatus() {
         assertEquals(Status.WAITING, bookingDtoOut.getStatus());
     }
 
     @Test
-    void getBooker() {
+    void getBooker_whenExpectedUserDtoOutShortVariable() {
         assertEquals(userDtoOutShort, bookingDtoOut.getBooker());
     }
 
     @Test
-    void getItem() {
+    void getItem_whenExpectedItemDtoOutShortVariable() {
         assertEquals(itemDtoOutShort, bookingDtoOut.getItem());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2L() {
         bookingDtoOut.setId(2L);
         assertEquals(2L, bookingDtoOut.getId());
     }
 
     @Test
-    void setStart() {
+    void setStart_whenExpectedStartVariablePlus5Hours() {
         bookingDtoOut.setStart(start.plusHours(5));
         assertEquals(start.plusHours(5), bookingDtoOut.getStart());
     }
 
     @Test
-    void setEnd() {
+    void setEnd_WhenExpectedEndVariablePlus5Hours() {
         bookingDtoOut.setEnd(end.plusHours(5));
         assertEquals(end.plusHours(5), bookingDtoOut.getEnd());
     }
 
     @Test
-    void setStatus() {
+    void setStatus_whenExpectedApprovedStatus() {
         bookingDtoOut.setStatus(Status.APPROVED);
         assertEquals(Status.APPROVED, bookingDtoOut.getStatus());
     }
 
     @Test
-    void setBooker() {
+    void setBooker_whenExpectedNewUserDtoOutShort() {
         UserDtoOutShort newUserDtoOutShort = new UserDtoOutShort(2L);
         bookingDtoOut.setBooker(newUserDtoOutShort);
         assertEquals(newUserDtoOutShort, bookingDtoOut.getBooker());
     }
 
     @Test
-    void setItem() {
+    void setItem_whenExpectedNewItemDtoOutShort() {
         ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(2L, "newItemName", 1L, "description", true);
         bookingDtoOut.setItem(newItemDtoOutShort);
         assertEquals(newItemDtoOutShort, bookingDtoOut.getItem());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsObjects() {
         BookingDtoOut newBooking = new BookingDtoOut(1L, start, end, Status.WAITING, userDtoOutShort, itemDtoOutShort);
         assertEquals(newBooking, bookingDtoOut);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameHashCode() {
         BookingDtoOut newBooking = new BookingDtoOut(1L, start, end, Status.WAITING, userDtoOutShort, itemDtoOutShort);
         assertEquals(newBooking.hashCode(), bookingDtoOut.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "BookingDtoOut(id=1, start=" + start + ", end=" + end + ", status=WAITING, " +
                 "booker=UserDtoOutShort(id=1), " +
                 "item=ItemDtoOutShort(id=1, name=itemName, requestId=1, description=description, available=true))";
@@ -116,7 +116,7 @@ class BookingDtoOutTest {
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedCorrectFields() {
         BookingDtoOut newBookingDtoOut = BookingDtoOut.builder()
                 .id(1L)
                 .status(Status.WAITING)
@@ -129,7 +129,7 @@ class BookingDtoOutTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void testNoArgsConstructor_whenExpectedNullFields() {
         BookingDtoOut newBookingDtoOut = new BookingDtoOut();
         assertNull(newBookingDtoOut.getItem());
         assertNull(newBookingDtoOut.getStatus());

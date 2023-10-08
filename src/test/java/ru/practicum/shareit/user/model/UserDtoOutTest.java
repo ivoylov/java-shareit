@@ -15,57 +15,58 @@ class UserDtoOutTest {
     }
 
     @Test
-    void getId() {
+    void getId_thenExpected1() {
         assertEquals(1L, userDtoOut.getId());
     }
 
     @Test
-    void getName() {
+    void getName_thenExpectedNameAsString() {
         assertEquals("name", userDtoOut.getName());
     }
 
     @Test
-    void getEmail() {
+    void getEmail_thenExpectedEmailAsString() {
         assertEquals("email", userDtoOut.getEmail());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         userDtoOut.setId(2L);
         assertEquals(2L, userDtoOut.getId());
     }
 
     @Test
-    void setName() {
+    void setName_thenExpectedNewNameAsString() {
         userDtoOut.setName("newName");
         assertEquals("newName", userDtoOut.getName());
     }
 
     @Test
-    void setEmail() {
+    void setEmail_thenExpectedNewEmailAsString() {
         userDtoOut.setEmail("newEmail");
         assertEquals("newEmail", userDtoOut.getEmail());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_thenExpectedEqualsWithNewUserDotOut() {
         UserDtoOut newUserDtoOut = new UserDtoOut(1L, "name", "email");
         assertEquals(newUserDtoOut, userDtoOut);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_thenExpectedSameHashCodeWithNewUserDtoOut() {
         UserDtoOut newUserDtoOut = new UserDtoOut(1L, "name", "email");
         assertEquals(newUserDtoOut.hashCode(), userDtoOut.hashCode());
     }
 
     @Test
-    void testToString() {
-        assertEquals("UserDtoOut(id=1, name=name, email=email)", userDtoOut.toString());
+    void testToString_thenExpectedEqualsWithTargetString() {
+        String targetString = "UserDtoOut(id=1, name=name, email=email)";
+        assertEquals(targetString, userDtoOut.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_thenExpectedEqualsWithNewUserDtoOut() {
         UserDtoOut newUserDtoOut = UserDtoOut.builder().id(1L).name("name").email("email").build();
         assertEquals(newUserDtoOut, userDtoOut);
     }

@@ -44,26 +44,26 @@ class BookingMapperTest {
     }
 
     @Test
-    void toShortBookingDtoOut() {
+    void toShortBookingDtoOut_whenExpectedCorrectShortBooking() {
         BookingDtoOutShort shortBooking = new BookingDtoOutShort(1L, 1L);
         Booking booking = new Booking(1L, LocalDateTime.now(), LocalDateTime.now(), Status.WAITING, booker, new Item());
         assertEquals(shortBooking, BookingMapper.toBookingDtoOutShort(booking));
     }
 
     @Test
-    void toBooking() {
+    void toBooking_whenExpectedCorrectBooking() {
         BookingDtoIn bookingDtoIn = new BookingDtoIn(1L, start, end);
         Booking bookingToTranslate = new Booking(null, start, end, null, null, null);
         assertEquals(bookingToTranslate, BookingMapper.toBooking(bookingDtoIn));
     }
 
     @Test
-    void toBookingDtoOut() {
+    void toBookingDtoOut_whenExpectedBooingDtoOutVariable() {
         assertEquals(bookingDtoOut, BookingMapper.toBookingDtoOut(booking));
     }
 
     @Test
-    void toBookingDtoOutList() {
+    void toBookingDtoOutList_whenExpectedListWithBookingDtoOut() {
         assertEquals(new ArrayList<>(List.of(bookingDtoOut)), BookingMapper.toBookingDtoOutList(List.of(booking)));
     }
 

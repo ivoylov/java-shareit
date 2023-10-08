@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RoleTest {
 
     @Test
-    void getId() {
+    void getId_whenExpectedEqualsBooker0Owner1() {
         Role owner = Role.OWNER;
         Role booker = Role.BOOKER;
         assertEquals(0, booker.getId());

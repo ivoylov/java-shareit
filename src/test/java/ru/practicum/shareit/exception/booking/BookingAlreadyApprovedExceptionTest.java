@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BookingAlreadyApprovedExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewBooking() {
         Booking booking = new Booking();
         BookingAlreadyApprovedException bookingException = new BookingAlreadyApprovedException(booking);
         assertEquals(booking, bookingException.getEntity());

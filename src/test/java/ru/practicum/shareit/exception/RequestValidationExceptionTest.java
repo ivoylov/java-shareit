@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RequestValidationExceptionTest {
 
     @Test
-    void getEntity() {
+    void getEntity_whenExpectedNewRequest() {
         Request request = new Request();
         RequestValidationException exception = new RequestValidationException(request);
         assertEquals(request, exception.getEntity());

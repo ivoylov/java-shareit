@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ErrorResponseTest {
 
     @Test
-    void getError() {
+    void getError_whenExpectedErrorMessageString() {
         ErrorResponse errorResponse = new ErrorResponse("error message");
         assertEquals("error message", errorResponse.getError());
     }

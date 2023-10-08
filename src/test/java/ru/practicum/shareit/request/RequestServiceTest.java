@@ -50,7 +50,7 @@ class RequestServiceTest {
     }
 
     @Test
-    void create() {
+    void create_thenExpectedEqualsRequestVariable() {
         Request requestToCreate = new Request(null, "description", new User(), null, new ArrayList<>());
         Mockito.when(requestRepository.save(any())).thenReturn(request);
         Mockito.when(userService.get(any())).thenReturn(user);
@@ -58,19 +58,19 @@ class RequestServiceTest {
     }
 
     @Test
-    void getUserRequests() {
+    void getUserRequests_thenExpectedEqualsWithListOfRequest() {
         Mockito.when(requestRepository.getRequestByUserId(1L)).thenReturn(List.of(request));
         assertEquals(List.of(request), requestService.getUserRequests(1L));
     }
 
     @Test
-    void getWithPagination() {
+    void getWithPagination_thenExpectedEmptyList() {
         Mockito.when(requestRepository.findAll(PageRequest.of(0,1))).thenReturn(Page.empty());
         assertEquals(Collections.emptyList(), requestService.getWithPagination(0, 1, 1L));
     }
 
     @Test
-    void get() {
+    void get_thenExpectedEqualsWithRequest() {
         Mockito.when(requestRepository.findById(1L)).thenReturn(Optional.of(request));
         assertEquals(requestService.get(1L, 1L), request);
     }

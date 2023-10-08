@@ -25,96 +25,96 @@ class ItemDtoOutTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, itemDtoOut.getId());
     }
 
     @Test
-    void getName() {
+    void getName_whenExpectedNameAsString() {
         assertEquals("name", itemDtoOut.getName());
     }
 
     @Test
-    void getDescription() {
+    void getDescription_whenExpectedDescriptionAsString() {
         assertEquals("description", itemDtoOut.getDescription());
     }
 
     @Test
-    void getAvailable() {
+    void getAvailable_whenExpectedTrue() {
         assertTrue(itemDtoOut.getAvailable());
     }
 
     @Test
-    void getLastBooking() {
+    void getLastBooking_whenExpectedEqualsWithLastBookingVariable() {
         assertEquals(lastBooking, itemDtoOut.getLastBooking());
     }
 
     @Test
-    void getNextBooking() {
+    void getNextBooking_whenExpectedEqualsWithNextBookingVariable() {
         assertEquals(nextBooking, itemDtoOut.getNextBooking());
     }
 
     @Test
-    void getComments() {
+    void getComments_whenExpectedEqualsWithCommentsVariable() {
         assertEquals(comments, itemDtoOut.getComments());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         itemDtoOut.setId(2L);
         assertEquals(2L, itemDtoOut.getId());
     }
 
     @Test
-    void setName() {
+    void setName_whenExpectedNewNameAsString() {
         itemDtoOut.setName("newName");
         assertEquals("newName", itemDtoOut.getName());
     }
 
     @Test
-    void setDescription() {
+    void setDescription_whenExpectedNewDescriptionAsString() {
         itemDtoOut.setDescription("newDescription");
         assertEquals("newDescription", itemDtoOut.getDescription());
     }
 
     @Test
-    void setAvailable() {
+    void setAvailable_whenExpectedFalse() {
         itemDtoOut.setAvailable(false);
         assertFalse(itemDtoOut.getAvailable());
     }
 
     @Test
-    void setLastBooking() {
+    void setLastBooking_whenExpectedNull() {
         itemDtoOut.setLastBooking(null);
         assertNull(itemDtoOut.getLastBooking());
     }
 
     @Test
-    void setNextBooking() {
+    void setNextBooking_whenExpectedNull() {
         itemDtoOut.setNextBooking(null);
         assertNull(itemDtoOut.getNextBooking());
     }
 
     @Test
-    void setComments() {
+    void setComments_whenExpectedNull() {
         itemDtoOut.setComments(null);
         assertNull(itemDtoOut.getComments());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsWithNewItemDtoOut() {
         ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments, 1L);
         assertEquals(newItemDtoOut, itemDtoOut);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedEqualsWithNewItemDtoOut() {
         ItemDtoOut newItemDtoOut = new ItemDtoOut(1L, "name", "description", true, lastBooking, nextBooking, comments, 1L);
         assertEquals(newItemDtoOut.hashCode(), itemDtoOut.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "ItemDtoOut(id=1, name=name, description=description, available=true, " +
                 "lastBooking=BookingDtoOutShort(id=1, bookerId=1), " +
                 "nextBooking=BookingDtoOutShort(id=2, bookerId=2), " +
@@ -124,7 +124,7 @@ class ItemDtoOutTest {
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedEqualsWithNewItemDtoOut() {
         ItemDtoOut newItemDtoOut = ItemDtoOut.builder()
                 .id(1L)
                 .name("name")
@@ -139,7 +139,7 @@ class ItemDtoOutTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void testNoArgsConstructor_whenExpectedEqualsWithNewItemDtoOut() {
         ItemDtoOut newItemDtoOut = new ItemDtoOut();
         assertNull(newItemDtoOut.getComments());
         assertNull(newItemDtoOut.getAvailable());

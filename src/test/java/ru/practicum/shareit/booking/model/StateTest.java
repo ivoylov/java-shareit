@@ -17,7 +17,7 @@ class StateTest {
     private final State unsupportedStatus = State.UNSUPPORTED_STATUS;
 
     @Test
-    void getId() {
+    void getId_whenExpectedCorrectIdForAllState() {
         assertEquals(0, all.getId());
         assertEquals(1, current.getId());
         assertEquals(2, past.getId());
@@ -28,13 +28,13 @@ class StateTest {
     }
 
     @Test
-    void values() {
+    void values_whenExpectedEqualsArrays() {
         State[] values = {all, current, past, future, waiting, rejected, unsupportedStatus};
         assertEquals(0, Arrays.compare(values, State.values()));
     }
 
     @Test
-    void valueOf() {
+    void valueOf_whenExpectedEqualsState() {
         assertEquals(State.ALL, State.valueOf("ALL"));
         assertEquals(State.CURRENT, State.valueOf("CURRENT"));
         assertEquals(State.PAST, State.valueOf("PAST"));

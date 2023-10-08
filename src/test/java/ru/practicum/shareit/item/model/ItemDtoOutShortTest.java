@@ -16,47 +16,47 @@ class ItemDtoOutShortTest {
     }
 
     @Test
-    void getId() {
+    void getId_whenExpected1() {
         assertEquals(1L, itemDtoOutShort.getId());
     }
 
     @Test
-    void getName() {
+    void getName_whenExpectedNameAsString() {
         assertEquals("name", itemDtoOutShort.getName());
     }
 
     @Test
-    void setId() {
+    void setId_whenExpected2() {
         itemDtoOutShort.setId(2L);
         assertEquals(2L, itemDtoOutShort.getId());
     }
 
     @Test
-    void setName() {
+    void setName_whenExpectedNewNameAsString() {
         itemDtoOutShort.setName("newName");
         assertEquals("newName", itemDtoOutShort.getName());
     }
 
     @Test
-    void testEquals() {
+    void testEquals_whenExpectedEqualsWithNEwItemDtoOutShort() {
         ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name", 1L, "description", true);
         assertEquals(newItemDtoOutShort, itemDtoOutShort);
     }
 
     @Test
-    void testHashCode() {
+    void testHashCode_whenExpectedSameCodeWithNewItemDtoOutShort() {
         ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort(1L, "name", 1L, "description", true);
         assertEquals(newItemDtoOutShort.hashCode(), itemDtoOutShort.hashCode());
     }
 
     @Test
-    void testToString() {
+    void testToString_whenExpectedTargetString() {
         String targetString = "ItemDtoOutShort(id=1, name=name, requestId=1, description=description, available=true)";
         assertEquals(targetString, itemDtoOutShort.toString());
     }
 
     @Test
-    void builder() {
+    void testBuilder_whenExpectedEqualsFieldsWithNewItemDtoOutShort() {
         ItemDtoOutShort newItemDtoOutShort = ItemDtoOutShort.builder()
                 .id(1L)
                 .name("name")
@@ -68,7 +68,7 @@ class ItemDtoOutShortTest {
     }
 
     @Test
-    void noArgsConstructor() {
+    void noArgsConstructor_whenExpectedAllNullFields() {
         ItemDtoOutShort newItemDtoOutShort = new ItemDtoOutShort();
         assertNull(newItemDtoOutShort.getName());
         assertNull(newItemDtoOutShort.getAvailable());

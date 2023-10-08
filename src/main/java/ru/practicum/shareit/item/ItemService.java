@@ -14,6 +14,7 @@ import ru.practicum.shareit.request.RequestService;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Formatter;
@@ -30,6 +31,7 @@ public class ItemService {
     private final UserService userService;
     private final RequestService requestService;
 
+    @Transactional
     public Item create(Item item, Long ownerId, Long requestId) {
         log.info(this.getClass() + "; запрос на создание {}", item);
         item.setOwner(userService.get(ownerId));
@@ -37,6 +39,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
+    @Transactional
     public Item update(Item updatedItem, Long itemId, Long ownerId) {
         log.info(this.getClass() + " запрос на обновление {}", updatedItem);
         User user = new User();
@@ -50,6 +53,7 @@ public class ItemService {
         return itemRepository.findById(itemToUpdate.getId()).orElse(null);
     }
 
+    @Transactional
     public Item get(Long id, Long userId) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
@@ -59,6 +63,7 @@ public class ItemService {
         return item;
     }
 
+    @Transactional
     public Item delete(Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(new Formatter().format("Item с id=%d не найден", id)));
         itemRepository.deleteById(id);
@@ -66,11 +71,13 @@ public class ItemService {
         return item;
     }
 
+    @Transactional
     public List<Item> searchByNameOrDescription(String text) {
         String formText = text.toLowerCase();
         return itemRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailable(formText, formText, true);
     }
 
+    @Transactional
     public List<Item> getOwnerItems(Long ownerId, PageRequest pageRequest) {
         List<Item> items = itemRepository.findOwnerItems(ownerId, pageRequest);
         while (items.size() == 0 && pageRequest.getPageNumber() > -1) {
@@ -80,6 +87,7 @@ public class ItemService {
         return items;
     }
 
+    @Transactional
     private void checkOwner(Item item) {
         Item checkedItem = itemRepository.findById(item.getId()).orElseThrow(() -> new EntityNotFoundException(item));
         Long itemOwnerId = item.getOwner().getId();
@@ -89,6 +97,7 @@ public class ItemService {
         }
     }
 
+    @Transactional
     public Comment createComment(Comment comment, Long bookerId, Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException(itemId));

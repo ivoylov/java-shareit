@@ -17,50 +17,50 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class ErrorHandlerTest {
 
     @Test
-    void handlerUserAlreadyExistException() {
+    void handlerUserAlreadyExistException_whenThrowUserAlreadyExistException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerUserAlreadyExistException(new UserAlreadyExistException("")).getError());
     }
 
     @Test
-    void handlerBookingAlreadyApprovedException() {
+    void handlerBookingAlreadyApprovedException_thenThrowBookingAlreadyApprovedException() {
         ErrorHandler handler = new ErrorHandler();
         handler.handlerBookingAlreadyApprovedException(new BookingAlreadyApprovedException(""));
         assertNull(handler.handlerBookingAlreadyApprovedException(new BookingAlreadyApprovedException("")).getError());
     }
 
     @Test
-    void handlerBookingAvailableException() {
+    void handlerBookingAvailableException_whenThrowBookingAvailableException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerBookingAvailableException(new BookingAvailableException("")).getError());
     }
 
     @Test
-    void handlerBookingTimeException() {
+    void handlerBookingTimeException_whenThrowBookingTimeException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerBookingTimeException(new BookingTimeException("")).getError());
     }
 
     @Test
-    void handlerItemAvailableException() {
+    void handlerItemAvailableException_thenThrowItemAvailableException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerItemAvailableException(new ItemAvailableException("")).getError());
     }
 
     @Test
-    void handlerRequestValidationException() {
+    void handlerRequestValidationException_thenThrowRequestValidationException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerRequestValidationException(new RequestValidationException("")).getError());
     }
 
     @Test
-    void handlerEntityNotFoundException() {
+    void handlerEntityNotFoundException_thenThrowEntityNotFoundException() {
         ErrorHandler handler = new ErrorHandler();
         assertNull(handler.handlerEntityNotFoundException(new EntityNotFoundException("")).getError());
     }
 
     @Test
-    void handlerUnsupportedStatusException() {
+    void handlerUnsupportedStatusException_whenExpectedUnsupportedStatus() {
         ErrorHandler handler = new ErrorHandler();
         assertEquals("Unknown state: UNSUPPORTED_STATUS", handler.handlerUnsupportedStatusException(new UnsupportedItemStatusException("")).getError());
     }
