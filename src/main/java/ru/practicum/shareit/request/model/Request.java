@@ -35,6 +35,7 @@ public class Request {
     @JsonIgnore
     @OneToMany(targetEntity = Item.class, mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items;
+
     @Override
     public String toString() {
         return String.format("id=%d, description=%s, user=%s, createdDate=%s, items=%s",

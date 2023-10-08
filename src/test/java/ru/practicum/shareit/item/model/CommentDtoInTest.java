@@ -42,7 +42,7 @@ class CommentDtoInTest {
     }
 
     @Test
-    void testToString_whenExpectedCommentDtoInTextText () {
+    void testToString_whenExpectedCommentDtoInTextText() {
         assertEquals("CommentDtoIn(text=text)", commentDtoIn.toString());
     }
 
