@@ -1,43 +1,44 @@
---DROP TABLE bookings;
---DROP TABLE comments;
---DROP TABLE requests;
---DROP TABLE items;
---DROP TABLE shareit_user;
+DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS items;
+DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS shareit_user;
 
 CREATE TABLE IF NOT EXISTS shareit_user (
-    id bigint not null generated always as identity primary key,
-    name varchar(255) not null,
-    email varchar not null unique
-);
-
-CREATE TABLE IF NOT EXISTS items (
-     id bigint not null generated always as identity primary key,
-     name varchar (255) not null,
-     description varchar (512),
-     available boolean not null,
-     owner_id bigint not null references shareit_user(id)
-);
-
-CREATE TABLE IF NOT EXISTS bookings (
-    id bigint not null generated always as identity primary key,
-    start_date timestamp without time zone not null,
-    end_date timestamp without time zone not null,
-    item_id bigint not null references items(id),
-    owner_id bigint not null references shareit_user(id),
-    booker_id bigint not null references shareit_user(id),
-    status int
+    user_id bigint not null generated always as identity primary key,
+    user_name varchar(255) not null,
+    user_email varchar not null unique
 );
 
 CREATE TABLE IF NOT EXISTS requests (
-    id bigint not null generated always as identity primary key,
-    description varchar(255),
-    requestor_id bigint not null references shareit_user(id)
+    request_id bigint not null generated always as identity primary key,
+    user_id bigint not null REFERENCES shareit_user(user_id),
+    created_date TIMESTAMP WITHOUT TIME ZONE not null,
+    description VARCHAR(255) not null
+);
+
+CREATE TABLE IF NOT EXISTS items (
+    item_id bigint not null generated always as identity primary key,
+    owner_id bigint not null REFERENCES shareit_user(user_id),
+    item_name varchar (255) not null,
+    item_description varchar (512),
+    item_available boolean not null,
+    request_id bigint REFERENCES requests(request_id)
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+    booking_id bigint not null generated always as identity primary key,
+    booker_id bigint not null REFERENCES shareit_user(user_id),
+    item_id bigint not null REFERENCES items(item_id),
+    start_date TIMESTAMP WITHOUT TIME ZONE,
+    end_date TIMESTAMP WITHOUT TIME ZONE,
+    status int
 );
 
 CREATE TABLE IF NOT EXISTS comments (
-    id bigint not null generated always as identity primary key,
-    text varchar(255),
-    item_id bigint not null references items(id),
-    author_id bigint not null references shareit_user(id),
-    created_date timestamp without time zone not null
+    comment_id bigint not null generated always as identity primary key,
+    booker_id bigint not null REFERENCES shareit_user(user_id),
+    item_id bigint not null REFERENCES items(item_id),
+    created_date TIMESTAMP WITHOUT TIME ZONE,
+    comment_text VARCHAR(255) not null
 );

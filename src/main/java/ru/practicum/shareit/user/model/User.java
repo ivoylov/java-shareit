@@ -1,19 +1,23 @@
 package ru.practicum.shareit.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.Request;
 
 import javax.persistence.*;
-
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "shareit_user")
+@Table(name = "shareit_user", schema = "public")
 public class User {
 
     public static final int MAX_NAME_LENGTH = 20;
@@ -21,10 +25,35 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "user_name", nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(name = "user_email", nullable = false, unique = true)
     private String email;
+    @JsonIgnore
+    @OneToMany(targetEntity = Item.class, mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<Item> items;
+    @JsonIgnore
+    @OneToMany(targetEntity = Booking.class, mappedBy = "booker", fetch = FetchType.LAZY)
+    private List<Booking> bookings;
+    @JsonIgnore
+    @OneToMany(targetEntity = Request.class, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Request> requests;
+
+    public void updateUser(User updatedUser) {
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isBlank()) {
+            this.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getName() != null && !updatedUser.getName().isBlank()) {
+            this.setName(updatedUser.getName());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("id=%d, name=%s, email=%s",
+                id, name, email);
+    }
 
 }
