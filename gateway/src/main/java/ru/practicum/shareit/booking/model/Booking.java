@@ -68,7 +68,7 @@ public class Booking implements Comparable<Booking> {
             throw new BookingAvailableException(this);
         }
         if (booker.getId().equals(item.getOwner().getId())) {
-            throw new EntityNotFoundException(this);
+            throw new EntityNotFoundException(this.toString());
         }
     }
 
@@ -77,6 +77,7 @@ public class Booking implements Comparable<Booking> {
         return booking.getId().compareTo(this.id);
     }
 
+    @Override
     public String toString() {
         return String.format("id=%d, start=%s, end=%s, status=%s, booker=%s, item=%s",
                 id, start, end, status, booker, item);

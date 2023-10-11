@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
@@ -18,33 +19,38 @@ import java.util.Collection;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserClient userClient;
 
     @PostMapping
-    public UserDtoOut create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
+    public ResponseEntity<Object> create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
         User user = UserMapper.toUser(userDtoIn);
-        return UserMapper.toUserDtoOut(userService.create(user));
+        return userClient.createUser(userDtoIn);
+        //return UserMapper.toUserDtoOut(userService.create(user));
     }
 
     @PatchMapping("/{id}")
-    public UserDtoOut update(@Validated(Update.class) @RequestBody UserDtoIn userDto, @PathVariable @Min(1) Long id) {
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDtoOut(userService.update(user, id));
+    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDtoIn userDtoIn, @PathVariable @Min(1) Long userId) {
+        User user = UserMapper.toUser(userDtoIn);
+        return userClient.updateUser(userId, userDtoIn);
+        //return UserMapper.toUserDtoOut(userService.update(user, id));
     }
 
     @DeleteMapping("/{id}")
-    public UserDtoOut delete(@PathVariable @Min(1) Long id) {
-        return UserMapper.toUserDtoOut(userService.delete(id));
+    public ResponseEntity<Object> delete(@PathVariable @Min(1) Long id) {
+        return userClient.removeUser(id);
+        //return UserMapper.toUserDtoOut(userService.delete(id));
     }
 
     @GetMapping("/{id}")
-    public UserDtoOut get(@PathVariable @Min(1) Long id) {
-        return UserMapper.toUserDtoOut(userService.get(id));
+    public ResponseEntity<Object>  get(@PathVariable @Min(1) Long id) {
+        return userClient.findUserById(id);
+        //return UserMapper.toUserDtoOut(userService.get(id));
     }
 
     @GetMapping
-    public Collection<UserDtoOut> getAll() {
-        return UserMapper.toUserDtoOutList(userService.getAll());
+    public ResponseEntity<Object>  getAll() {
+        return userClient.findAllUsers();
+        //return UserMapper.toUserDtoOutList(userService.getAll());
     }
 
 }
