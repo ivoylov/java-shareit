@@ -2,6 +2,7 @@ package ru.practicum.shareit.request;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
@@ -21,34 +22,38 @@ import java.util.List;
 @RequestMapping("/requests")
 public class RequestController {
 
-    private final RequestService requestService;
+    private final RequestClient requestClient;
 
     @PostMapping
-    RequestDtoOut created(@Validated(Create.class) @RequestBody RequestDtoIn requestDtoIn,
-                          @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+    public ResponseEntity<Object> created(@Validated(Create.class) @RequestBody RequestDtoIn requestDtoIn,
+                                   @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
         Request request = RequestMapper.toRequest(requestDtoIn);
-        return RequestMapper.toRequestDtoOut(requestService.create(request, userId));
+        return requestClient.createRequest(requestDtoIn, userId);
+        //return RequestMapper.toRequestDtoOut(requestService.create(request, userId));
     }
 
     // GET /requests — получить список СВОИХ запросов вместе с данными об ответах на них.
     @GetMapping
-    List<RequestDtoOut> getAllUserRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
-        return RequestMapper.toListRequestDtoOut(requestService.getUserRequests(userId));
+    public ResponseEntity<Object> getAllUserRequests(@RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
+        return requestClient.getAllItemRequest(userId);
+        //return RequestMapper.toListRequestDtoOut(requestService.getUserRequests(userId));
     }
 
     // GET /requests/all?from={from}&size={size} — получить список запросов, созданных другими пользователями.
     @GetMapping("/all")
-    List<RequestDtoOut> getAllByAnotherUsers(@RequestParam(defaultValue = "0") @Min(0) Integer from,
+    public ResponseEntity<Object> getAllByAnotherUsers(@RequestParam(defaultValue = "0") @Min(0) Integer from,
                             @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size,
                             @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
-        return RequestMapper.toListRequestDtoOut(requestService.getWithPagination(from, size, userId));
+        return requestClient.getAllRequests(userId, from, size);
+        //return RequestMapper.toListRequestDtoOut(requestService.getWithPagination(from, size, userId));
     }
 
     // GET /requests/{requestId} получить данные об одном конкретном запросе вместе с данными об ответах на нег
     @GetMapping("/{requestId}")
-    RequestDtoOut get(@PathVariable Long requestId,
+    public ResponseEntity<Object> get(@PathVariable Long requestId,
                       @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
-        return RequestMapper.toRequestDtoOut(requestService.get(requestId, userId));
+        return requestClient.getItemRequestById(userId, requestId);
+        //return RequestMapper.toRequestDtoOut(requestService.get(requestId, userId));
     }
 
 }
