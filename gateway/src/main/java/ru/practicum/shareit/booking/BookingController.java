@@ -6,15 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingDtoIn;
-import ru.practicum.shareit.booking.model.BookingDtoOut;
-import ru.practicum.shareit.booking.model.BookingMapper;
-import ru.practicum.shareit.user.model.Role;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -28,10 +22,7 @@ public class BookingController {
     public ResponseEntity<Object> create(@Validated(Create.class) @RequestBody BookingDtoIn bookingDtoIn,
                                          @RequestHeader("X-Sharer-User-Id") @Min(1) Long bookerId) {
         log.info("{}; POST; /bookings; {}, bookerId={}", this.getClass(), bookingDtoIn, bookerId);
-        Booking booking = BookingMapper.toBooking(bookingDtoIn);
-        Long itemId = bookingDtoIn.getItemId();
         return bookingClient.createBooking(bookingDtoIn, bookerId);
-        //return BookingMapper.toBookingDtoOut(bookingService.create(booking, bookerId, itemId));
     }
 
     @PatchMapping("/{bookingId}")
@@ -41,7 +32,6 @@ public class BookingController {
         log.info("{}; PATCH; /bookings/{bookingId}; userId= {}, bookingId={}, approved={}",
                 this.getClass(), userId, bookingId, approved);
         return bookingClient.updateBookingStatus(bookingId, approved, userId);
-        //return BookingMapper.toBookingDtoOut(bookingService.approved(userId, bookingId, approved));
     }
 
     @GetMapping("/{bookingId}")
@@ -49,7 +39,6 @@ public class BookingController {
                              @RequestHeader("X-Sharer-User-Id") @Min(1) Long userId) {
         log.info("{}; GET; /bookings/{bookingId}; bookingId={}, userId={}", this.getClass(), bookingId, userId);
         return bookingClient.getBookingDetails(bookingId, userId);
-        //return BookingMapper.toBookingDtoOut(bookingService.get(bookingId, userId));
     }
 
     @GetMapping
@@ -59,7 +48,6 @@ public class BookingController {
                                                @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         log.info("{}; GET; /bookings/; bookerId={}", this.getClass(), userId);
         return bookingClient.findBookingUsers(state, userId, from, size);
-        //return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.BOOKER, from, size));
     }
 
     @GetMapping("/owner")
@@ -69,7 +57,6 @@ public class BookingController {
                                               @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         log.info("{}; GET; /bookings/owner; ownerId={}", this.getClass(), userId);
         return bookingClient.getOwnerBookings(userId, state, from, size);
-        //return BookingMapper.toBookingDtoOutList(bookingService.getAll(state, userId, Role.OWNER, from, size));
     }
 
 }

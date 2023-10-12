@@ -7,11 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.item.model.CommentDtoIn;
-import ru.practicum.shareit.item.model.CommentRequestDto;
-import ru.practicum.shareit.item.model.ItemDtoIn;
-import ru.practicum.shareit.item.model.ItemRequestDto;
+import ru.practicum.shareit.BaseClient;
 
 import java.util.Map;
 
@@ -35,8 +31,8 @@ public class ItemClient extends BaseClient {
         return patch("/" + userId, id, itemDtoIn);
     }
 
-    public ResponseEntity<Object> delete(long id) {
-        return delete("/" + id);
+    public void delete(long id) {
+        delete("/" + id, id, null);
     }
 
     public ResponseEntity<Object> findItemById(Long userId, Long id) {

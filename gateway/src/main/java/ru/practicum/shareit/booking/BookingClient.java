@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.shareit.booking.model.BookingDtoIn;
-import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.BaseClient;
 
 import javax.validation.Valid;
 import java.util.Map;
