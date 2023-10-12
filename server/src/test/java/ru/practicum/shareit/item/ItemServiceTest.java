@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.RequestValidationException;
@@ -102,9 +103,9 @@ class ItemServiceTest {
     @Test
     void getOwnerItems_whenExpectedEqualsWithListOfCreatedItem() {
         Mockito
-                .when(itemRepository.findOwnerItems(1L, PageRequest.of(0,1)))
+                .when(itemRepository.findOwnerItems(1L, PageRequest.of(0,1).withSort(Sort.Direction.ASC, "item_id")))
                 .thenReturn(List.of(createdItem));
-        assertEquals(itemService.getOwnerItems(1L, PageRequest.of(0, 1)), List.of(createdItem));
+        assertEquals(itemService.getOwnerItems(1L, PageRequest.of(0, 1).withSort(Sort.Direction.ASC, "item_id")), List.of(createdItem));
     }
 
     @Test
