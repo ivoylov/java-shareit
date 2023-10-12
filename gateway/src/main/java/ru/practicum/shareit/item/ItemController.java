@@ -46,7 +46,7 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> get(@PathVariable Long id,
                           @RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemClient.findItemById(userId, id);
+        return itemClient.findItemById(id, userId);
     }
 
     @GetMapping("/search")

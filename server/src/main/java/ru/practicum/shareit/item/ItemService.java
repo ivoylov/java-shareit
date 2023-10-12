@@ -87,7 +87,6 @@ public class ItemService {
         return items;
     }
 
-    @Transactional
     private void checkOwner(Item item) {
         Item checkedItem = itemRepository.findById(item.getId()).orElseThrow(() -> new EntityNotFoundException(item));
         Long itemOwnerId = item.getOwner().getId();
