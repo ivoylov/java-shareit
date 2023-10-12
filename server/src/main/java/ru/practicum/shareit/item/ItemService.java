@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
@@ -79,10 +80,10 @@ public class ItemService {
 
     @Transactional
     public List<Item> getOwnerItems(Long ownerId, PageRequest pageRequest) {
-        List<Item> items = itemRepository.findOwnerItems(ownerId, pageRequest);
+        List<Item> items = itemRepository.findOwnerItems(ownerId, pageRequest.withSort(Sort.Direction.ASC, "item_id"));
         while (items.size() == 0 && pageRequest.getPageNumber() > -1) {
             pageRequest = pageRequest.previous();
-            items.addAll(itemRepository.findOwnerItems(ownerId, pageRequest));
+            items.addAll(itemRepository.findOwnerItems(ownerId, pageRequest.withSort(Sort.Direction.ASC, "item_id")));
         }
         return items;
     }
