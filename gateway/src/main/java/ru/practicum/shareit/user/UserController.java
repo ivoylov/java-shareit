@@ -22,8 +22,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDtoIn userDtoIn, @PathVariable @Min(1) Long userId) {
-        return userClient.updateUser(userId, userDtoIn);
+    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDtoIn userDtoIn, @PathVariable @Min(1) Long id) {
+        return userClient.updateUser(id, userDtoIn);
     }
 
     @DeleteMapping("/{id}")
