@@ -16,7 +16,6 @@ import ru.practicum.shareit.exception.item.UnsupportedItemStatusException;
 @Slf4j
 public class ErrorHandler {
 
-    // 409
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerUserAlreadyExistException(final UserAlreadyExistException e) {
@@ -24,7 +23,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //404
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerEntityNotFoundException(final EntityNotFoundException e) {
@@ -32,7 +30,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerItemAvailableException(final ItemAvailableException e) {
@@ -40,7 +37,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerBookingTimeException(final BookingTimeException e) {
@@ -48,7 +44,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    // 409
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handlerBookingAvailableException(final BookingAvailableException e) {
@@ -56,7 +51,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerRequestValidationException(final RequestValidationException e) {
@@ -64,7 +58,6 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUnsupportedStatusException(final UnsupportedItemStatusException e) {
@@ -72,7 +65,6 @@ public class ErrorHandler {
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
     }
 
-    //400
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerBookingAlreadyApprovedException(final BookingAlreadyApprovedException e) {
