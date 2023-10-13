@@ -20,37 +20,39 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final String userIdHeader = "X-Sharer-User-Id";
+    private final String idPath = "/{id}";
 
     @PostMapping
     public ItemDtoOut create(@Validated(Create.class) @RequestBody ItemDtoIn itemDtoIn,
-                            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                            @RequestHeader(userIdHeader) Long ownerId) {
         Item item = ItemMapper.toItem(itemDtoIn);
         return ItemMapper.toItemDtoOut(itemService.create(item, ownerId, itemDtoIn.getRequestId()));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(idPath)
     public ItemDtoOut update(@RequestBody @Validated(Update.class) ItemDtoIn itemDto,
                             @PathVariable Long id,
-                            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                            @RequestHeader(userIdHeader) Long ownerId) {
         Item item = ItemMapper.toItem(itemDto);
         return ItemMapper.toItemDtoOut(itemService.update(item, id, ownerId));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(idPath)
     public ItemDtoOut delete(@PathVariable Long id) {
         return ItemMapper.toItemDtoOut(itemService.delete(id));
     }
 
     @GetMapping
-    public List<ItemDtoOut> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public List<ItemDtoOut> getItems(@RequestHeader(userIdHeader) Long ownerId,
                                      @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                      @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         return ItemMapper.toListItemDtoOut(itemService.getOwnerItems(ownerId, PageRequest.of(from, size)));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(idPath)
     public ItemDtoOut get(@PathVariable Long id,
-                          @RequestHeader("X-Sharer-User-Id") Long userId) {
+                          @RequestHeader(userIdHeader) Long userId) {
         return ItemMapper.toItemDtoOut(itemService.get(id, userId));
     }
 
@@ -62,7 +64,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDtoOut createComment(@RequestBody @Validated(Create.class) CommentDtoIn commentDtoIn,
-                                  @RequestHeader("X-Sharer-User-Id") Long bookerId,
+                                  @RequestHeader(userIdHeader) Long bookerId,
                                   @PathVariable Long itemId) {
         Comment comment = CommentMapper.toComment(commentDtoIn);
         return CommentMapper.toCommentDtoOut(itemService.createComment(comment, bookerId, itemId));

@@ -17,35 +17,37 @@ import javax.validation.constraints.Min;
 public class ItemController {
 
     private final ItemClient itemClient;
+    private final String userIdHeader = "X-Sharer-User-Id";
+    private final String idPath = "/{id}";
 
     @PostMapping
     public ResponseEntity<Object> create(@Validated(Create.class) @RequestBody ItemDtoIn itemDtoIn,
-                                         @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                                         @RequestHeader(userIdHeader) Long ownerId) {
         return itemClient.createItem(itemDtoIn, ownerId);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(idPath)
     public ResponseEntity<Object> update(@RequestBody @Validated(Update.class) ItemDtoIn itemDtoIn,
                              @PathVariable Long id,
-                             @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                             @RequestHeader(userIdHeader) Long ownerId) {
         return itemClient.updateItem(ownerId, id, itemDtoIn);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(idPath)
     public void delete(@PathVariable Long id) {
         itemClient.delete(id);
     }
 
     @GetMapping
-    public ResponseEntity<Object> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
+    public ResponseEntity<Object> getItems(@RequestHeader(userIdHeader) Long ownerId,
                                      @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                      @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
         return itemClient.getAllItems(ownerId, from, size);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(idPath)
     public ResponseEntity<Object> get(@PathVariable Long id,
-                          @RequestHeader("X-Sharer-User-Id") Long userId) {
+                          @RequestHeader(userIdHeader) Long userId) {
         return itemClient.findItemById(id, userId);
     }
 
@@ -56,7 +58,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> createComment(@RequestBody @Validated(Create.class) CommentDtoIn commentDtoIn,
-                                  @RequestHeader("X-Sharer-User-Id") Long bookerId,
+                                  @RequestHeader(userIdHeader) Long bookerId,
                                   @PathVariable Long itemId) {
         return itemClient.createComment(commentDtoIn, itemId, bookerId);
     }
