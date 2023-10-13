@@ -20,6 +20,7 @@ public class BookingController {
     private final String userHeader = "X-Sharer-User-Id";
     private final int minBookerId = 1;
     private final int minBookingId = 1;
+    private final String bookingIdPath = "/{bookingId}";
 
     @PostMapping
     public ResponseEntity<Object> create(@Validated(Create.class) @RequestBody BookingDtoIn bookingDtoIn,
@@ -28,7 +29,7 @@ public class BookingController {
         return bookingClient.createBooking(bookingDtoIn, bookerId);
     }
 
-    @PatchMapping("/{bookingId}")
+    @PatchMapping(bookingIdPath)
     public ResponseEntity<Object> approved(@PathVariable @Min(minBookingId) Long bookingId,
                                   @RequestParam Boolean approved,
                                   @RequestHeader(userHeader) @Min(minBookerId) Long userId) {
@@ -37,7 +38,7 @@ public class BookingController {
         return bookingClient.updateBookingStatus(bookingId, approved, userId);
     }
 
-    @GetMapping("/{bookingId}")
+    @GetMapping(bookingIdPath)
     public ResponseEntity<Object> get(@PathVariable @Min(minBookingId) Long bookingId,
                              @RequestHeader(userHeader) @Min(minBookerId) Long userId) {
         log.info("{}; GET; /bookings/{bookingId}; bookingId={}, userId={}", this.getClass(), bookingId, userId);
