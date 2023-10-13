@@ -19,6 +19,8 @@ import java.util.Collection;
 public class UserController {
 
     private final UserService userService;
+    private final int minUserId = 1;
+    private final String pathId = "/{id}";
 
     @PostMapping
     public UserDtoOut create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
@@ -26,19 +28,20 @@ public class UserController {
         return UserMapper.toUserDtoOut(userService.create(user));
     }
 
-    @PatchMapping("/{id}")
-    public UserDtoOut update(@Validated(Update.class) @RequestBody UserDtoIn userDto, @PathVariable @Min(1) Long id) {
+    @PatchMapping(pathId)
+    public UserDtoOut update(@Validated(Update.class) @RequestBody UserDtoIn userDto,
+                             @PathVariable @Min(minUserId) Long id) {
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDtoOut(userService.update(user, id));
     }
 
-    @DeleteMapping("/{id}")
-    public UserDtoOut delete(@PathVariable @Min(1) Long id) {
+    @DeleteMapping(pathId)
+    public UserDtoOut delete(@PathVariable @Min(minUserId) Long id) {
         return UserMapper.toUserDtoOut(userService.delete(id));
     }
 
-    @GetMapping("/{id}")
-    public UserDtoOut get(@PathVariable @Min(1) Long id) {
+    @GetMapping(pathId)
+    public UserDtoOut get(@PathVariable @Min(minUserId) Long id) {
         return UserMapper.toUserDtoOut(userService.get(id));
     }
 

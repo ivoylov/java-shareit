@@ -15,24 +15,26 @@ import javax.validation.constraints.Min;
 public class UserController {
 
     private final UserClient userClient;
+    private final int minUserId = 1;
+    private final String pathId = "/{id}";
 
     @PostMapping
     public ResponseEntity<Object> create(@Validated(Create.class) @RequestBody UserDtoIn userDtoIn) {
         return userClient.createUser(userDtoIn);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDtoIn userDtoIn, @PathVariable @Min(1) Long id) {
+    @PatchMapping(pathId)
+    public ResponseEntity<Object> update(@Validated(Update.class) @RequestBody UserDtoIn userDtoIn, @PathVariable @Min(minUserId) Long id) {
         return userClient.updateUser(id, userDtoIn);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable @Min(1) Long id) {
+    @DeleteMapping(pathId)
+    public void delete(@PathVariable @Min(minUserId) Long id) {
         userClient.removeUser(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object>  get(@PathVariable @Min(1) Long id) {
+    @GetMapping(pathId)
+    public ResponseEntity<Object>  get(@PathVariable @Min(minUserId) Long id) {
         return userClient.findUserById(id);
     }
 
